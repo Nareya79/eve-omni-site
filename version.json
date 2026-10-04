@@ -1,5 +1,5 @@
 {
-  "version": "4.0.60",
-  "url": "https://omni.nareya79.com/",
-  "notes": "Update-Hinweis, Wurmlöcher, Thera, Erz-Tabelle, Login für alle"
+  "version": "4.0.67",
+  "url": "https://github.com/Nareya79/eve-omni/releases/latest",
+  "notes": "First public beta: installer without admin rights, demo mode, English UI, update check via GitHub"
 }
