@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EVE Omni – the all-in-one companion for EVE Online</title>
+<meta name="description" content="EVE Omni – free all-in-one desktop companion for EVE Online: market scanner, trading, hauling, industry, assets, skills, navigation and more.">
+<link rel="canonical" href="https://omni.nareya79.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="EVE Omni">
+<meta property="og:title" content="EVE Omni – the all-in-one companion for EVE Online">
+<meta property="og:description" content="Free desktop app for EVE Online: multi-client preview, in-game overlay, market scanner, trading, hauling, industry, assets, skills and navigation.">
+<meta property="og:url" content="https://omni.nareya79.com/">
+<meta property="og:image" content="https://omni.nareya79.com/og.png">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="640">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0d141c">
+<style>
+:root{
+  --bg:#0b1118; --bg2:#101a24; --card:#131f2b; --line:#24364a;
+  --fg:#e6f4fb; --mut:#9fb3c2; --dim:#6f8494; --cy:#86d1eb; --gd:#e0b45d; --gd2:#f0cb7e;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--cy);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+/* header */
+header{position:sticky;top:0;z-index:20;background:rgba(11,17,24,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;gap:18px;height:62px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.06em;color:var(--fg)}
+.brand:hover{text-decoration:none}
+.brand b{color:var(--gd)}
+.brand svg{width:34px;height:34px}
+.links{display:flex;gap:18px;margin-left:auto;font-size:15px}
+.links a{color:var(--mut)}
+.links a:hover{color:var(--fg);text-decoration:none}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{background:none;border:0;color:var(--mut);font:600 13px/1 inherit;padding:7px 11px;cursor:pointer}
+.lang button[aria-pressed=true]{background:var(--gd);color:#0b1118}
+@media(max-width:860px){.links{display:none}.lang{margin-left:auto}}
+/* hero */
+.hero{position:relative;overflow:hidden;background:radial-gradient(ellipse at 30% 40%,#1d3140 0%,#121c26 50%,var(--bg) 100%)}
+.stars{position:absolute;inset:0;opacity:.7;pointer-events:none}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center;padding-top:80px;padding-bottom:90px}
+@media(max-width:860px){.hero .wrap{grid-template-columns:1fr;padding-top:48px;padding-bottom:60px;text-align:center}.hero .cta{justify-content:center}.hero .logo{order:-1}}
+.pill{display:inline-block;border:1.5px solid var(--gd);color:var(--gd);border-radius:999px;padding:4px 14px;font-weight:700;letter-spacing:.12em;font-size:12px}
+h1{font-size:clamp(42px,7vw,76px);line-height:1.02;letter-spacing:.05em;margin:16px 0 14px;font-weight:900}
+h1 b{color:var(--gd)}
+.lead{font-size:clamp(18px,2.4vw,22px);color:var(--cy);margin:0 0 10px}
+.sub{color:var(--mut);max-width:560px;margin:0 0 28px}
+@media(max-width:860px){.sub{margin-left:auto;margin-right:auto}}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:10px;padding:12px 20px;font-weight:700;border:1.5px solid transparent;cursor:pointer;font-size:15px}
+.btn:hover{text-decoration:none}
+.btn.primary{background:var(--gd);color:#0b1118}
+.btn.primary:hover{background:var(--gd2)}
+.btn.ghost{border-color:var(--line);color:var(--fg);background:rgba(255,255,255,.02)}
+.btn.ghost:hover{border-color:var(--cy)}
+.btn[aria-disabled=true]{opacity:.55;cursor:not-allowed}
+.logo{display:flex;justify-content:center}
+.logo svg{width:min(340px,70vw);height:auto;filter:drop-shadow(0 0 40px rgba(134,209,235,.15))}
+/* sections */
+section{padding:80px 0;border-top:1px solid var(--line)}
+section.alt{background:var(--bg2)}
+h2{font-size:clamp(28px,4vw,38px);margin:0 0 8px;letter-spacing:.02em}
+h2 b{color:var(--gd)}
+.intro{color:var(--mut);max-width:680px;margin:0 0 40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.card h3{margin:12px 0 6px;font-size:17px}
+.card p{margin:0;color:var(--mut);font-size:15px}
+.ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:radial-gradient(circle,#1d3140,#0d141c);border:1px solid var(--line)}
+.ic svg{width:24px;height:24px;stroke:var(--gd);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ic svg .c{stroke:var(--cy)}
+/* trust */
+.trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.trust .card{border-left:3px solid var(--cy)}
+/* download */
+.dl{display:grid;grid-template-columns:1.1fr 1fr;gap:24px}
+@media(max-width:860px){.dl{grid-template-columns:1fr}}
+.files{list-style:none;padding:0;margin:16px 0 0}
+.files li{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line);color:var(--mut);font-size:15px}
+.files li span:first-child{color:var(--fg)}
+ol.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+ol.steps li{counter-increment:s;position:relative;padding:0 0 18px 46px;color:var(--mut)}
+ol.steps li b{color:var(--fg)}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:-2px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--card);border:1px solid var(--gd);color:var(--gd);font-weight:800;font-size:14px}
+.note{background:rgba(224,180,93,.08);border:1px solid rgba(224,180,93,.35);border-radius:10px;padding:12px 14px;color:var(--mut);font-size:14px;margin-top:6px}
+kbd{background:#0d141c;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;font-size:13px;color:var(--fg)}
+/* faq */
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:0 18px;margin-bottom:10px}
+summary{cursor:pointer;padding:16px 0;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--gd);font-size:22px;line-height:1}
+details[open] summary::after{content:"–"}
+details p{margin:0 0 16px;color:var(--mut)}
+/* support */
+.support{text-align:center}
+.support .intro{margin-left:auto;margin-right:auto}
+.copy{display:inline-flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--gd);border-radius:12px;padding:10px 10px 10px 18px;font-size:20px;font-weight:800;letter-spacing:.02em}
+.copy button{background:var(--gd);color:#0b1118;border:0;border-radius:8px;padding:8px 14px;font-weight:700;cursor:pointer}
+.small{font-size:14px;color:var(--dim)}
+
+/* multibox highlight */
+.mb .wrap{display:grid;grid-template-columns:1fr 1.05fr;gap:48px;align-items:center}
+@media(max-width:860px){.mb .wrap{grid-template-columns:1fr}}
+.mb ul{list-style:none;padding:0;margin:0 0 22px}
+.mb li{position:relative;padding:0 0 12px 30px;color:var(--mut)}
+.mb li b{color:var(--fg)}
+.mb li::before{content:"";position:absolute;left:0;top:7px;width:14px;height:14px;border-radius:4px;border:2px solid var(--gd);box-shadow:0 0 10px rgba(224,180,93,.35)}
+.tag{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--cy);margin-bottom:10px}
+.mock{width:100%;height:auto;border-radius:16px;border:1px solid var(--line);background:#0d141c;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.mock .tile{fill:#142130;stroke:#2c3d4f;stroke-width:2}
+.mock .act{stroke:var(--gd);stroke-width:4}
+.mock text{font:600 15px system-ui,sans-serif;fill:#9fb3c2}
+.mock .big{fill:#101a24;stroke:#24364a;stroke-width:2}
+@media(prefers-reduced-motion:no-preference){.mock .pulse{animation:pl 2.4s ease-in-out infinite}@keyframes pl{50%{opacity:.35}}}
+
+/* pillars */
+.pillars{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:900px){.pillars{grid-template-columns:1fr}}
+.pillar{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;display:flex;flex-direction:column}
+.pillar h3{font-size:clamp(22px,2.6vw,28px);margin:6px 0 8px;line-height:1.2}
+.pillar h3 b{color:var(--gd)}
+.pillar .lede{color:var(--mut);margin:0 0 18px}
+.pillar .mock{margin:0 0 20px}
+.pillar ul{list-style:none;padding:0;margin:0}
+.pillar li{position:relative;padding:0 0 10px 26px;color:var(--mut);font-size:15px}
+.pillar li b{color:var(--fg)}
+.pillar li::before{content:"";position:absolute;left:0;top:6px;width:12px;height:12px;border-radius:3px;border:2px solid var(--gd);box-shadow:0 0 8px rgba(224,180,93,.35)}
+.pillar.ov li::before{border-color:var(--cy);box-shadow:0 0 8px rgba(134,209,235,.35)}
+.pillar.ov .tag{color:var(--gd)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 14px}
+.chips > span{font-size:12.5px;padding:3px 10px;border-radius:999px;border:1px solid var(--line);color:var(--fg);background:#0f1924}
+.mock .panel{fill:rgba(16,26,36,.86);stroke:#86d1eb;stroke-opacity:.45;stroke-width:1.5}
+.mock .ph{fill:#86d1eb;opacity:.18}
+.mock .row{fill:#9fb3c2;opacity:.35}
+.mock .gold{fill:#e0b45d}
+.mock .red{fill:#ff3b3b}
+
+/* soundtrack */
+.st-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px;margin-bottom:28px}
+.st-head .intro{margin:0}
+.st-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.trk{position:relative;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card);cursor:pointer;padding:0;color:inherit;text-align:left;font:inherit}
+.trk img{display:block;width:100%;aspect-ratio:1;object-fit:cover;transition:transform .3s}
+.trk:hover img{transform:scale(1.04)}
+.trk .pl{position:absolute;inset:0;display:grid;place-items:center;background:rgba(11,17,24,.35);opacity:0;transition:opacity .2s}
+.trk:hover .pl,.trk.on .pl,.trk:focus-visible .pl{opacity:1}
+.trk .pl span{width:48px;height:48px;border-radius:50%;background:var(--gd);color:#0b1118;display:grid;place-items:center;font-size:18px;box-shadow:0 0 20px rgba(224,180,93,.5)}
+.trk.on{border-color:var(--gd);box-shadow:0 0 0 1px var(--gd)}
+.trk .meta{display:flex;justify-content:space-between;gap:6px;padding:8px 10px;font-size:13px}
+.trk .meta b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trk .meta i{font-style:normal;color:var(--dim)}
+.st-more{margin-top:18px;text-align:center}
+.player{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:40;width:min(720px,calc(100% - 32px));display:flex;align-items:center;gap:12px;background:rgba(16,26,36,.96);backdrop-filter:blur(8px);border:1px solid var(--gd);border-radius:14px;padding:8px 12px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.player img{width:44px;height:44px;border-radius:8px;object-fit:cover}
+.player .pt{flex:1;min-width:0}
+.player .pt b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.player .pt small{color:var(--dim);font-size:12px}
+.player input[type=range]{width:100%;accent-color:var(--gd);height:4px;margin:4px 0 0}
+.player button{background:none;border:0;color:var(--fg);font-size:18px;cursor:pointer;padding:6px;border-radius:8px}
+.player button:hover{background:rgba(255,255,255,.06)}
+.player .pp{background:var(--gd);color:#0b1118;width:38px;height:38px;border-radius:50%}
+.player .pp:hover{background:var(--gd2)}
+@media(max-width:560px){.player .skip{display:none}}
+
+/* soundtrack strip */
+.ststrip{margin-top:24px;display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;background:linear-gradient(90deg,rgba(224,180,93,.08),rgba(134,209,235,.05));border:1px solid var(--line);border-radius:18px;padding:22px 26px;overflow:hidden}
+@media(max-width:900px){.ststrip{grid-template-columns:1fr}}
+.covers{display:flex;align-items:center;padding-left:14px}
+.covers img{width:96px;height:96px;border-radius:10px;object-fit:cover;margin-left:-18px;border:2px solid #0b1118;box-shadow:0 8px 24px rgba(0,0,0,.5);transition:transform .25s}
+.covers img:nth-child(odd){transform:rotate(-3deg)}
+.covers img:nth-child(even){transform:rotate(3deg) translateY(6px)}
+.covers img:hover{transform:translateY(-6px) scale(1.06);z-index:2}
+@media(max-width:560px){.covers img{width:68px;height:68px;margin-left:-14px}.covers img:nth-child(n+6){display:none}}
+.ststrip h3{font-size:clamp(20px,2.4vw,24px);margin:4px 0 6px}
+.ststrip h3 b{color:var(--gd)}
+.ststrip p{color:var(--mut);margin:0 0 14px;font-size:15px}
+.ststrip .cta{gap:10px}
+
+/* trailer */
+#trailer{padding:56px 0 64px}
+.tr-box{position:relative;max-width:960px;margin:0 auto;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:#05080c center/cover no-repeat;box-shadow:0 20px 60px rgba(0,0,0,.55)}
+.tr-box button{position:absolute;inset:0;width:100%;height:100%;border:0;background:linear-gradient(180deg,rgba(5,8,12,.15),rgba(5,8,12,.55));cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:#fff;font:inherit}
+.tr-box .tr-play{width:92px;height:92px;border-radius:50%;background:var(--gd);color:#0b1118;display:flex;align-items:center;justify-content:center;font-size:38px;padding-left:6px;box-shadow:0 0 0 10px rgba(224,180,93,.18);transition:transform .2s}
+.tr-box button:hover .tr-play{transform:scale(1.08)}
+.tr-box .tr-t{font-size:22px;font-weight:700;text-shadow:0 2px 8px rgba(0,0,0,.8)}
+.tr-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.tr-note{text-align:center;color:var(--mut);font-size:13px;margin-top:10px}
+/* footer */
+footer{border-top:1px solid var(--line);padding:36px 0 50px;color:var(--dim);font-size:13px}
+footer .row{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;margin-bottom:14px}
+footer a{color:var(--mut)}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="EVE Omni"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"><defs><radialGradient id="bg" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#1d3140"/><stop offset=".6" stop-color="#121c26"/><stop offset="1" stop-color="#0d141c"/></radialGradient>
+<radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#86d1eb" stop-opacity=".28"/><stop offset="1" stop-color="#86d1eb" stop-opacity="0"/></radialGradient>
+<filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect x="8" y="8" width="496" height="496" rx="90" fill="url(#bg)" stroke="#2c3d4f" stroke-width="10"/>
+<circle cx="256" cy="256" r="200" fill="url(#halo)"/><g filter="url(#glow)"><circle cx="256" cy="256" r="173" fill="none" stroke="#e0b45d" stroke-width="33"/></g><g><rect x="146.5" y="126" width="33" height="260" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/><rect x="201.5" y="126" width="164" height="33" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/><rect x="201.5" y="239.5" width="128" height="33" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/><rect x="201.5" y="353" width="164" height="33" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/></g><g filter="url(#glow)"><rect x="146.5" y="126" width="33" height="260" rx="4" fill="#86d1eb"/><rect x="201.5" y="126" width="164" height="33" rx="4" fill="#86d1eb"/><rect x="201.5" y="239.5" width="128" height="33" rx="4" fill="#e0b45d"/><rect x="201.5" y="353" width="164" height="33" rx="4" fill="#86d1eb"/></g></svg><span>EVE <b>OMNI</b></span></a>
+    <nav class="links" aria-label="Main">
+      <a href="#trailer">Trailer</a>
+      <a href="#multi">Multi-Client</a>
+      <a href="#overlay">Overlay</a>
+      <a href="#features"><span data-en>Features</span><span data-de>Funktionen</span></a>
+      <a href="#download">Download</a>
+      <a href="#install"><span data-en>Install</span><span data-de>Installation</span></a>
+      <a href="#soundtrack">Soundtrack</a>
+      <a href="#faq">FAQ</a>
+      <a href="#support"><span data-en>Support</span><span data-de>Unterstützen</span></a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false">DE</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<div class="hero">
+  <svg class="stars" id="stars" aria-hidden="true"></svg>
+  <div class="wrap">
+    <div>
+      <span class="pill">BETA · FREE · OPEN SOURCE</span>
+      <h1>EVE <b>OMNI</b></h1>
+      <p class="lead"><span data-en>The all-in-one companion for EVE Online.</span><span data-de>Das All-in-One-Werkzeug für EVE Online.</span></p>
+      <p class="sub">
+        <span data-en>Market scanner, trade &amp; profit tracking, hauling, industry, assets, skills and navigation – plus multi-client preview, an in-game overlay and Stream Deck support. One desktop app instead of ten tools. Your data stays on your PC.</span>
+        <span data-de>Markt-Scanner, Handel &amp; Gewinne, Hauling, Industrie, Assets, Skills und Navigation – dazu Multi-Client-Vorschau, Overlay im Spiel und Stream-Deck-Unterstützung. Ein Programm statt zehn Tools. Deine Daten bleiben auf deinem PC.</span>
+      </p>
+      <div class="cta">
+        <a class="btn primary" href="#download" id="cta-dl">⬇ <span data-en>Download – coming soon</span><span data-de>Download – bald verfügbar</span></a>
+        <a class="btn ghost" href="#trailer">▶ Trailer</a>
+        <a class="btn ghost" href="https://discord.gg/Tyxt6J8yPR" target="_blank" rel="noopener">Discord</a>
+        <a class="btn ghost" href="#highlights"><span data-en>Multi-client &amp; overlay</span><span data-de>Multi-Client &amp; Overlay</span></a>
+      </div>
+    </div>
+    <div class="logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="EVE Omni"><defs><radialGradient id="bg" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#1d3140"/><stop offset=".6" stop-color="#121c26"/><stop offset="1" stop-color="#0d141c"/></radialGradient>
+<radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#86d1eb" stop-opacity=".28"/><stop offset="1" stop-color="#86d1eb" stop-opacity="0"/></radialGradient>
+<filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect x="8" y="8" width="496" height="496" rx="90" fill="url(#bg)" stroke="#2c3d4f" stroke-width="10"/>
+<circle cx="256" cy="256" r="200" fill="url(#halo)"/><g filter="url(#glow)"><circle cx="256" cy="256" r="173" fill="none" stroke="#e0b45d" stroke-width="33"/></g><g><rect x="146.5" y="126" width="33" height="260" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/><rect x="201.5" y="126" width="164" height="33" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/><rect x="201.5" y="239.5" width="128" height="33" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/><rect x="201.5" y="353" width="164" height="33" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/></g><g filter="url(#glow)"><rect x="146.5" y="126" width="33" height="260" rx="4" fill="#86d1eb"/><rect x="201.5" y="126" width="164" height="33" rx="4" fill="#86d1eb"/><rect x="201.5" y="239.5" width="128" height="33" rx="4" fill="#e0b45d"/><rect x="201.5" y="353" width="164" height="33" rx="4" fill="#86d1eb"/></g></svg></div>
+  </div>
+</div>
+
+<section id="trailer">
+  <div class="wrap">
+    <div class="tr-box" id="tr-box" style="background-image:url(trailer.jpg)">
+      <button type="button" id="tr-btn" aria-label="Play trailer"><span class="tr-play">▶</span><span class="tr-t"><span data-en>Watch the trailer (1 min)</span><span data-de>Trailer ansehen (1 Min.)</span></span></button>
+    </div>
+    <p class="tr-note"><span data-en>The video is loaded from YouTube only after you click play (youtube-nocookie.com).</span><span data-de>Das Video wird erst nach dem Klick von YouTube geladen (youtube-nocookie.com).</span> · <a href="https://youtu.be/LSafv7unbqA" target="_blank" rel="noopener">YouTube</a></p>
+  </div>
+</section>
+
+<section class="alt" id="highlights">
+  <div class="wrap">
+    <h2><span data-en>Two tools you will <b>never close</b></span><span data-de>Zwei Werkzeuge, die du <b>nie mehr schließt</b></span></h2>
+    <p class="intro"><span data-en>EVE Omni sits next to the game while you play – not in a browser tab you have to alt-tab to.</span><span data-de>EVE Omni läuft beim Spielen direkt neben dem Spiel – nicht in einem Browser-Tab, zu dem du erst wechseln musst.</span></p>
+    <div class="pillars">
+
+      <article class="pillar" id="multi">
+        <span class="tag"><span data-en>MULTI-CLIENT PREVIEW</span><span data-de>MULTI-CLIENT-VORSCHAU</span></span>
+        <h3><span data-en>All your clients. <b>One key.</b></span><span data-de>Alle deine Clients. <b>Eine Taste.</b></span></h3>
+        <p class="lede"><span data-en>Live previews of every EVE window and lightning-fast switching – built in, no extra preview tool needed.</span><span data-de>Live-Vorschau aller EVE-Fenster und blitzschnelles Umschalten – eingebaut, kein extra Vorschau-Tool nötig.</span></p>
+        <svg class="mock" viewBox="0 0 560 340" role="img" aria-label="Illustration: four client previews, one active">
+          <rect class="big" x="16" y="16" width="528" height="308" rx="12"/>
+          <text x="38" y="50">EVE – Pilot 1</text>
+          <rect x="38" y="64" width="484" height="160" rx="8" fill="#0b1118"/>
+          <g opacity=".55" fill="#cfe9f5"><circle cx="90" cy="100" r="1.4"/><circle cx="200" cy="140" r="1"/><circle cx="330" cy="90" r="1.6"/><circle cx="440" cy="190" r="1.1"/><circle cx="270" cy="200" r="1.3"/><circle cx="150" cy="196" r="1"/><circle cx="480" cy="110" r="1.2"/></g>
+          <circle cx="280" cy="144" r="32" fill="none" stroke="#e0b45d" stroke-width="3" opacity=".8"/>
+          <circle cx="280" cy="144" r="11" fill="#86d1eb" opacity=".8"/>
+          <rect class="tile act" x="38" y="244" width="109" height="62" rx="7"/><text x="50" y="280">Pilot 1</text>
+          <rect class="tile" x="163" y="244" width="109" height="62" rx="7"/><text x="175" y="280">Pilot 2</text>
+          <rect class="tile" x="288" y="244" width="109" height="62" rx="7"/><text x="300" y="280">Pilot 3</text>
+          <rect class="tile" x="413" y="244" width="109" height="62" rx="7"/><text x="425" y="280">Pilot 4</text>
+          <g class="pulse"><rect x="458" y="26" width="64" height="30" rx="6" fill="#0d141c" stroke="#e0b45d" stroke-width="2"/><text x="474" y="47" style="fill:#e0b45d;font-weight:800">TAB</text></g>
+        </svg>
+        <ul>
+          <li><b><span data-en>Live client previews</span><span data-de>Live-Vorschau</span></b> – <span data-en>small always-on-top windows show every client in real time; size, frame rate and position are up to you.</span><span data-de>kleine Fenster immer im Vordergrund zeigen jeden Client in Echtzeit; Größe, Bildrate und Position bestimmst du.</span></li>
+          <li><b><span data-en>Tab through your clients</span><span data-de>Mit Tab durchschalten</span></b> – <span data-en>Tab (or any key) jumps to the next client, Shift+Tab goes back – in your order, character select skipped.</span><span data-de>Tab (oder eine Taste deiner Wahl) springt zum nächsten Client, Umschalt+Tab zurück – in deiner Reihenfolge, Charakterauswahl übersprungen.</span></li>
+          <li><b><span data-en>Click to focus</span><span data-de>Klick zum Wechseln</span></b> – <span data-en>click a preview to bring that client to the front; a gold frame marks the active one.</span><span data-de>Klick auf eine Vorschau holt den Client nach vorne; ein goldener Rahmen zeigt den aktiven.</span></li>
+          <li><b><span data-en>Fair play</span><span data-de>Fair Play</span></b> – <span data-en>one key press switches one window. Never sends keys or clicks to the game, never repeats input across clients.</span><span data-de>ein Tastendruck wechselt ein Fenster. Sendet nie Tasten oder Klicks ans Spiel, verteilt nie Eingaben auf mehrere Clients.</span></li>
+        </ul>
+      </article>
+
+      <article class="pillar ov" id="overlay">
+        <span class="tag"><span data-en>IN-GAME OVERLAY</span><span data-de>OVERLAY IM SPIEL</span></span>
+        <h3><span data-en>Your tools. <b>Right over EVE.</b></span><span data-de>Deine Werkzeuge. <b>Direkt über EVE.</b></span></h3>
+        <p class="lede"><span data-en>Small, see-through windows that float over the game – only while EVE is in front. Everything you need without leaving your client.</span><span data-de>Kleine, durchsichtige Fenster, die über dem Spiel schweben – nur solange EVE vorne ist. Alles Wichtige, ohne den Client zu verlassen.</span></p>
+        <svg class="mock" viewBox="0 0 560 340" role="img" aria-label="Illustration: overlay windows over the game">
+          <rect class="big" x="16" y="16" width="528" height="308" rx="12"/>
+          <rect x="16" y="16" width="528" height="308" rx="12" fill="#0b1118"/>
+          <g opacity=".5" fill="#cfe9f5"><circle cx="300" cy="80" r="1.3"/><circle cx="420" cy="260" r="1"/><circle cx="250" cy="250" r="1.5"/><circle cx="360" cy="150" r="1"/><circle cx="200" cy="120" r="1.2"/></g>
+          <circle cx="330" cy="190" r="40" fill="none" stroke="#86d1eb" stroke-opacity=".25" stroke-width="2"/>
+          <!-- neocom -->
+          <rect x="16" y="16" width="38" height="308" rx="12" fill="#101a24" opacity=".95"/>
+          <g class="gold"><rect x="27" y="34" width="16" height="16" rx="3"/><rect x="27" y="62" width="16" height="16" rx="3" opacity=".6"/><rect x="27" y="90" width="16" height="16" rx="3" opacity=".6"/><rect x="27" y="118" width="16" height="16" rx="3" opacity=".6"/><rect x="27" y="146" width="16" height="16" rx="3" opacity=".6"/></g>
+          <!-- trades panel -->
+          <rect class="panel" x="72" y="34" width="180" height="128" rx="8"/>
+          <text x="84" y="56" style="fill:#e6f4fb;font-size:14px">Trades</text>
+          <rect class="row" x="84" y="70" width="110" height="7" rx="3"/><rect class="gold" x="206" y="70" width="34" height="7" rx="3"/>
+          <rect class="row" x="84" y="88" width="96" height="7" rx="3"/><rect class="gold" x="206" y="88" width="34" height="7" rx="3"/>
+          <rect class="row" x="84" y="106" width="120" height="7" rx="3"/><rect class="gold" x="206" y="106" width="34" height="7" rx="3"/>
+          <rect class="row" x="84" y="124" width="80" height="7" rx="3"/><rect class="gold" x="206" y="124" width="34" height="7" rx="3"/>
+          <!-- local panel -->
+          <rect class="panel" x="72" y="176" width="180" height="130" rx="8"/>
+          <text x="84" y="198" style="fill:#e6f4fb;font-size:14px">Local</text>
+          <rect class="red" x="84" y="212" width="8" height="8" rx="2"/><rect class="row" x="98" y="213" width="100" height="7" rx="3"/>
+          <rect class="gold" x="84" y="230" width="8" height="8" rx="2"/><rect class="row" x="98" y="231" width="84" height="7" rx="3"/>
+          <rect class="ph" x="84" y="248" width="8" height="8" rx="2"/><rect class="row" x="98" y="249" width="110" height="7" rx="3"/>
+          <rect class="ph" x="84" y="266" width="8" height="8" rx="2"/><rect class="row" x="98" y="267" width="70" height="7" rx="3"/>
+          <!-- route panel -->
+          <rect class="panel" x="376" y="34" width="150" height="96" rx="8"/>
+          <text x="388" y="56" style="fill:#e6f4fb;font-size:14px">Route</text>
+          <g fill="#86d1eb"><circle cx="396" cy="92" r="5"/><circle cx="436" cy="80" r="5"/><circle cx="476" cy="98" r="5"/><circle cx="510" cy="84" r="5" fill="#e0b45d"/></g>
+          <path d="M396 92L436 80L476 98L510 84" stroke="#86d1eb" stroke-width="2" fill="none"/>
+          <!-- alarm -->
+          <g class="pulse"><rect x="376" y="230" width="150" height="76" rx="8" fill="rgba(60,16,16,.85)" stroke="#ff3b3b" stroke-width="2"/>
+          <text x="390" y="256" style="fill:#ff8a8a;font-size:14px;font-weight:800">Hostile reported</text>
+          <rect class="row" x="390" y="270" width="110" height="7" rx="3"/><rect class="row" x="390" y="286" width="80" height="7" rx="3"/></g>
+        </svg>
+        <div class="chips">
+          <span>Trades</span><span>Watchlist</span><span><span data-en>Market</span><span data-de>Handel</span></span><span>Wallet</span><span>Assets</span><span><span data-en>Characters</span><span data-de>Charaktere</span></span><span>Skills</span><span>Route</span><span><span data-en>Map</span><span data-de>Karte</span></span><span>Local</span><span><span data-en>Gang alarm</span><span data-de>Gang-Alarm</span></span><span>Jukebox</span>
+        </div>
+        <ul>
+          <li><b><span data-en>Pick your views</span><span data-de>Ansichten frei wählen</span></b> – <span data-en>one compact window or each view as its own little window – snapped to the screen edge where you want it.</span><span data-de>ein kompaktes Fenster oder jede Ansicht als eigenes kleines Fenster – rastet am Bildschirmrand ein, wo du es willst.</span></li>
+          <li><b><span data-en>See-through &amp; out of the way</span><span data-de>Durchsichtig &amp; unauffällig</span></b> – <span data-en>set transparency per window, lock position, auto-hide – the overlay only shows while EVE is active.</span><span data-de>Deckkraft je Fenster, Position sperren, automatisch ausblenden – das Overlay erscheint nur, wenn EVE aktiv ist.</span></li>
+          <li><b><span data-en>Act in one click</span><span data-de>Mit einem Klick handeln</span></b> – <span data-en>copy exact prices, open an item's market window in EVE, set your autopilot destination.</span><span data-de>exakte Preise kopieren, das Marktfenster eines Items in EVE öffnen, Autopilot-Ziel setzen.</span></li>
+          <li><b><span data-en>Instant intel</span><span data-de>Intel sofort</span></b> – <span data-en>copy local with Ctrl+C and the overlay shows who is there; a live alarm pops up when hostiles are reported.</span><span data-de>Local mit Strg+C kopieren und das Overlay zeigt, wer da ist; bei gemeldeten Feinden springt ein Live-Alarm auf.</span></li>
+        </ul>
+      </article>
+
+    </div>
+    <div class="ststrip" id="st-strip">
+      <div class="covers" aria-hidden="true"><img src="music/radio-silence.jpg" alt="" loading="lazy"><img src="music/harmonic-deep-field.jpg" alt="" loading="lazy"><img src="music/warpdrive.jpg" alt="" loading="lazy"><img src="music/sunbreak.jpg" alt="" loading="lazy"><img src="music/sombra-evolvente.jpg" alt="" loading="lazy"><img src="music/sunless-orbit.jpg" alt="" loading="lazy"><img src="music/deep-space-pulse.jpg" alt="" loading="lazy"><img src="music/space-flowers.jpg" alt="" loading="lazy"></div>
+      <div>
+        <span class="tag"><span data-en>BONUS · OWN SOUNDTRACK</span><span data-de>BONUS · EIGENER SOUNDTRACK</span></span>
+        <h3><span data-en>24 space tracks by <b>Nareya79</b></span><span data-de>24 Weltraum-Tracks von <b>Nareya79</b></span></h3>
+        <p><span data-en>Built right into EVE Omni – your own music for trading, hauling and roaming.</span><span data-de>Direkt in EVE Omni eingebaut – eigene Musik zum Handeln, Haulen und Fliegen.</span></p>
+        <div class="cta">
+          <button class="btn primary" type="button" id="st-strip-play">▶ <span data-en>Listen now</span><span data-de>Reinhören</span></button>
+          <a class="btn ghost" href="#soundtrack"><span data-en>All 24 tracks</span><span data-de>Alle 24 Titel</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <h2><span data-en>…and everything else a capsuleer <b>needs</b></span><span data-de>…und alles andere, was ein Kapselpilot <b>braucht</b></span></h2>
+    <p class="intro"><span data-en>Built by a trader and hauler for daily play – with all values you type into EVE ready to copy, and profits always shown net per unit and in total.</span><span data-de>Gebaut von einem Händler und Hauler für den Alltag im Spiel – alle Werte, die du in EVE eintippst, mit Kopier-Knopf, und Gewinne immer netto pro Stück und gesamt.</span></p>
+    <div class="grid">
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M5 16l4-5 3 3 6-8"/><circle class="c" cx="18" cy="6" r="1.6"/></svg></div>
+        <h3><span data-en>Market scanner</span><span data-de>Markt-Scanner</span></h3>
+        <p><span data-en>Finds profitable trades between hubs like Jita 4-4 – with taxes, fees and volume already included.</span><span data-de>Findet lohnende Trades zwischen Handelsplätzen wie Jita 4-4 – Steuern, Gebühren und Volumen schon eingerechnet.</span></p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path class="c" d="M8 10h8M8 14h5"/></svg></div>
+        <h3><span data-en>My trades &amp; profits</span><span data-de>Meine Trades &amp; Gewinne</span></h3>
+        <p><span data-en>Tracks every buy and sell from your wallet and shows real profit per item, per run and over time.</span><span data-de>Verfolgt jeden Kauf und Verkauf aus der Wallet und zeigt den echten Gewinn pro Stück, pro Lauf und über die Zeit.</span></p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path class="c" d="M4 7.5l8 4.5 8-4.5M12 12v9"/></svg></div>
+        <h3><span data-en>Hauling &amp; watchlist</span><span data-de>Hauling &amp; Watchlist</span></h3>
+        <p><span data-en>Plan runs, see what is bought, in transit or selling – and get a heads-up when something goes wrong.</span><span data-de>Läufe planen und sehen, was gekauft, unterwegs oder im Verkauf ist – mit Hinweis, wenn etwas schiefläuft.</span></p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path class="c" d="M8 10h8M8 14h8M8 18h5"/></svg></div>
+        <h3><span data-en>Orders, contracts &amp; sell check</span><span data-de>Orders, Verträge &amp; Verkaufs-Check</span></h3>
+        <p><span data-en>Watch your market orders, see when you are undercut and check where an item sells best.</span><span data-de>Behalte deine Marktorders im Blick, sieh, wann du unterboten wirst, und prüfe, wo sich ein Item am besten verkauft.</span></p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path class="c" d="M16 12.5h2"/><path d="M3 10h18"/></svg></div>
+        <h3><span data-en>Wallet &amp; assets</span><span data-de>Wallet &amp; Assets</span></h3>
+        <p><span data-en>All characters at a glance: ISK, journal, items in every station – searchable and with current values.</span><span data-de>Alle Charaktere auf einen Blick: ISK, Journal, Items in jeder Station – durchsuchbar und mit aktuellem Wert.</span></p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 20V10l5 3V10l5 3V6h4l1 14z"/><path class="c" d="M7 17h2M12 17h2"/></svg></div>
+        <h3><span data-en>Industry &amp; blueprints</span><span data-de>Industrie &amp; Blueprints</span></h3>
+        <p><span data-en>Running jobs, blueprints and planetary industry – know when something finishes.</span><span data-de>Laufende Jobs, Blueprints und Planeten-Industrie – du weißt, wann etwas fertig ist.</span></p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M6 4h10a2 2 0 012 2v14H8a2 2 0 01-2-2z"/><path class="c" d="M6 18a2 2 0 012-2h10"/></svg></div>
+        <h3><span data-en>Skills</span><span data-de>Skills</span></h3>
+        <p><span data-en>Skill queue and trading skills for every character – fees and taxes are calculated from your real skills.</span><span data-de>Skill-Warteschlange und Handels-Skills aller Charaktere – Gebühren und Steuern werden mit deinen echten Skills berechnet.</span></p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><circle class="c" cx="6" cy="17" r="2"/><circle cx="12" cy="9" r="2"/><circle class="c" cx="18" cy="6" r="2"/><path d="M7.5 15.5l3-5M14 8l2.3-1"/></svg></div>
+        <h3><span data-en>Navigation &amp; map</span><span data-de>Navigation &amp; Karte</span></h3>
+        <p><span data-en>Route planner, jump planner and map – set your autopilot destination in EVE with one click.</span><span data-de>Routenplaner, Sprungplaner und Karte – Autopilot-Ziel in EVE mit einem Klick setzen.</span></p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle class="c" cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></div>
+        <h3><span data-en>Intel &amp; local report</span><span data-de>Intel &amp; Local-Report</span></h3>
+        <p><span data-en>Paste local and instantly see who is around – with killboard info at a glance.</span><span data-de>Local einfügen und sofort sehen, wer unterwegs ist – mit Killboard-Infos auf einen Blick.</span></p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path class="c" d="M12 10v4M12 17h.01"/></svg></div>
+        <h3><span data-en>Gang alarm &amp; report</span><span data-de>Gang-Alarm &amp; Report</span></h3>
+        <p><span data-en>Live killboard alerts in a “Hostile reported” window and a short report of what happened.</span><span data-de>Live-Warnungen vom Killboard im „Feind gemeldet“-Fenster und ein kurzer Bericht, was passiert ist.</span></p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="3"/><circle class="c" cx="16" cy="9" r="3"/><path d="M3 19c1-3 3-4 5-4s4 1 5 4M13 15c1-.6 2-.9 3-.9 2 0 4 1 5 4"/></svg></div>
+        <h3><span data-en>Multi-character &amp; settings sync</span><span data-de>Mehrere Charaktere &amp; Settings-Sync</span></h3>
+        <p><span data-en>Log in all your characters at once and copy EVE client settings between them.</span><span data-de>Alle Charaktere gleichzeitig einloggen und EVE-Client-Einstellungen zwischen ihnen übertragen.</span></p></div>
+      <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><rect class="c" x="6" y="8" width="3" height="3" rx=".5"/><rect x="10.5" y="8" width="3" height="3" rx=".5"/><rect class="c" x="15" y="8" width="3" height="3" rx=".5"/><rect x="6" y="13" width="3" height="3" rx=".5"/><rect class="c" x="10.5" y="13" width="3" height="3" rx=".5"/><rect x="15" y="13" width="3" height="3" rx=".5"/></svg></div>
+        <h3><span data-en>Stream Deck &amp; Stream Dock</span><span data-de>Stream Deck &amp; Stream Dock</span></h3>
+        <p><span data-en>Plugin for Elgato Stream Deck (incl. Stream Deck +) and MiraBox Stream Dock (N4 &amp; co.): overlay keys, live values, timer, jukebox and dials.</span><span data-de>Plugin für Elgato Stream Deck (auch Stream Deck +) und MiraBox Stream Dock (N4 &amp; Co.): Overlay-Tasten, Live-Werte, Timer, Jukebox und Drehknöpfe.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="safe">
+  <div class="wrap">
+    <h2><span data-en>Safe by <b>design</b></span><span data-de>Sicher <b>gebaut</b></span></h2>
+    <p class="intro"><span data-en>EVE Omni only uses the official EVE interfaces. It never touches your game client.</span><span data-de>EVE Omni nutzt nur die offiziellen EVE-Schnittstellen und greift nie in deinen Spiel-Client ein.</span></p>
+    <div class="trust">
+      <div class="card"><h3><span data-en>Official EVE login</span><span data-de>Offizieller EVE-Login</span></h3><p><span data-en>You log in on CCP's own login page (EVE SSO). EVE Omni never sees your password.</span><span data-de>Du loggst dich auf der Login-Seite von CCP ein (EVE SSO). EVE Omni sieht dein Passwort nie.</span></p></div>
+      <div class="card"><h3><span data-en>Your data stays local</span><span data-de>Deine Daten bleiben lokal</span></h3><p><span data-en>Logins, trades and settings are stored only on your PC – no account, no cloud, no tracking.</span><span data-de>Logins, Trades und Einstellungen liegen nur auf deinem PC – kein Konto, keine Cloud, kein Tracking.</span></p></div>
+      <div class="card"><h3><span data-en>No automation</span><span data-de>Keine Automatisierung</span></h3><p><span data-en>EVE Omni does not send any input to the game and does not play for you. It shows information – you fly.</span><span data-de>EVE Omni sendet keine Eingaben ans Spiel und spielt nicht für dich. Es zeigt Informationen – du fliegst.</span></p></div>
+      <div class="card"><h3><span data-en>Open source</span><span data-de>Offener Quellcode</span></h3><p><span data-en>The full code will be public on GitHub (MIT license) – anyone can check what it does.</span><span data-de>Der komplette Code wird öffentlich auf GitHub stehen (MIT-Lizenz) – jeder kann nachprüfen, was er tut.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section id="download">
+  <div class="wrap dl">
+    <div>
+      <h2>Download</h2>
+      <p class="intro" style="margin-bottom:18px"><span data-en>The first public beta is on its way. Follow the YouTube channel to get notified.</span><span data-de>Die erste öffentliche Beta ist unterwegs. Folge dem YouTube-Kanal, um Bescheid zu bekommen.</span></p>
+      <div class="cta">
+        <a class="btn primary" aria-disabled="true" href="#download">⬇ <span data-en>Windows – coming soon</span><span data-de>Windows – bald verfügbar</span></a>
+        <a class="btn ghost" href="https://www.youtube.com/@EVEOmni" target="_blank" rel="noopener">▶ YouTube</a>
+      </div>
+      <p class="small" style="margin-top:14px"><span data-en>Windows 10/11 · 64-bit · no admin rights needed</span><span data-de>Windows 10/11 · 64 Bit · keine Admin-Rechte nötig</span></p>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0"><span data-en>What you will get</span><span data-de>Was es geben wird</span></h3>
+      <ul class="files">
+        <li><span>EVE-Omni-Setup.exe</span><span data-en>Installer</span><span data-de>Installer</span></li>
+        <li><span>EVE-Omni-portable.zip</span><span data-en>No install</span><span data-de>Ohne Installation</span></li>
+        <li><span>EVE-Omni-Soundtrack.zip</span><span data-en>Music</span><span data-de>Musik</span></li>
+        <li><span>SHA256SUMS.txt</span><span data-en>Checksums</span><span data-de>Prüfsummen</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="install">
+  <div class="wrap">
+    <h2><span data-en>Install in <b>2 minutes</b></span><span data-de>In <b>2 Minuten</b> installiert</span></h2>
+    <p class="intro"><span data-en>No developer account, no API keys – just log in with EVE.</span><span data-de>Kein Entwicklerkonto, keine API-Schlüssel – einfach mit EVE einloggen.</span></p>
+    <ol class="steps">
+      <li><b><span data-en>Download</span><span data-de>Herunterladen</span></b> – <span data-en>get <kbd>EVE-Omni-Setup.exe</kbd> from this page or from GitHub.</span><span data-de>lade <kbd>EVE-Omni-Setup.exe</kbd> von dieser Seite oder von GitHub.</span></li>
+      <li><b><span data-en>Start the installer</span><span data-de>Installer starten</span></b> – <span data-en>if Windows shows “Windows protected your PC”, click <kbd>More info</kbd> → <kbd>Run anyway</kbd>.</span><span data-de>wenn Windows „Der Computer wurde durch Windows geschützt“ zeigt, klicke auf <kbd>Weitere Informationen</kbd> → <kbd>Trotzdem ausführen</kbd>.</span>
+        <div class="note"><span data-en>Why? EVE Omni is a free hobby project and is not code-signed (a certificate costs money every year). The release page lists checksums and a VirusTotal scan so you can verify the file.</span><span data-de>Warum? EVE Omni ist ein kostenloses Hobby-Projekt ohne Code-Signatur (ein Zertifikat kostet jedes Jahr Geld). Auf der Release-Seite stehen Prüfsummen und ein VirusTotal-Scan, damit du die Datei prüfen kannst.</span></div></li>
+      <li><b><span data-en>Log in with EVE</span><span data-de>Mit EVE einloggen</span></b> – <span data-en>click “Log in with EVE”, choose your character on CCP's page and confirm. Add more characters any time.</span><span data-de>klicke auf „Mit EVE einloggen“, wähle auf der Seite von CCP deinen Charakter und bestätige. Weitere Charaktere kannst du jederzeit hinzufügen.</span></li>
+      <li><b><span data-en>Fly</span><span data-de>Losfliegen</span></b> – <span data-en>pick your trade hub, open the market scanner and go. o7</span><span data-de>Handelsplatz wählen, Markt-Scanner öffnen, los geht's. o7</span></li>
+    </ol>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>FAQ</h2>
+    <p class="intro"></p>
+    <details><summary><span data-en>Does it work with Stream Deck / Stream Dock?</span><span data-de>Geht es mit Stream Deck / Stream Dock?</span></summary>
+      <p><span data-en>Yes. EVE Omni brings a plugin for the Elgato Stream Deck (incl. Stream Deck + with dials) and the MiraBox Stream Dock (N4 and others). Turn it on under Settings › Program › Stream keys and click “Install plugin”. The keys only talk to EVE Omni on your own PC (127.0.0.1) – they never send input to the game.</span><span data-de>Ja. EVE Omni bringt ein Plugin für das Elgato Stream Deck (auch Stream Deck + mit Drehknöpfen) und das MiraBox Stream Dock (N4 und andere) mit. Einschalten unter Einstellungen › Programm › Stream-Tasten und „Plugin installieren“ klicken. Die Tasten sprechen nur mit EVE Omni auf deinem eigenen PC (127.0.0.1) – sie senden nie Eingaben ans Spiel.</span></p></details>
+    <details><summary><span data-en>Is EVE Omni allowed by CCP?</span><span data-de>Ist EVE Omni von CCP erlaubt?</span></summary>
+      <p><span data-en>EVE Omni uses only CCP's official, public interfaces (ESI and EVE SSO) like other third-party tools. It never reads or changes game files in memory and never sends keyboard or mouse input to the game. The client switcher only brings an EVE window to the front – one key, one window. It is a fan project and not affiliated with or endorsed by CCP.</span><span data-de>EVE Omni nutzt wie andere Drittanbieter-Tools nur die offiziellen, öffentlichen Schnittstellen von CCP (ESI und EVE SSO). Es liest oder verändert nichts im Spiel-Speicher und sendet keine Tastatur- oder Mauseingaben ans Spiel. Der Client-Umschalter holt nur ein EVE-Fenster nach vorne – eine Taste, ein Fenster. Es ist ein Fan-Projekt, nicht mit CCP verbunden und nicht von CCP unterstützt.</span></p></details>
+    <details><summary><span data-en>Does it cost anything?</span><span data-de>Kostet es etwas?</span></summary>
+      <p><span data-en>No. EVE Omni is free, with every feature, forever – no premium version. If you like it, you can send an in-game ISK donation, but you never have to.</span><span data-de>Nein. EVE Omni ist kostenlos, mit allen Funktionen, für immer – keine Premium-Version. Wenn es dir gefällt, kannst du eine ISK-Spende im Spiel schicken, musst aber nie.</span></p></details>
+    <details><summary><span data-en>Why does the login ask for so many permissions?</span><span data-de>Warum fragt der Login nach so vielen Berechtigungen?</span></summary>
+      <p><span data-en>Each area of the app needs read access to its own data – wallet for profits, assets for your items, skills for fees and so on. Only two permissions can do something in the game: setting your autopilot destination and opening an info window, and only when you click the button.</span><span data-de>Jeder Bereich braucht Lesezugriff auf seine Daten – Wallet für Gewinne, Assets für deine Items, Skills für Gebühren usw. Nur zwei Berechtigungen bewirken etwas im Spiel: Autopilot-Ziel setzen und ein Info-Fenster öffnen – und das nur, wenn du auf den Knopf klickst.</span></p></details>
+    <details><summary><span data-en>Where is my data stored?</span><span data-de>Wo werden meine Daten gespeichert?</span></summary>
+      <p><span data-en>Only on your PC, in the app's own folder. Nothing is uploaded to the developer. EVE Omni talks to CCP's ESI, zKillboard and DOTLAN for public data, and checks GitHub once a day for updates (can be turned off).</span><span data-de>Nur auf deinem PC, im Programmordner. Nichts wird an den Entwickler geschickt. EVE Omni fragt bei CCPs ESI, zKillboard und DOTLAN öffentliche Daten ab und schaut einmal am Tag bei GitHub nach Updates (abschaltbar).</span></p></details>
+    <details><summary><span data-en>Mac or Linux?</span><span data-de>Mac oder Linux?</span></summary>
+      <p><span data-en>The app is made for Windows. A browser version (single HTML file) is included and also works on other systems, with a few limits.</span><span data-de>Das Programm ist für Windows gemacht. Eine Browser-Version (eine HTML-Datei) liegt bei und läuft auch auf anderen Systemen, mit ein paar Einschränkungen.</span></p></details>
+    <details><summary><span data-en>I found a bug / have an idea</span><span data-de>Ich habe einen Fehler gefunden / eine Idee</span></summary>
+      <p><span data-en>Use the “Report bug” button in the app, open an issue on GitHub or ask on the <a href="https://discord.gg/Tyxt6J8yPR" target="_blank" rel="noopener">EVE Omni Discord</a>. Never post login tokens or codes.</span><span data-de>Nutze den Knopf „Fehler melden“ im Programm, öffne ein Issue auf GitHub oder frag im <a href="https://discord.gg/Tyxt6J8yPR" target="_blank" rel="noopener">EVE-Omni-Discord</a>. Poste nie Login-Tokens oder Codes.</span></p></details>
+  </div>
+</section>
+
+<section id="soundtrack">
+  <div class="wrap">
+    <div class="st-head">
+      <div>
+        <span class="tag"><span data-en>ORIGINAL SOUNDTRACK</span><span data-de>EIGENER SOUNDTRACK</span></span>
+        <h2><span data-en>The EVE Omni <b>Soundtrack</b></span><span data-de>Der EVE Omni <b>Soundtrack</b></span></h2>
+        <p class="intro"><span data-en>24 tracks of space ambience by Nareya79 – built right into EVE Omni, so you can trade, haul and roam with your own music. Click a cover to listen.</span><span data-de>24 Weltraum-Tracks von Nareya79 – direkt in EVE Omni eingebaut, damit du mit eigener Musik handeln, haulen und fliegen kannst. Klick auf ein Cover zum Reinhören.</span></p>
+      </div>
+      <button class="btn ghost" type="button" id="st-all">▶ <span data-en>Play all</span><span data-de>Alle abspielen</span></button>
+    </div>
+    <div class="st-grid" id="st-grid"></div>
+    <div class="st-more"><button class="btn ghost" type="button" id="st-more"><span data-en>Show all 24 tracks</span><span data-de>Alle 24 Titel zeigen</span></button></div>
+    <p class="small" style="margin-top:16px">© 2026 Nareya79 · <span data-en>for listening here and use with EVE Omni – please do not re-upload.</span><span data-de>zum Anhören hier und zur Nutzung mit EVE Omni – bitte nicht woanders hochladen.</span></p>
+  </div>
+</section>
+
+<section class="alt support" id="support">
+  <div class="wrap">
+    <h2><span data-en>Support <b>EVE Omni</b></span><span data-de><b>EVE Omni</b> unterstützen</span></h2>
+    <p class="intro"><span data-en>EVE Omni is free. If it helps you, an in-game ISK donation is very welcome – no real money, no premium, no pressure.</span><span data-de>EVE Omni ist kostenlos. Wenn es dir hilft, freue ich mich über eine ISK-Spende im Spiel – kein Echtgeld, kein Premium, kein Zwang.</span></p>
+    <div class="copy"><span id="donor">Nareya Mythec</span><button type="button" id="copy-donor"><span data-en>Copy</span><span data-de>Kopieren</span></button></div>
+    <p class="small" style="margin-top:14px"><span data-en>In EVE: search the name → right-click → “Give Money”.</span><span data-de>In EVE: Namen suchen → Rechtsklick → „Geld geben“.</span></p>
+    <p style="margin-top:22px"><span data-en>Questions, ideas, bugs or just want to say o7?</span><span data-de>Fragen, Ideen, Fehler oder einfach o7 sagen?</span> <a class="btn ghost" style="margin-left:8px" href="https://discord.gg/Tyxt6J8yPR" target="_blank" rel="noopener"><span data-en>Join the Discord</span><span data-de>Zum Discord</span></a></p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="row">
+      <a class="brand" href="#top"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true"><defs><radialGradient id="bg" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#1d3140"/><stop offset=".6" stop-color="#121c26"/><stop offset="1" stop-color="#0d141c"/></radialGradient>
+<radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#86d1eb" stop-opacity=".28"/><stop offset="1" stop-color="#86d1eb" stop-opacity="0"/></radialGradient>
+<filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect x="8" y="8" width="496" height="496" rx="90" fill="url(#bg)" stroke="#2c3d4f" stroke-width="10"/>
+<circle cx="256" cy="256" r="200" fill="url(#halo)"/><g filter="url(#glow)"><circle cx="256" cy="256" r="173" fill="none" stroke="#e0b45d" stroke-width="33"/></g><g><rect x="146.5" y="126" width="33" height="260" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/><rect x="201.5" y="126" width="164" height="33" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/><rect x="201.5" y="239.5" width="128" height="33" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/><rect x="201.5" y="353" width="164" height="33" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/></g><g filter="url(#glow)"><rect x="146.5" y="126" width="33" height="260" rx="4" fill="#86d1eb"/><rect x="201.5" y="126" width="164" height="33" rx="4" fill="#86d1eb"/><rect x="201.5" y="239.5" width="128" height="33" rx="4" fill="#e0b45d"/><rect x="201.5" y="353" width="164" height="33" rx="4" fill="#86d1eb"/></g></svg><span>EVE <b>OMNI</b></span></a>
+      <a href="https://discord.gg/Tyxt6J8yPR" target="_blank" rel="noopener">Discord</a>
+      <a href="https://www.youtube.com/@EVEOmni" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://github.com/Nareya79" target="_blank" rel="noopener">GitHub</a>
+      <a href="impressum.html"><span data-en>Legal notice</span><span data-de>Impressum</span></a>
+      <a href="datenschutz.html"><span data-en>Privacy</span><span data-de>Datenschutz</span></a>
+    </div>
+    <p><span data-en>This page sets no cookies and uses no tracking. Fonts are your system's own.</span><span data-de>Diese Seite setzt keine Cookies und nutzt kein Tracking. Es werden nur Schriften deines Systems verwendet.</span></p>
+    <p>EVE Omni is a fan project by Nareya79 and is not affiliated with CCP hf. © CCP hf. All rights reserved. “EVE”, “EVE Online”, “CCP”, and all related logos and images are trademarks or registered trademarks of CCP hf.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var KEY='eveomni-site-lang';
+  function apply(l){
+    document.documentElement.lang=l;
+    document.querySelectorAll('[data-en]').forEach(function(e){e.hidden=(l!=='en');});
+    document.querySelectorAll('[data-de]').forEach(function(e){e.hidden=(l!=='de');});
+    document.querySelectorAll('[data-set-lang]').forEach(function(b){b.setAttribute('aria-pressed', b.getAttribute('data-set-lang')===l);});
+  }
+  var l=null; try{l=localStorage.getItem(KEY);}catch(e){}
+  if(l!=='en'&&l!=='de'){ l=(navigator.language||'en').toLowerCase().indexOf('de')===0?'de':'en'; }
+  apply(l);
+  document.querySelectorAll('[data-set-lang]').forEach(function(b){b.addEventListener('click',function(){var v=b.getAttribute('data-set-lang');apply(v);try{localStorage.setItem(KEY,v);}catch(e){}});});
+  document.querySelectorAll('[aria-disabled=true]').forEach(function(a){a.addEventListener('click',function(ev){ev.preventDefault();});});
+  var cb=document.getElementById('copy-donor');
+  cb.addEventListener('click',function(){
+    var t=document.getElementById('donor').textContent;
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){cb.classList.add('ok');cb.innerHTML='✓';setTimeout(function(){apply(document.documentElement.lang);cb.innerHTML='<span data-en>Copy</span><span data-de>Kopieren</span>';apply(document.documentElement.lang);},1500);}).catch(function(){});
+  });
+  // stars
+  var s=document.getElementById('stars'), w=1400, h=700, seed=7, out='';
+  function r(){seed=(seed*16807)%2147483647;return seed/2147483647;}
+  s.setAttribute('viewBox','0 0 '+w+' '+h); s.setAttribute('preserveAspectRatio','xMidYMid slice');
+  for(var i=0;i<170;i++){out+='<circle cx="'+(r()*w).toFixed(1)+'" cy="'+(r()*h).toFixed(1)+'" r="'+(r()*1.4+.3).toFixed(2)+'" fill="#cfe9f5" opacity="'+(r()*.6+.15).toFixed(2)+'"/>';}
+  s.innerHTML=out;
+})();
+</script>
+<div class="player" id="player" hidden>
+  <img id="pl-img" alt="">
+  <div class="pt"><b id="pl-t"></b><small><span id="pl-cur">0:00</span> / <span id="pl-dur">0:00</span> · Nareya79</small><input type="range" id="pl-seek" min="0" max="100" value="0" step="0.1" aria-label="Seek"></div>
+  <button class="skip" type="button" id="pl-prev" aria-label="Previous">⏮</button>
+  <button class="pp" type="button" id="pl-pp" aria-label="Play/Pause">⏸</button>
+  <button class="skip" type="button" id="pl-next" aria-label="Next">⏭</button>
+  <button type="button" id="pl-x" aria-label="Close">✕</button>
+  <audio id="pl-audio" preload="none"></audio>
+</div>
+
+<script>
+(function(){
+  var T=[{"n":1,"t":"Radio Silence","s":"radio-silence","d":218},{"n":2,"t":"Harmonic Deep Field","s":"harmonic-deep-field","d":238},{"n":3,"t":"Warpdrive","s":"warpdrive","d":234},{"n":4,"t":"Sunbreak","s":"sunbreak","d":189},{"n":5,"t":"Sombra Evolvente","s":"sombra-evolvente","d":169},{"n":6,"t":"Sunless Orbit","s":"sunless-orbit","d":280},{"n":7,"t":"Deep Space Pulse","s":"deep-space-pulse","d":218},{"n":8,"t":"Space Flowers","s":"space-flowers","d":198},{"n":9,"t":"Never Ending Systems","s":"never-ending-systems","d":252},{"n":10,"t":"Deep Space Drift","s":"deep-space-drift","d":205},{"n":11,"t":"Subterranean Pressure","s":"subterranean-pressure","d":209},{"n":12,"t":"Airy Delays","s":"airy-delays","d":257},{"n":13,"t":"Warpdrive Hyperspeedtravel","s":"warpdrive-hyperspeedtravel","d":179},{"n":14,"t":"Starscape Arpeggio","s":"starscape-arpeggio","d":210},{"n":15,"t":"Deep Space Drones","s":"deep-space-drones","d":209},{"n":16,"t":"Wein Flaschen im Weltraum","s":"wein-flaschen-im-weltraum","d":235},{"n":17,"t":"Dark Fade","s":"dark-fade","d":224},{"n":18,"t":"Deep Field Drift","s":"deep-field-drift","d":224},{"n":19,"t":"Jumpbridge Offline","s":"jumpbridge-offline","d":262},{"n":20,"t":"Pulsar 42","s":"pulsar-42","d":224},{"n":21,"t":"Midnight Currents","s":"midnight-currents","d":210},{"n":22,"t":"Static Bloom","s":"static-bloom","d":202},{"n":23,"t":"Nebula Drift","s":"nebula-drift","d":203},{"n":24,"t":"Funkstille Alpha","s":"funkstille-alpha","d":258}];
+  var g=document.getElementById('st-grid'), a=document.getElementById('pl-audio'), P=document.getElementById('player');
+  var cur=-1, shown=12;
+  function fmt(s){s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+':'+('0'+s%60).slice(-2);}
+  function render(){
+    g.innerHTML='';
+    T.slice(0,shown).forEach(function(t,i){
+      var b=document.createElement('button'); b.type='button'; b.className='trk'+(i===cur?' on':''); b.setAttribute('aria-label','Play '+t.t);
+      b.innerHTML='<img loading="lazy" src="music/'+t.s+'.jpg" alt=""><div class="pl"><span>'+(i===cur&&!a.paused?'❚❚':'▶')+'</span></div><div class="meta"><b>'+t.t+'</b><i>'+fmt(t.d)+'</i></div>';
+      b.addEventListener('click',function(){ if(i===cur){ a.paused?a.play():a.pause(); } else play(i); });
+      g.appendChild(b);
+    });
+    document.getElementById('st-more').parentNode.hidden = shown>=T.length;
+  }
+  function play(i){
+    cur=(i+T.length)%T.length; var t=T[cur];
+    if(cur>=shown){shown=T.length;}
+    a.src='music/'+t.s+'.mp3'; a.play().catch(function(){});
+    document.getElementById('pl-img').src='music/'+t.s+'.jpg';
+    document.getElementById('pl-t').textContent=t.n+'. '+t.t;
+    document.getElementById('pl-dur').textContent=fmt(t.d);
+    P.hidden=false; render();
+  }
+  a.addEventListener('play',function(){document.getElementById('pl-pp').textContent='⏸';render();});
+  a.addEventListener('pause',function(){document.getElementById('pl-pp').textContent='▶';render();});
+  a.addEventListener('ended',function(){play(cur+1);});
+  a.addEventListener('timeupdate',function(){ if(a.duration){document.getElementById('pl-seek').value=a.currentTime/a.duration*100;document.getElementById('pl-cur').textContent=fmt(a.currentTime);document.getElementById('pl-dur').textContent=fmt(a.duration);} });
+  document.getElementById('pl-seek').addEventListener('input',function(e){ if(a.duration) a.currentTime=e.target.value/100*a.duration; });
+  document.getElementById('pl-pp').addEventListener('click',function(){ a.paused?a.play():a.pause(); });
+  document.getElementById('pl-prev').addEventListener('click',function(){ play(cur-1); });
+  document.getElementById('pl-next').addEventListener('click',function(){ play(cur+1); });
+  document.getElementById('pl-x').addEventListener('click',function(){ a.pause(); P.hidden=true; cur=-1; render(); });
+  document.getElementById('st-more').addEventListener('click',function(){ shown=T.length; render(); });
+  document.getElementById('st-all').addEventListener('click',function(){ play(0); });
+  render();
+  var trb=document.getElementById('tr-btn'); if(trb) trb.addEventListener('click',function(){ var f=document.createElement('iframe'); f.src='https://www.youtube-nocookie.com/embed/LSafv7unbqA?autoplay=1&rel=0'; f.title='EVE Omni Trailer'; f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen=true; var a=document.getElementById('pl-audio'); if(a) a.pause(); document.getElementById('tr-box').replaceChildren(f); });
+  var sb=document.getElementById('st-strip-play'); if(sb) sb.addEventListener('click',function(){ play(0); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /callback.html
+
+Sitemap: https://omni.nareya79.com/sitemap.xml

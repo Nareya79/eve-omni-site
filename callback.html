@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>EVE Omni – Login</title>
+<style>
+:root{--bg:#0b1118;--fg:#e6f4fb;--mut:#9fb3c2;--cy:#86d1eb;--gd:#e0b45d}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{background:radial-gradient(ellipse at 50% 35%,#1d3140 0%,#121c26 55%,var(--bg) 100%);color:var(--fg);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;align-items:center;justify-content:center;padding:24px 16px}
+main{max-width:640px;text-align:center}
+h1{font-size:clamp(34px,7vw,56px);letter-spacing:.06em;margin:18px 0 6px;font-weight:800}
+h1 b{color:var(--gd)}
+.sub{color:var(--cy);font-size:clamp(17px,3.5vw,21px);margin:0 0 22px}
+.pill{display:inline-block;border:1.5px solid var(--gd);color:var(--gd);border-radius:999px;padding:6px 16px;font-weight:700;letter-spacing:.12em;font-size:13px}
+p{color:var(--mut)}
+code{background:#16222d;border:1px solid #2c3d4f;border-radius:8px;padding:10px 12px;display:block;word-break:break-all;color:var(--fg);font-size:14px;text-align:left}
+button{margin-top:10px;background:var(--cy);color:#0b1118;border:0;border-radius:8px;padding:9px 18px;font-weight:700;cursor:pointer}
+footer{margin-top:34px;font-size:12px;color:#6f8494}
+</style><link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0d141c">
+</head>
+<body><main>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="96" height="96" role="img" aria-label="EVE Omni"><defs><radialGradient id="bg" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#1d3140"/><stop offset=".6" stop-color="#121c26"/><stop offset="1" stop-color="#0d141c"/></radialGradient>
+<radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#86d1eb" stop-opacity=".28"/><stop offset="1" stop-color="#86d1eb" stop-opacity="0"/></radialGradient>
+<filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+<rect x="8" y="8" width="496" height="496" rx="90" fill="url(#bg)" stroke="#2c3d4f" stroke-width="10"/>
+<circle cx="256" cy="256" r="200" fill="url(#halo)"/><g filter="url(#glow)"><circle cx="256" cy="256" r="173" fill="none" stroke="#e0b45d" stroke-width="33"/></g><g><rect x="146.5" y="126" width="33" height="260" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/><rect x="201.5" y="126" width="164" height="33" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/><rect x="201.5" y="239.5" width="128" height="33" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/><rect x="201.5" y="353" width="164" height="33" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/></g><g filter="url(#glow)"><rect x="146.5" y="126" width="33" height="260" rx="4" fill="#86d1eb"/><rect x="201.5" y="126" width="164" height="33" rx="4" fill="#86d1eb"/><rect x="201.5" y="239.5" width="128" height="33" rx="4" fill="#e0b45d"/><rect x="201.5" y="353" width="164" height="33" rx="4" fill="#86d1eb"/></g></svg>
+<h1 style="font-size:30px">EVE <b>OMNI</b> Login</h1>
+<div id="ok">
+<p class="sub">Login received – you can return to EVE Omni.<br><span lang="de">Login erhalten – du kannst zu EVE Omni zurückkehren.</span></p>
+<p>If EVE Omni did not pick it up automatically, copy this address and paste it into EVE Omni.<br>
+<span lang="de">Falls EVE Omni den Login nicht automatisch übernommen hat: diese Adresse kopieren und in EVE Omni einfügen.</span></p>
+<code id="url"></code>
+<button id="copy" type="button">Copy / Kopieren</button>
+</div>
+<p id="none" hidden>No login data found on this page.<br><span lang="de">Keine Login-Daten auf dieser Seite gefunden.</span></p>
+<footer>This page runs only in your browser. It stores and sends nothing.<br>
+Fan project – not affiliated with CCP hf.</footer>
+</main>
+<script>
+(function(){
+  var q=new URLSearchParams(location.search);
+  if(!q.get('code')){document.getElementById('ok').hidden=true;document.getElementById('none').hidden=false;return;}
+  var full=location.href;
+  document.getElementById('url').textContent=full;
+  document.getElementById('copy').onclick=function(){
+    navigator.clipboard.writeText(full).then(function(){document.getElementById('copy').textContent='Copied ✓ / Kopiert ✓';});
+  };
+})();
+</script>
+</body></html>
