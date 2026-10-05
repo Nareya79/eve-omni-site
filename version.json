@@ -1,5 +1,5 @@
 {
-  "version": "4.0.67",
+  "version": "4.0.73",
   "url": "https://github.com/Nareya79/eve-omni/releases/latest",
-  "notes": "First public beta: installer without admin rights, demo mode, English UI, update check via GitHub"
+  "notes": "Full English UI, EVE settings backup & profiles, overlay data countdown, sell orders become trades automatically, gank check fix"
 }
