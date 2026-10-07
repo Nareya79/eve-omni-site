@@ -74,6 +74,9 @@ section.alt{background:var(--bg2)}
 h2{font-size:clamp(28px,4vw,38px);margin:0 0 8px;letter-spacing:.02em}
 h2 b{color:var(--gd)}
 .intro{color:var(--mut);max-width:680px;margin:0 0 40px}
+.nw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:22px}
+.nw-grid .card h3{margin:6px 0 6px;font-size:18px}.nw-grid .card p{margin:0;color:var(--mut,#9aa7b4);font-size:15px;line-height:1.5}
+.nw-ic{font-size:26px}.nw-shot{margin-top:24px;display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
 .card h3{margin:12px 0 6px;font-size:17px}
@@ -280,6 +283,23 @@ footer a{color:var(--mut)}
       <button type="button" id="tr-btn" aria-label="Play trailer"><span class="tr-play">▶</span><span class="tr-t"><span data-en>Watch the trailer (1 min)</span><span data-de>Trailer ansehen (1 Min.)</span></span></button>
     </div>
     <p class="tr-note"><span data-en>The video is loaded from YouTube only after you click play (youtube-nocookie.com).</span><span data-de>Das Video wird erst nach dem Klick von YouTube geladen (youtube-nocookie.com).</span> · <a href="https://youtu.be/LSafv7unbqA" target="_blank" rel="noopener">YouTube</a></p>
+  </div>
+</section>
+
+<section class="alt" id="new">
+  <div class="wrap">
+    <span class="tag"><span data-en>NEW IN BETA 4.0.74</span><span data-de>NEU IN BETA 4.0.74</span></span>
+    <h2><span data-en>Simpler. <b>Your size. Your playstyle.</b></span><span data-de>Einfacher. <b>Deine Größe. Deine Spielweise.</b></span></h2>
+    <p class="intro"><span data-en>Thanks to your feedback after the first release, EVE Omni is now much easier to find your way around – only what you need, clearly labelled and explained.</span><span data-de>Dank eurer Rückmeldungen nach dem ersten Release findet man sich in EVE Omni jetzt viel leichter zurecht – nur was du brauchst, klar beschriftet und erklärt.</span></p>
+    <div class="nw-grid">
+      <div class="card"><div class="nw-ic">🔍</div><h3><span data-en>Zoom 80–200 %</span><span data-de>Zoom 80–200 %</span></h3><p><span data-en>Start size fits your screen – from laptop to ultrawide (3440×1440, 5120×1440). Overlays keep their own size.</span><span data-de>Startgröße passt sich deinem Bildschirm an – vom Laptop bis Ultrawide (3440×1440, 5120×1440). Overlays haben ihre eigene Größe.</span></p></div>
+      <div class="card"><div class="nw-ic">🎯</div><h3><span data-en>Pick your playstyle</span><span data-de>Spielart wählen</span></h3><p><span data-en>On first start: what do you mainly play? Trading, hauling, mining, PvP, industry or multi-boxing – those tools go on top, the rest is folded away.</span><span data-de>Beim ersten Start: Was spielst du hauptsächlich? Handel, Hauling, Mining, PvP, Industrie oder Multiboxing – diese Werkzeuge stehen oben, der Rest ist eingeklappt.</span></p></div>
+      <div class="card"><div class="nw-ic">🏠</div><h3><span data-en>Overview page</span><span data-de>Übersicht-Seite</span></h3><p><span data-en>Wallet, trades &amp; runs, skills, planets, intel and your next timer at a glance – also as an overlay.</span><span data-de>Wallet, Trades &amp; Läufe, Skills, Planeten, Intel und der nächste Timer auf einen Blick – auch als Overlay.</span></p></div>
+      <div class="card"><div class="nw-ic">🧭</div><h3><span data-en>Clear &amp; explained</span><span data-de>Klar &amp; erklärt</span></h3><p><span data-en>Main button on top, rarely used options under “Advanced”, short hints on every page – and trading in one simple form.</span><span data-de>Hauptknopf oben, Seltenes unter „Erweitert“, kurze Hinweise auf jeder Seite – und Handel in einem einfachen Formular.</span></p></div>
+    </div>
+    <img class="nw-shot" data-en data-zoom src="shots/en/uebersicht.webp" alt="EVE Omni overview: wallet, trades, skills, planets, intel, timer" width="1920" height="236" loading="lazy"><img class="nw-shot" data-de data-zoom src="shots/de/uebersicht.webp" alt="EVE Omni Übersicht: Wallet, Trades, Skills, Planeten, Intel, Timer" width="1920" height="236" loading="lazy">
+    <p class="intro" style="margin-top:22px"><span data-en>On a 5120×1440 ultrawide at 125 % zoom – main window plus overlays side by side:</span><span data-de>Auf einem 5120×1440-Ultrawide bei 125 % Zoom – Hauptfenster und Overlays nebeneinander:</span></p>
+    <img class="nw-shot" data-en data-zoom src="shots/en/ultrawide.webp" alt="EVE Omni on a 5120x1440 ultrawide screen" width="2560" height="720" loading="lazy"><img class="nw-shot" data-de data-zoom src="shots/de/ultrawide.webp" alt="EVE Omni auf einem 5120x1440-Ultrawide" width="2560" height="720" loading="lazy">
   </div>
 </section>
 
@@ -613,11 +633,13 @@ footer a{color:var(--mut)}
 
 (function(){
   var S=[
+    ['spielart','Pick your playstyle','Spielart wählen','New in 4.0.74: on first start choose what you play – only those tools go on top.','Neu in 4.0.74: Beim ersten Start wählst du, was du spielst – nur diese Werkzeuge stehen oben.'],
+    ['erweitert','Clear pages','Klare Seiten','Main button on top, rarely used options under “Advanced”, a short hint on every page.','Hauptknopf oben, Seltenes unter „Erweitert“, ein kurzer Hinweis auf jeder Seite.'],
     ['scanner','Market scanner','Markt-Scanner','Finds profitable items in Jita 4-4 and plans your buys – net profit per unit and in total.','Findet lohnende Waren in Jita 4-4 und plant deine Einkäufe – Gewinn netto pro Stück und gesamt.'],
     ['trades','My trades','Meine Trades','Every trade from buy to sale: outbid warnings, exact new price with copy button, real net profit.','Jeder Trade vom Kauf bis zum Verkauf: Warnung bei Überboten, exakter neuer Preis zum Kopieren, echter Nettogewinn.'],
     ['gewinne','Profits','Gewinne','What you really earned – after fees and taxes, per item, per day and per month.','Was wirklich hängen bleibt – nach Gebühren und Steuern, je Ware, Tag und Monat.'],
     ['wallet','Wallet','Wallet','All characters\' ISK, income and spending at a glance.','ISK aller Charaktere, Einnahmen und Ausgaben auf einen Blick.'],
-    ['handel','Hub trading','Hub-Handel','Buy in one hub, sell in another – with cargo, jumps and a gank risk light.','In einem Hub kaufen, im anderen verkaufen – mit Ladung, Sprüngen und Gank-Ampel.'],
+    ['handel','Trading','Handel','One form: buy in, sell in, ship, budget and gank protection – best cargo with fitting and gank light.','Ein Formular: Einkaufen, Verkaufen, Schiff, Budget und Gank-Schutz – beste Ladung mit Fitting und Gank-Ampel.'],
     ['route','Route planner','Routenplaner','Safest or shortest route, dangerous systems flagged, destination set with one click.','Sicherste oder kürzeste Route, gefährliche Systeme markiert, Ziel mit einem Klick setzen.'],
     ['karte','Map','Karte','Region map with your characters, kills, jumps and your route.','Regionskarte mit deinen Charakteren, Kills, Sprüngen und deiner Route.'],
     ['local','Local intel','Local-Intel','Copy local with Ctrl+C – EVE Omni shows who is dangerous.','Local mit Strg+C kopieren – EVE Omni zeigt, wer gefährlich ist.'],
