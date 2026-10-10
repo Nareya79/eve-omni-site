@@ -1,5 +1,5 @@
 {
-  "version": "4.0.74",
+  "version": "4.0.75",
   "url": "https://github.com/Nareya79/eve-omni/releases/latest",
-  "notes": "Easier to use: zoom 80–200 % incl. ultrawide, pick your playstyle on first start, new overview page, \"Advanced\" sections and hints, trading in one form"
+  "notes": "Wallet analysis, map in DOTLAN style (set destination in EVE), Neocom like EVE, Jukebox with equalizer & streaming in the overlay, pin/zoom per overlay, skip clients when tabbing, fixes"
 }
