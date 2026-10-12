@@ -76,7 +76,7 @@ h2 b{color:var(--gd)}
 .intro{color:var(--mut);max-width:680px;margin:0 0 40px}
 .nw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px;margin-top:22px}
 .nw-grid .card h3{margin:6px 0 6px;font-size:18px}.nw-grid .card p{margin:0;color:var(--mut,#9aa7b4);font-size:15px;line-height:1.5}
-.nw-ic{font-size:26px}.nw-shot{margin-top:24px;display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
+.nw-ic{font-size:26px}@media(max-width:820px){.nw-ob{grid-template-columns:1fr!important}.nw-ob img{max-width:340px;margin:0 auto}}.nw-shot{margin-top:24px;display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
 .card h3{margin:12px 0 6px;font-size:17px}
@@ -219,6 +219,7 @@ footer a{color:var(--mut)}
 #lb img{max-width:100%;max-height:100%;border-radius:8px;box-shadow:0 20px 80px rgba(0,0,0,.6)}
 .pillar img.mock{display:block;aspect-ratio:1128/476;object-fit:cover}
 @media(max-width:600px){#screens .tabs button{font-size:13px;padding:8px 11px}}
+.fx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px 30px}.fx-col h3{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent,#86d1eb);margin:0 0 8px}.fx-col ul{list-style:none;margin:0;padding:0}.fx-col li{padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}.fx-col li small{display:block;color:var(--mut);font-size:12px;margin-top:2px}.fx-ov{color:var(--accent,#86d1eb);font-size:12px}   /* Funktionsliste */
 </style>
 </head>
 <body>
@@ -280,7 +281,7 @@ footer a{color:var(--mut)}
 <section id="trailer">
   <div class="wrap">
     <div class="tr-box" id="tr-box" style="background-image:url(trailer.jpg)">
-      <button type="button" id="tr-btn" aria-label="Play trailer"><span class="tr-play">▶</span><span class="tr-t"><span data-en>Watch the 4.0.75 trailer (1 min)</span><span data-de>Trailer 4.0.75 ansehen (1 Min.)</span></span></button>
+      <button type="button" id="tr-btn" aria-label="Play trailer"><span class="tr-play">▶</span><span class="tr-t"><span data-en>Watch the trailer (1:25)</span><span data-de>Trailer ansehen (1:25 Min.)</span></span></button>
     </div>
     <p class="tr-note"><span data-en>The video is loaded from YouTube only after you click play (youtube-nocookie.com).</span><span data-de>Das Video wird erst nach dem Klick von YouTube geladen (youtube-nocookie.com).</span> · <a href="https://youtu.be/aLU9zXKDErQ" target="_blank" rel="noopener">YouTube</a></p>
   </div>
@@ -288,15 +289,19 @@ footer a{color:var(--mut)}
 
 <section class="alt" id="new">
   <div class="wrap">
-    <span class="tag"><span data-en>NEW IN BETA 4.0.75</span><span data-de>NEU IN BETA 4.0.75</span></span>
-    <h2><span data-en>Know your ISK. <b>Read the map. Feel at home.</b></span><span data-de>Kenne dein ISK. <b>Lies die Karte. Fühl dich wie in EVE.</b></span></h2>
-    <p class="intro"><span data-en>A new wallet analysis, a map in DOTLAN style, a Neocom that works like EVE's – plus a much bigger Jukebox and lots of fixes.</span><span data-de>Neue Wallet-Auswertung, Karte im DOTLAN-Stil, ein Neocom wie in EVE – dazu eine deutlich größere Jukebox und viele Fehlerbehebungen.</span></p>
-    <div class="nw-grid">
-      <div class="card"><div class="nw-ic">📊</div><h3><span data-en>Wallet analysis</span><span data-de>Wallet-Auswertung</span></h3><p><span data-en>Net profit by source (trading, hauling, courier, mining, missions, PI), top &amp; flop items, fees, order stats, ROI and a weekday × hour heat map – Today to All.</span><span data-de>Netto-Gewinn nach Quelle (Handel, Hauling, Kurier, Mining, Missionen, PI), Top- &amp; Flop-Waren, Gebühren, Orders, Rendite und Wochentag × Uhrzeit – von Heute bis Alles.</span></p></div>
-      <div class="card"><div class="nw-ic">🗺️</div><h3><span data-en>Map in DOTLAN style</span><span data-de>Karte im DOTLAN-Stil</span></h3><p><span data-en>Systems as boxes with name and security, no overlapping labels, info card on click – and one click sets the destination in EVE.</span><span data-de>Systeme als Kästchen mit Name und Sicherheit, keine überlappenden Namen, Info-Kärtchen per Klick – und ein Klick setzt das Ziel in EVE.</span></p></div>
-      <div class="card"><div class="nw-ic">✨</div><h3><span data-en>Neocom like EVE</span><span data-de>Neocom wie in EVE</span></h3><p><span data-en>Glowing group icons in your colour – click opens the group next to the bar. Drag buttons into any group or keep them on top.</span><span data-de>Leuchtende Gruppen-Symbole in deiner Farbe – Klick öffnet die Gruppe neben der Leiste. Knöpfe per Ziehen in jede Gruppe oder oben lassen.</span></p></div>
-      <div class="card"><div class="nw-ic">🎵</div><h3><span data-en>Jukebox &amp; more</span><span data-de>Jukebox &amp; mehr</span></h3><p><span data-en>Equalizer, loudness levelling, visualizer, Spotify / Deezer / Apple Music in the overlay. Plus: pin and zoom per overlay, skip clients when tabbing, bookmark folders.</span><span data-de>Equalizer, Lautstärke-Angleich, Visualizer, Spotify / Deezer / Apple Music im Overlay. Dazu: Pin und Zoom je Overlay, Clients beim Umschalten überspringen, Lesezeichen-Ordner.</span></p></div>
+    <span class="tag"><span data-en>NEW IN BETA 4.0.76</span><span data-de>NEU IN BETA 4.0.76</span></span>
+    <h2><span data-en>Break some ore. <b>Trade faster.</b></span><span data-de>Erz knacken. <b>Schneller handeln.</b></span></h2>
+    <p class="intro"><span data-en>OmniBreaker, a mini-game in EVE style for the waiting times between undocks – plus a faster trading overlay and an installer where you choose what you get.</span><span data-de>OmniBreaker, ein Minispiel im EVE-Stil für die Wartezeit zwischen zwei Abdockvorgängen – dazu ein schnelleres Handel-Overlay und ein Installer, bei dem du wählst, was du bekommst.</span></p>
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:24px;align-items:start" class="nw-ob">
+      <div class="nw-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+        <div class="card"><div class="nw-ic">🕹️</div><h3><span data-en>OmniBreaker</span><span data-de>OmniBreaker</span></h3><p><span data-en>Aim your mining laser, clear the ore veins, chain combos. 100 levels with a highlight every 10, high score, save game and practice mode.</span><span data-de>Mining-Laser zielen, Erzadern leeren, Combos aneinanderreihen. 100 Level mit Höhepunkt alle 10, Highscore, Spielstand und Übungsmodus.</span></p></div>
+        <div class="card"><div class="nw-ic">🌌</div><h3><span data-en>Power items &amp; space</span><span data-de>Power-Items &amp; Weltraum</span></h3><p><span data-en>8 power items unlock as you go – stasis web, magnet drone, warp jump, gravity bomb … – on 12 animated space backgrounds. English and German.</span><span data-de>8 Power-Items kommen mit den Leveln dazu – Stasis-Netz, Magnet-Drohne, Warp-Sprung, Gravitationsbombe … – auf 12 animierten Weltraum-Hintergründen. Deutsch und Englisch.</span></p></div>
+        <div class="card"><div class="nw-ic">📈</div><h3><span data-en>Trading overlay</span><span data-de>Handel-Overlay</span></h3><p><span data-en>Switch your trading character right in the overlay, re-detect ships, cancel running searches and save market-scan results from the trades overlay.</span><span data-de>Handelscharakter direkt im Overlay wechseln, Schiffe neu erkennen, laufende Suchen abbrechen und Markt-Scan-Ergebnisse im Trades-Overlay merken.</span></p></div>
+        <div class="card"><div class="nw-ic">📦</div><h3><span data-en>You choose</span><span data-de>Du wählst</span></h3><p><span data-en>The installer lets you untick OmniBreaker and the soundtrack. Without OmniBreaker the game is hidden everywhere.</span><span data-de>Im Installer kannst du OmniBreaker und den Soundtrack abwählen. Ohne OmniBreaker ist das Spiel überall ausgeblendet.</span></p></div>
+      </div>
+      <img class="nw-shot" data-zoom src="shots/en/omnibreaker.webp" alt="OmniBreaker mini-game in EVE Omni" width="544" height="740" loading="lazy" style="margin-top:0">
     </div>
+    <p class="intro" style="margin-top:28px"><span data-en>Since 4.0.75: wallet analysis (net profit by source, top &amp; flop items, ROI, heat map), a map in DOTLAN style with “set destination in EVE”, a Neocom like EVE's and a much bigger Jukebox.</span><span data-de>Seit 4.0.75: Wallet-Auswertung (Netto-Gewinn nach Quelle, Top- &amp; Flop-Waren, Rendite, Wärmefeld), Karte im DOTLAN-Stil mit „Ziel in EVE setzen“, ein Neocom wie in EVE und eine deutlich größere Jukebox.</span></p>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-top:8px">
       <img class="nw-shot" data-zoom src="shots/en/auswertung.webp" alt="EVE Omni wallet analysis: net profit by source, top items, costs" width="1600" height="900" loading="lazy">
       <img class="nw-shot" data-zoom src="shots/en/karte-dotlan.webp" alt="EVE Omni map in DOTLAN style, The Forge" width="1920" height="920" loading="lazy">
@@ -461,7 +466,7 @@ footer a{color:var(--mut)}
         <a class="btn primary" href="https://github.com/Nareya79/eve-omni/releases/latest" target="_blank" rel="noopener">⬇ <span data-en>Download for Windows</span><span data-de>Für Windows laden</span></a>
         <a class="btn ghost" href="https://github.com/Nareya79/eve-omni/releases" target="_blank" rel="noopener"><span data-en>All versions &amp; checksums</span><span data-de>Alle Versionen &amp; Prüfsummen</span></a>
       </div>
-      <p class="small" style="margin-top:14px"><span data-en>Windows 10/11 · 64-bit · no admin rights needed · on the release page pick <kbd>EVE-Omni-Setup-….exe</kbd></span><span data-de>Windows 10/11 · 64 Bit · keine Admin-Rechte nötig · auf der Release-Seite <kbd>EVE-Omni-Setup-….exe</kbd> wählen</span></p>
+      <p class="small" style="margin-top:14px"><span data-en>Windows 10/11 · 64-bit · no admin rights needed · on the <a href="https://github.com/Nareya79/eve-omni/releases/latest" target="_blank" rel="noopener">release page</a> pick <kbd>EVE-Omni-Setup-….exe</kbd></span><span data-de>Windows 10/11 · 64 Bit · keine Admin-Rechte nötig · auf der <a href="https://github.com/Nareya79/eve-omni/releases/latest" target="_blank" rel="noopener">Release-Seite</a> <kbd>EVE-Omni-Setup-….exe</kbd> wählen</span></p>
     </div>
     <div class="card">
       <h3 style="margin-top:0"><span data-en>Files in every release</span><span data-de>Dateien in jedem Release</span></h3>
@@ -482,7 +487,7 @@ footer a{color:var(--mut)}
     <ol class="steps">
       <li><b><span data-en>Download</span><span data-de>Herunterladen</span></b> – <span data-en>get <kbd>EVE-Omni-Setup-….exe</kbd> from the <a href="#download">download</a> button above.</span><span data-de>lade <kbd>EVE-Omni-Setup-….exe</kbd> über den <a href="#download">Download</a>-Knopf oben.</span></li>
       <li><b><span data-en>Start the installer</span><span data-de>Installer starten</span></b> – <span data-en>if Windows shows “Windows protected your PC”, click <kbd>More info</kbd> → <kbd>Run anyway</kbd>.</span><span data-de>wenn Windows „Der Computer wurde durch Windows geschützt“ zeigt, klicke auf <kbd>Weitere Informationen</kbd> → <kbd>Trotzdem ausführen</kbd>.</span>
-        <div class="note"><span data-en>Why? EVE Omni is a free hobby project and is not code-signed (a certificate costs money every year). The release page lists checksums and a VirusTotal scan so you can verify the file.</span><span data-de>Warum? EVE Omni ist ein kostenloses Hobby-Projekt ohne Code-Signatur (ein Zertifikat kostet jedes Jahr Geld). Auf der Release-Seite stehen Prüfsummen und ein VirusTotal-Scan, damit du die Datei prüfen kannst.</span></div></li>
+        <div class="note"><span data-en>Why? EVE Omni is a free hobby project and is not code-signed (a certificate costs money every year). The <a href="https://github.com/Nareya79/eve-omni/releases/latest" target="_blank" rel="noopener">release page</a> lists checksums and a VirusTotal scan so you can verify the file.</span><span data-de>Warum? EVE Omni ist ein kostenloses Hobby-Projekt ohne Code-Signatur (ein Zertifikat kostet jedes Jahr Geld). Auf der <a href="https://github.com/Nareya79/eve-omni/releases/latest" target="_blank" rel="noopener">Release-Seite</a> stehen Prüfsummen und ein VirusTotal-Scan, damit du die Datei prüfen kannst.</span></div></li>
       <li><b><span data-en>Log in with EVE</span><span data-de>Mit EVE einloggen</span></b> – <span data-en>click “Log in with EVE”, choose your character on CCP's page and confirm. Add more characters any time.</span><span data-de>klicke auf „Mit EVE einloggen“, wähle auf der Seite von CCP deinen Charakter und bestätige. Weitere Charaktere kannst du jederzeit hinzufügen.</span></li>
       <li><b><span data-en>Fly</span><span data-de>Losfliegen</span></b> – <span data-en>pick your trade hub, open the market scanner and go. o7</span><span data-de>Handelsplatz wählen, Markt-Scanner öffnen, los geht's. o7</span></li>
     </ol>
@@ -525,6 +530,93 @@ footer a{color:var(--mut)}
     <p class="small" style="margin-top:16px">© 2026 Nareya79 · <span data-en>for listening here and use with EVE Omni – please do not re-upload.</span><span data-de>zum Anhören hier und zur Nutzung mit EVE Omni – bitte nicht woanders hochladen.</span></p>
   </div>
 </section>
+
+<!-- FUNKTIONEN-START (erzeugt von tools/funktionsliste.js – nicht von Hand ändern) -->
+<section id="all-functions">
+  <div class="wrap">
+    <h2><span data-en>All functions</span><span data-de>Alle Funktionen</span></h2>
+    <p class="intro"><span data-en>60 functions – and where to find them in the app. ◱ = also available as an overlay on top of EVE.</span><span data-de>60 Funktionen – und wo du sie im Programm findest. ◱ = auch als Overlay über EVE.</span></p>
+    <div class="fx-grid">
+      <div class="fx-col"><h3><span data-en>Trading</span><span data-de>Handel</span></h3><ul>
+        <li><span data-en>Market scanner: profitable items for station trading per hub</span><span data-de>Markt-Scanner: lohnende Waren fürs Station-Trading je Hub</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading › Station trading</span><span data-de>Handel › Station-Trading</span></small></li>
+        <li><span data-en>My trades with outbid alarm, price suggestion and profit</span><span data-de>Meine Trades mit Überboten-Alarm, Preisvorschlag und Gewinn</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading › Station trading › Trades</span><span data-de>Handel › Station-Trading › Trades</span></small></li>
+        <li><span data-en>Price watchlist with charts and alarm</span><span data-de>Preis-Merkliste mit Kurven und Alarm</span><small><span data-en>Trading › Station trading › Price watchlist</span><span data-de>Handel › Station-Trading › Preis-Merkliste</span></small></li>
+        <li><span data-en>Profit history from the wallet (day, week, month)</span><span data-de>Gewinn-Historie aus der Wallet (Tag, Woche, Monat)</span><small><span data-en>Trading › Station trading › Profit</span><span data-de>Handel › Station-Trading › Gewinn</span></small></li>
+        <li><span data-en>Hauling: best cargo in a radius or to a target, with ship recommendation</span><span data-de>Hauling: beste Ladung im Umkreis oder zu einem Ziel, mit Schiffsempfehlung</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading</span><span data-de>Handel</span></small></li>
+        <li><span data-en>Hub trading: best cargo between hubs by budget and cargo space</span><span data-de>Hub-Handel: beste Ladung zwischen Hubs nach Budget und Laderaum</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading › To a fixed hub</span><span data-de>Handel › Zu festem Hub</span></small></li>
+        <li><span data-en>Buying starts at the location of the active EVE client</span><span data-de>Einkauf startet am Standort des aktiven EVE-Clients</span><small><span data-en>Trading › Where to buy</span><span data-de>Handel › Wo kaufen</span></small></li>
+        <li><span data-en>Gank protection: cargo value matched to the ship (ISK/EHP light)</span><span data-de>Gank-Schutz: Ladungswert passend zum Schiff (ISK/EHP-Ampel)</span><small><span data-en>Trading › How much ISK</span><span data-de>Handel › Wie viel ISK</span></small></li>
+        <li><span data-en>Market browser: one item in the 5 hubs, order book, price history, margin</span><span data-de>Marktbrowser: eine Ware in den 5 Hubs, Orderbuch, Preisverlauf, Marge</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading › Market</span><span data-de>Handel › Markt</span></small></li>
+        <li><span data-en>Watchlist: all trades and hauling runs with profit/loss</span><span data-de>Watchlist: alle Trades und Hauling-Läufe mit Gewinn/Verlust</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading › Watchlist</span><span data-de>Handel › Watchlist</span></small></li>
+        <li><span data-en>Appraisal: paste a list, value in Jita and the hubs</span><span data-de>Wertschätzer: Liste einfügen, Wert in Jita und den Hubs</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading › Appraisal</span><span data-de>Handel › Wertschätzer</span></small></li>
+        <li><span data-en>Courier scanner: public courier contracts with ISK per jump</span><span data-de>Kurier-Scanner: öffentliche Kurierverträge mit ISK pro Sprung</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading › Courier</span><span data-de>Handel › Kurier</span></small></li>
+        <li><span data-en>Sell scan: best places to sell your assets</span><span data-de>Verkaufsscan: beste Verkaufsorte für eigene Assets</span><small><span data-en>Assets › Sell scan</span><span data-de>Besitz › Verkaufsscan</span></small></li>
+      </ul></div>
+      <div class="fx-col"><h3><span data-en>Assets</span><span data-de>Besitz</span></h3><ul>
+        <li><span data-en>Wallet of all characters with evaluation</span><span data-de>Wallet aller Charaktere mit Auswertung</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Assets › Wallet</span><span data-de>Besitz › Wallet</span></small></li>
+        <li><span data-en>Assets of all characters with search and value</span><span data-de>Assets aller Charaktere mit Suche und Wert</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Assets › Assets</span><span data-de>Besitz › Assets</span></small></li>
+        <li><span data-en>Own market orders with expiry warning and free slots</span><span data-de>Eigene Market-Orders mit Ablauf-Warnung und freien Slots</span><small><span data-en>Assets › Orders</span><span data-de>Besitz › Orders</span></small></li>
+        <li><span data-en>Contracts of all characters</span><span data-de>Verträge aller Charaktere</span><small><span data-en>Assets › Contracts</span><span data-de>Besitz › Verträge</span></small></li>
+        <li><span data-en>Industry jobs and blueprints</span><span data-de>Industrie-Jobs und Blaupausen</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Assets › Industry</span><span data-de>Besitz › Industrie</span></small></li>
+        <li><span data-en>Mining: ore calculator, best place to sell, mining log, moons</span><span data-de>Mining: Erz-Rechner, bester Verkaufsort, Mining-Tagebuch, Monde</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Assets › Mining</span><span data-de>Besitz › Mining</span></small></li>
+      </ul></div>
+      <div class="fx-col"><h3><span data-en>Navigation &amp; intel</span><span data-de>Navigation &amp; Intel</span></h3><ul>
+        <li><span data-en>Travel route with gank warning and “paste route”</span><span data-de>Reiseroute mit Gank-Warnung und „Route einfügen“</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Navi &amp; Intel › Navigation</span><span data-de>Navi &amp; Intel › Navigation</span></small></li>
+        <li><span data-en>Jump planner and jump bridges</span><span data-de>Jump Planner und Jump Bridges</span><small><span data-en>Navi &amp; Intel › Navigation</span><span data-de>Navi &amp; Intel › Navigation</span></small></li>
+        <li><span data-en>Set destination or waypoint directly in EVE</span><span data-de>Ziel oder Wegpunkt direkt in EVE setzen</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Navi &amp; Intel › Navigation</span><span data-de>Navi &amp; Intel › Navigation</span></small></li>
+        <li><span data-en>Map: region and universe with kills, route and characters</span><span data-de>Karte: Region und Universum mit Kills, Route und Charakteren</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Navi &amp; Intel › Map</span><span data-de>Navi &amp; Intel › Karte</span></small></li>
+        <li><span data-en>Local report: threat in local (Ctrl+C in local)</span><span data-de>Local Report: Bedrohung im Local (Strg+C im Local)</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Navi &amp; Intel › Local</span><span data-de>Navi &amp; Intel › Local</span></small></li>
+        <li><span data-en>D-scan evaluation with warnings</span><span data-de>D-Scan-Auswertung mit Warnungen</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Navi &amp; Intel › Local</span><span data-de>Navi &amp; Intel › Local</span></small></li>
+        <li><span data-en>Alert: kills near you live from zKillboard, with report</span><span data-de>Alert: Kills in deiner Nähe live über zKillboard, mit Report</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Neocom overlay › Alert</span><span data-de>Neocom-Overlay › Alert</span></small></li>
+        <li><span data-en>Radar: gate camps in the radius</span><span data-de>Radar: Gate-Camps im Umkreis</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Navi &amp; Intel › Radar</span><span data-de>Navi &amp; Intel › Radar</span></small></li>
+        <li><span data-en>Wormholes: J-systems and wormhole types</span><span data-de>Wurmlöcher: J-Systeme und Wurmloch-Typen</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Navi &amp; Intel › Wormholes</span><span data-de>Navi &amp; Intel › Wurmlöcher</span></small></li>
+        <li><span data-en>Read intel channels</span><span data-de>Intel-Kanäle mitlesen</span><small><span data-en>Settings › Alarms</span><span data-de>Einstellungen › Alarme</span></small></li>
+      </ul></div>
+      <div class="fx-col"><h3><span data-en>Characters</span><span data-de>Charaktere</span></h3><ul>
+        <li><span data-en>Characters: location, ship, online, clones, implants</span><span data-de>Charaktere: Standort, Schiff, online, Klone, Implantate</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Characters</span><span data-de>Charaktere</span></small></li>
+        <li><span data-en>Skills and queues of all characters</span><span data-de>Skills und Warteschlangen aller Charaktere</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Characters › Skills</span><span data-de>Charaktere › Skills</span></small></li>
+        <li><span data-en>Skill plans with prerequisites and injector calculator</span><span data-de>Skillpläne mit Voraussetzungen und Injektor-Rechner</span><small><span data-en>Characters › Skills › Skill plans</span><span data-de>Charaktere › Skills › Skillpläne</span></small></li>
+        <li><span data-en>Planets (PI): extractors, runtime, storage</span><span data-de>Planeten (PI): Extraktoren, Laufzeit, Lager</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Characters › Planets</span><span data-de>Charaktere › Planeten</span></small></li>
+        <li><span data-en>EVE mail of all characters: read, folders, search</span><span data-de>EVE-Mail aller Charaktere: lesen, Ordner, Suche</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Characters › Mail</span><span data-de>Charaktere › Mail</span></small></li>
+        <li><span data-en>Write, reply, forward mail (also to corp, alliance, mailing lists)</span><span data-de>Mail schreiben, antworten, weiterleiten (auch an Corp, Allianz, Mailinglisten)</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Characters › Mail</span><span data-de>Charaktere › Mail</span></small></li>
+        <li><span data-en>Notification and counter for new EVE mail</span><span data-de>Meldung und Zähler bei neuer EVE-Mail</span><small><span data-en>Characters › Mail</span><span data-de>Charaktere › Mail</span></small></li>
+        <li><span data-en>PI planner: production chains P0 to P4</span><span data-de>PI-Planer: Produktionsketten P0 bis P4</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Neocom overlay › PI planner</span><span data-de>Neocom-Overlay › PI-Planer</span></small></li>
+      </ul></div>
+      <div class="fx-col"><h3><span data-en>EVE clients</span><span data-de>EVE-Clients</span></h3><ul>
+        <li><span data-en>Start EVE (opens the launcher)</span><span data-de>EVE starten (öffnet den Launcher)</span><small><span data-en>Button ▶ EVE at the top</span><span data-de>Knopf ▶ EVE oben</span></small></li>
+        <li><span data-en>Quit all EVE clients (e.g. for downtime)</span><span data-de>Alle EVE-Clients beenden (z. B. zur Downtime)</span><small><span data-en>Button ■ EVE at the top · tray icon</span><span data-de>Knopf ■ EVE oben · Symbol unten rechts</span></small></li>
+        <li><span data-en>Client preview: live image of all clients, click brings the client to the front</span><span data-de>Client-Vorschau: Live-Bild aller Clients, Klick holt den Client nach vorne</span><small><span data-en>Settings › EVE clients</span><span data-de>Einstellungen › EVE-Clients</span></small></li>
+        <li><span data-en>Cycle clients with one key (like EVE-X-Preview)</span><span data-de>Clients mit einer Taste durchschalten (wie EVE-X-Preview)</span><small><span data-en>Settings › EVE clients</span><span data-de>Einstellungen › EVE-Clients</span></small></li>
+        <li><span data-en>Copy EVE settings between characters</span><span data-de>EVE-Einstellungen zwischen Charakteren übertragen</span><small><span data-en>Settings › EVE clients</span><span data-de>Einstellungen › EVE-Clients</span></small></li>
+        <li><span data-en>Back up EVE settings and load them as a profile</span><span data-de>EVE-Einstellungen sichern und als Profil laden</span><small><span data-en>Settings › EVE clients</span><span data-de>Einstellungen › EVE-Clients</span></small></li>
+      </ul></div>
+      <div class="fx-col"><h3><span data-en>Overlays &amp; windows</span><span data-de>Overlays &amp; Fenster</span></h3><ul>
+        <li><span data-en>Every view as its own overlay on top of EVE</span><span data-de>Jede Ansicht als eigenes Overlay über EVE</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Neocom overlay · Settings › Overlays</span><span data-de>Neocom-Overlay · Einstellungen › Overlays</span></small></li>
+        <li><span data-en>Neocom overlay with own groups and icon color</span><span data-de>Neocom-Overlay mit eigenen Gruppen und Symbolfarbe</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Settings › Neocom</span><span data-de>Einstellungen › Neocom</span></small></li>
+        <li><span data-en>Snap overlays, click-through, opacity per window</span><span data-de>Overlays einrasten, durchklicken, Deckkraft je Fenster</span><small><span data-en>Settings › Overlays</span><span data-de>Einstellungen › Overlays</span></small></li>
+        <li><span data-en>Overlays only on top of EVE (hidden for other programs)</span><span data-de>Overlays nur über EVE (verschwinden bei anderen Programmen)</span><small><span data-en>Settings › Overlays</span><span data-de>Einstellungen › Overlays</span></small></li>
+        <li><span data-en>Hotkeys for show/hide, click-through and more</span><span data-de>Tastenkürzel für Anzeigen, Durchklicken und mehr</span><small><span data-en>Settings › Program</span><span data-de>Einstellungen › Programm</span></small></li>
+        <li><span data-en>Built-in browser (e.g. zKillboard, DOTLAN)</span><span data-de>Eingebauter Browser (z. B. zKillboard, DOTLAN)</span><small><span data-en>Neocom overlay › Browser</span><span data-de>Neocom-Overlay › Browser</span></small></li>
+        <li><span data-en>Stream keys (MiraBox, Elgato Stream Deck) with dials</span><span data-de>Stream-Tasten (MiraBox, Elgato Stream Deck) mit Drehknöpfen</span><small><span data-en>Settings › Program</span><span data-de>Einstellungen › Programm</span></small></li>
+      </ul></div>
+      <div class="fx-col"><h3><span data-en>Extras</span><span data-de>Extras</span></h3><ul>
+        <li><span data-en>Jukebox: own music, internet radio, streaming, playlists</span><span data-de>Jukebox: eigene Musik, Internet-Radio, Streaming, Playlists</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Other › Jukebox</span><span data-de>Sonstiges › Jukebox</span></small></li>
+        <li><span data-en>Clock and timers (EVE time, downtime, own timers)</span><span data-de>Uhr und Timer (EVE-Zeit, Downtime, eigene Timer)</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Neocom overlay › Clock &amp; timers</span><span data-de>Neocom-Overlay › Uhr &amp; Timer</span></small></li>
+        <li><span data-en>Notes</span><span data-de>Notizen</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Neocom overlay › Notes</span><span data-de>Neocom-Overlay › Notizen</span></small></li>
+        <li><span data-en>Performance: CPU, RAM, GPU of the PC</span><span data-de>Leistung: CPU, RAM, GPU des PCs</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Neocom overlay › Performance</span><span data-de>Neocom-Overlay › Leistung</span></small></li>
+        <li><span data-en>Overview as start page</span><span data-de>Übersicht als Startseite</span><small><span data-en>Other › Overview</span><span data-de>Sonstiges › Übersicht</span></small></li>
+      </ul></div>
+      <div class="fx-col"><h3><span data-en>Data &amp; account</span><span data-de>Daten &amp; Konto</span></h3><ul>
+        <li><span data-en>Log in several characters and accounts (EVE SSO only)</span><span data-de>Mehrere Charaktere und Accounts einloggen (nur EVE-SSO)</span><small><span data-en>Settings › Account</span><span data-de>Einstellungen › Konto</span></small></li>
+        <li><span data-en>Back up data and move it to another PC</span><span data-de>Daten sichern und auf einem anderen PC übernehmen</span><small><span data-en>Settings › Data</span><span data-de>Einstellungen › Daten</span></small></li>
+        <li><span data-en>German and English</span><span data-de>Deutsch und Englisch</span><small><span data-en>Settings › General</span><span data-de>Einstellungen › Allgemein</span></small></li>
+        <li><span data-en>Colors, light/dark design</span><span data-de>Farben, helles/dunkles Design</span><small><span data-en>Settings › Appearance</span><span data-de>Einstellungen › Darstellung</span></small></li>
+        <li><span data-en>Update notice for new versions</span><span data-de>Update-Hinweis bei neuer Version</span><small><span data-en>Settings › Program</span><span data-de>Einstellungen › Programm</span></small></li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+<!-- FUNKTIONEN-ENDE -->
 
 <section class="alt support" id="support">
   <div class="wrap">
@@ -631,7 +723,7 @@ footer a{color:var(--mut)}
   document.getElementById('st-more').addEventListener('click',function(){ shown=T.length; render(); });
   document.getElementById('st-all').addEventListener('click',function(){ play(0); });
   render();
-  var trb=document.getElementById('tr-btn'); if(trb) trb.addEventListener('click',function(){ var f=document.createElement('iframe'); f.src='https://www.youtube-nocookie.com/embed/aLU9zXKDErQ?autoplay=1&rel=0'; f.title='EVE Omni Trailer'; f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen=true; var a=document.getElementById('pl-audio'); if(a) a.pause(); document.getElementById('tr-box').replaceChildren(f); });
+  var trb=document.getElementById('tr-btn'); if(trb) trb.addEventListener('click',function(){ var f=document.createElement('iframe'); f.src='https://www.youtube-nocookie.com/embed/2eMqlG5wxwU?autoplay=1&rel=0'; f.title='EVE Omni Trailer'; f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen'; f.allowFullscreen=true; var a=document.getElementById('pl-audio'); if(a) a.pause(); document.getElementById('tr-box').replaceChildren(f); });
   var sb=document.getElementById('st-strip-play'); if(sb) sb.addEventListener('click',function(){ play(0); });
 })();
 

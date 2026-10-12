@@ -1,5 +1,5 @@
 {
-  "version": "4.0.75",
+  "version": "4.0.76",
   "url": "https://github.com/Nareya79/eve-omni/releases/latest",
-  "notes": "Wallet analysis, map in DOTLAN style (set destination in EVE), Neocom like EVE, Jukebox with equalizer & streaming in the overlay, pin/zoom per overlay, skip clients when tabbing, fixes"
+  "notes": "OmniBreaker mini-game (100 levels, power items, high score), installer lets you untick OmniBreaker and soundtrack, trading overlay: switch character, re-detect ships, cancel searches, fixes"
 }
