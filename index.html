@@ -27,6 +27,15 @@
   --fg:#e6f4fb; --mut:#9fb3c2; --dim:#6f8494; --cy:#86d1eb; --gd:#e0b45d; --gd2:#f0cb7e;
   --r:14px;
 }
+/* OmniBreaker-Bestenliste (live vom Server des Entwicklers) */
+.lb-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+.lb-bar select{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit}
+.lb-list{list-style:none;margin:0;padding:0;counter-reset:lb;max-width:720px}
+.lb-list li{display:grid;grid-template-columns:44px minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:9px 14px;border-bottom:1px solid var(--line)}
+.lb-list li:nth-child(-n+3) .lb-rk{color:var(--gd2);font-weight:700}
+.lb-rk{color:var(--dim);font-variant-numeric:tabular-nums}.lb-nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-sc{color:var(--cy);font-weight:600;font-variant-numeric:tabular-nums}.lb-lv{color:var(--dim);font-size:14px}
+.lb-st{color:var(--mut);min-height:1.4em}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:72px}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
@@ -239,6 +248,7 @@ footer a{color:var(--mut)}
       <a href="#features"><span data-en>Features</span><span data-de>Funktionen</span></a>
       <a href="#download">Download</a>
       <a href="#install"><span data-en>Install</span><span data-de>Installation</span></a>
+      <a href="#leaderboard"><span data-en>Leaderboard</span><span data-de>Bestenliste</span></a>
       <a href="#soundtrack">Soundtrack</a>
       <a href="#faq">FAQ</a>
       <a href="#support"><span data-en>Support</span><span data-de>Unterstützen</span></a>
@@ -309,6 +319,20 @@ footer a{color:var(--mut)}
     <p class="intro" style="margin-top:22px"><span data-en>Since 4.0.74: zoom 80–200 %, pick your playstyle on first start, an overview page and “Advanced” for rarely used options.</span><span data-de>Seit 4.0.74: Zoom 80–200 %, Spielart beim ersten Start wählen, eine Übersicht-Seite und „Erweitert“ für Seltenes.</span></p>
     <p class="intro" style="margin-top:22px"><span data-en>On a 5120×1440 ultrawide at 125 % zoom – main window plus overlays side by side:</span><span data-de>Auf einem 5120×1440-Ultrawide bei 125 % Zoom – Hauptfenster und Overlays nebeneinander:</span></p>
     <img class="nw-shot" data-en data-zoom src="shots/en/ultrawide.webp" alt="EVE Omni on a 5120x1440 ultrawide screen" width="2560" height="720" loading="lazy"><img class="nw-shot" data-de data-zoom src="shots/de/ultrawide.webp" alt="EVE Omni auf einem 5120x1440-Ultrawide" width="2560" height="720" loading="lazy">
+  </div>
+</section>
+
+<section id="leaderboard">
+  <div class="wrap">
+    <span class="tag"><span data-en>OMNIBREAKER</span><span data-de>OMNIBREAKER</span></span>
+    <h2><span data-en>Worldwide <b>leaderboard</b></span><span data-de>Weltweite <b>Bestenliste</b></span></h2>
+    <p class="intro"><span data-en>The best OmniBreaker pilots – live. In EVE Omni, tick “Upload scores” in the game menu ☰; your active EVE character is the name. Only the best value per character counts.</span><span data-de>Die besten OmniBreaker-Piloten – live. In EVE Omni im Spielmenü ☰ den Haken „Punkte hochladen“ setzen; der Name ist dein aktiver EVE-Charakter. Je Charakter zählt nur der beste Wert.</span></p>
+    <div class="lb-bar">
+      <select id="lb-sel" aria-label="Campaign or level"></select>
+      <button class="btn ghost" type="button" id="lb-reload">⟳ <span data-en>Refresh</span><span data-de>Neu laden</span></button>
+    </div>
+    <p class="lb-st" id="lb-st"></p>
+    <ol class="lb-list" id="lb-list"></ol>
   </div>
 </section>
 
@@ -535,7 +559,7 @@ footer a{color:var(--mut)}
 <section id="all-functions">
   <div class="wrap">
     <h2><span data-en>All functions</span><span data-de>Alle Funktionen</span></h2>
-    <p class="intro"><span data-en>60 functions – and where to find them in the app. ◱ = also available as an overlay on top of EVE.</span><span data-de>60 Funktionen – und wo du sie im Programm findest. ◱ = auch als Overlay über EVE.</span></p>
+    <p class="intro"><span data-en>61 functions – and where to find them in the app. ◱ = also available as an overlay on top of EVE.</span><span data-de>61 Funktionen – und wo du sie im Programm findest. ◱ = auch als Overlay über EVE.</span></p>
     <div class="fx-grid">
       <div class="fx-col"><h3><span data-en>Trading</span><span data-de>Handel</span></h3><ul>
         <li><span data-en>Market scanner: profitable items for station trading per hub</span><span data-de>Markt-Scanner: lohnende Waren fürs Station-Trading je Hub</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading › Station trading</span><span data-de>Handel › Station-Trading</span></small></li>
@@ -604,6 +628,7 @@ footer a{color:var(--mut)}
         <li><span data-en>Clock and timers (EVE time, downtime, own timers)</span><span data-de>Uhr und Timer (EVE-Zeit, Downtime, eigene Timer)</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Neocom overlay › Clock &amp; timers</span><span data-de>Neocom-Overlay › Uhr &amp; Timer</span></small></li>
         <li><span data-en>Notes</span><span data-de>Notizen</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Neocom overlay › Notes</span><span data-de>Neocom-Overlay › Notizen</span></small></li>
         <li><span data-en>Performance: CPU, RAM, GPU of the PC</span><span data-de>Leistung: CPU, RAM, GPU des PCs</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Neocom overlay › Performance</span><span data-de>Neocom-Overlay › Leistung</span></small></li>
+        <li><span data-en>OmniBreaker: minigame with 100 levels, power-ups, rails, rolling tracks, combo effects and a worldwide leaderboard</span><span data-de>OmniBreaker: Minispiel mit 100 Leveln, Power-Items, Schienen, Rollbahnen, Combo-Effekten und weltweiter Bestenliste</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Other › OmniBreaker</span><span data-de>Sonstiges › OmniBreaker</span></small></li>
         <li><span data-en>Overview as start page</span><span data-de>Übersicht als Startseite</span><small><span data-en>Other › Overview</span><span data-de>Sonstiges › Übersicht</span></small></li>
       </ul></div>
       <div class="fx-col"><h3><span data-en>Data &amp; account</span><span data-de>Daten &amp; Konto</span></h3><ul>
@@ -757,6 +782,34 @@ footer a{color:var(--mut)}
   lb.addEventListener('click',function(){lb.classList.remove('on');});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')lb.classList.remove('on');
     if(lb.classList.contains('on'))return; });
+})();
+</script>
+<script>
+/* OmniBreaker-Bestenliste: GET /top?l=0 (Kampagne) bzw. l=1..100; Namen nur als Text einsetzen (kommen von Spielern) */
+(function(){
+  var API='https://fluxserver01.taileafff1.ts.net:8443/omni', sel=document.getElementById('lb-sel'), list=document.getElementById('lb-list'), st=document.getElementById('lb-st'), req=0;
+  if(!sel) return;
+  function de(){return document.documentElement.lang==='de';}
+  function fmt(n){return Math.floor(n||0).toLocaleString(de()?'de-DE':'en-GB');}
+  function opts(){var v=sel.value||'0';sel.innerHTML='';var o=document.createElement('option');o.value='0';o.textContent=de()?'Kampagne (Gesamtpunkte)':'Campaign (total score)';sel.appendChild(o);
+    for(var i=1;i<=100;i++){o=document.createElement('option');o.value=String(i);o.textContent='Level '+i;sel.appendChild(o);} sel.value=v;}
+  function load(){
+    var l=Number(sel.value)||0, my=++req; st.textContent=de()?'Lade …':'Loading …'; list.textContent='';
+    fetch(API+'/top?l='+l).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();}).then(function(rows){
+      if(my!==req)return;
+      rows=Array.isArray(rows)?rows:[]; st.textContent=rows.length?'':(de()?'Noch keine Einträge – sei der Erste!':'No entries yet – be the first!');
+      rows.slice(0,50).forEach(function(s,i){
+        var li=document.createElement('li'), a=document.createElement('span'), n=document.createElement('span'), p=document.createElement('span'), v=document.createElement('span');
+        a.className='lb-rk';a.textContent=String(i+1);n.className='lb-nm';n.textContent=String(s.n||'?');p.className='lb-sc';p.textContent=fmt(s.s);
+        v.className='lb-lv';v.textContent=l===0&&s.lv?(de()?s.lv+' Level':s.lv+' levels'):(l>0&&s.ms?(s.ms/1000).toFixed(1)+' s':'');
+        li.appendChild(a);li.appendChild(n);li.appendChild(p);li.appendChild(v);list.appendChild(li);
+      });
+    }).catch(function(){if(my===req)st.textContent=de()?'Bestenliste gerade nicht erreichbar.':'Leaderboard not reachable right now.';});
+  }
+  opts(); sel.addEventListener('change',load); document.getElementById('lb-reload').addEventListener('click',load);
+  document.querySelectorAll('[data-set-lang]').forEach(function(b){b.addEventListener('click',function(){opts();load();});});
+  var sec=document.getElementById('leaderboard');   // erst laden, wenn der Abschnitt in Sicht kommt
+  if('IntersectionObserver' in window){var io=new IntersectionObserver(function(e){if(e[0].isIntersecting){io.disconnect();load();}},{rootMargin:'300px'});io.observe(sec);} else load();
 })();
 </script>
 </body>

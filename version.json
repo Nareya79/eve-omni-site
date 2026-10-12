@@ -1,5 +1,1 @@
-{
-  "version": "4.0.76",
-  "url": "https://github.com/Nareya79/eve-omni/releases/latest",
-  "notes": "OmniBreaker mini-game (100 levels, power items, high score), installer lets you untick OmniBreaker and soundtrack, trading overlay: switch character, re-detect ships, cancel searches, fixes"
-}
+{"version":"4.0.77","url":"https://github.com/Nareya79/eve-omni/releases/latest","notes":"Login fix for new users, OmniBreaker: rolling tracks, worldwide leaderboard and combo effects, Neocom drag and drop like in EVE, browser minimize and dark pages, fixes"}
