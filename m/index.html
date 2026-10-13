@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d141c"><meta name="referrer" content="no-referrer">
+<title>EVEOmni Mobile</title>
+<link rel="manifest" href="/m/manifest.webmanifest"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/m/m.css"></head>
+<body>
+<header><h1>EVE<b>Omni</b> Mobile</h1><button class="ghost" id="b-refresh" hidden aria-label="Aktualisieren">⟳</button></header>
+<main>
+ <section id="v-login" hidden>
+  <div class="hero"><h1>EVE <b>OMNI</b></h1><div class="sub">Mobile · Beta</div></div>
+  <p class="msg">Melde dich mit deinem EVE-Charakter an. Dein Login bleibt nur in diesem Browser auf deinem Handy.</p>
+  <button id="b-login" style="width:100%">Mit EVE-Charakter einloggen</button>
+  <p class="msg" id="login-msg"></p>
+ </section>
+ <section id="v-wallet" hidden><h2>Wallet</h2><div id="wallet-list"></div><div class="card row"><div class="grow nm">Gesamt</div><div class="isk" id="wallet-sum"></div></div><p class="msg" id="wallet-msg"></p>
+  <button class="ghost" id="b-add">Weiteren Charakter einloggen</button></section>
+ <section id="v-orders" hidden><h2>Orders</h2><div id="orders-list"></div><p class="msg" id="orders-msg"></p></section>
+ <section id="v-skills" hidden><h2>Skills</h2><div id="skills-list"></div><p class="msg" id="skills-msg"></p></section>
+ <section id="v-chars" hidden><h2>Charaktere</h2><div id="chars-list"></div><p class="msg" id="chars-msg"></p></section>
+ <section id="v-more" hidden><h2>Mehr</h2>
+  <div class="card"><div class="nm">Bald hier</div><div class="sub">Gewinne · Assets · Route · OmniBreaker</div></div>
+  <div class="card"><div class="nm">Eingeloggte Charaktere</div><div id="chars"></div></div>
+  <button class="ghost" id="b-out" style="width:100%">Alle ausloggen</button>
+  <p class="msg">Version <span id="ver"></span> · Fanprojekt, nicht mit CCP verbunden.</p></section>
+</main>
+<nav id="nav" hidden><button data-v="wallet" class="on"><span>◈</span>Wallet</button><button data-v="orders"><span>⇄</span>Orders</button><button data-v="skills"><span>✦</span>Skills</button><button data-v="chars"><span>☺</span>Chars</button><button data-v="more"><span>☰</span>Mehr</button></nav>
+<script src="/m/m.js"></script>
+</body></html>

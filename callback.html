@@ -45,7 +45,10 @@ Fan project – not affiliated with CCP hf.</footer>
 (function(){
   var q=new URLSearchParams(location.search);
   if(!q.get('code')){document.getElementById('ok').hidden=true;document.getElementById('none').hidden=false;return;}
-  var full=location.href;
+  // EVEOmni Mobile: hat die Handy-App den Login gestartet (Merker im selben Ursprung, max. 15 Min.), geht es sofort dorthin zurueck
+ try{var mk=parseInt(localStorage.getItem('eve-omni-m-login')||'0',10);
+  if(mk&&Date.now()-mk<15*60*1000&&q.get('state')){localStorage.removeItem('eve-omni-m-login');location.replace('/m/'+location.search);return;}}catch(e){}
+ var full=location.href;
   document.getElementById('url').textContent=full;
   document.getElementById('copy').onclick=function(){
     navigator.clipboard.writeText(full).then(function(){document.getElementById('copy').textContent='Copied ✓ / Kopiert ✓';});
