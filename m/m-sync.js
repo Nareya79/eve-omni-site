@@ -61,10 +61,12 @@ function fillTrade(box,t,c){
 /* Überboten-Prüfung: eigene Order (am Handy eingeloggter Charakter) gegen die beste Konkurrenz am selben Ort */
 function checkOrder(t,ch,done){
   var u=t._ui,buy=!t.buyDone;
-  getOrd(ch).then(async function(orders){
+  /* Lauf-Trades: verkaufen darf jeder Charakter des Laufs (wie am PC) – dann die Orders aller eingeloggten Charaktere durchsuchen */
+  var who=t.run&&!buy?M.loadChars().filter(function(c){return M.hasScope(c,"esi-markets.read_character_orders.v1");}):[ch];
+  Promise.all(who.map(function(c){return getOrd(c).catch(function(e){return c===ch?Promise.reject(e):[];});})).then(function(a){return [].concat.apply([],a);}).then(async function(orders){
     var own={};orders.forEach(function(o){own[o.order_id]=1;});
     var mine=orders.filter(function(x){return x.type_id===t.tid&&!!x.is_buy_order===buy;}).sort(function(a,b){return buy?b.price-a.price:a.price-b.price;}),o=mine[0];
-    if(!o){u.ord.textContent="Keine Order gefunden";u.badge.textContent="";done(null);return;}
+    if(!o){u.ord.textContent=buy?"Noch keine Kauforder":"Noch keine Verkaufsorder";u.badge.textContent="";done(null);return;}
     var best=await M.bestAt(o,own);
     var side=buy?"Kauf":"Verkauf";
     var lost=best!=null&&(buy?best>o.price:best<o.price);

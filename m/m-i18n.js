@@ -103,7 +103,7 @@ var P=[
 ["Charakter nicht auf dem Handy eingeloggt – kein Fortschritt.","Character not logged in on this phone – no progress."],["Fortschritt nicht abrufbar","Progress unavailable"],
 ["Keine Käufe/Verkäufe seit dem Anlegen gefunden.","No purchases/sales found since it was created."],["Summe aller angezeigten Trades","Sum of all shown trades"],
 ["überboten","outbid"],["geplant netto","planned net"],["alle auf","expand all"],["alle zu","collapse all"],["Größe","Size"],["Stück zu","pcs at"],
-["Deine Verkaufsorder","Your sell order"],["Deine Kauforder","Your buy order"],["Keine Order gefunden","No order found"],["Beste Konkurrenz","Best competitor"],["Marge","Margin"],["Plan","Plan"],
+["Deine Verkaufsorder","Your sell order"],["Deine Kauforder","Your buy order"],["Keine Order gefunden","No order found"],["Noch keine Kauforder","No buy order yet"],["Noch keine Verkaufsorder","No sell order yet"],["Beste Konkurrenz","Best competitor"],["Marge","Margin"],["Plan","Plan"],
 ["Sortieren","Sort"],["Datum","Date"],["Ort","Place"],["Gewinn","Profit"],["Verlust","Loss"],["verkauft","sold"],["gekauft","bought"],
 ["Wallet-Daten reichen nur 30 Tage zurück.","Wallet data only goes back 30 days."]
 ];
