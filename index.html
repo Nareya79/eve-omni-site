@@ -229,6 +229,7 @@ footer a{color:var(--mut)}
 .pillar img.mock{display:block;aspect-ratio:1128/476;object-fit:cover}
 @media(max-width:600px){#screens .tabs button{font-size:13px;padding:8px 11px}}
 .fx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px 30px}.fx-col h3{font-size:15px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent,#86d1eb);margin:0 0 8px}.fx-col ul{list-style:none;margin:0;padding:0}.fx-col li{padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}.fx-col li small{display:block;color:var(--mut);font-size:12px;margin-top:2px}.fx-ov{color:var(--accent,#86d1eb);font-size:12px}   /* Funktionsliste */
+.hero-new{display:flex;align-items:center;gap:12px;margin:14px 0 4px;padding:12px 16px;border:1px solid #e0b45d;border-radius:12px;background:linear-gradient(90deg,rgba(224,180,93,.16),rgba(134,209,235,.08));color:#e8eef4;text-decoration:none;max-width:560px}.hero-new:hover{background:linear-gradient(90deg,rgba(224,180,93,.26),rgba(134,209,235,.14))}.hn-tag{background:#e0b45d;color:#0d141c;font-weight:800;font-size:11px;letter-spacing:.08em;padding:3px 8px;border-radius:6px;flex:none}.hn-txt{font-size:14px;line-height:1.4}.hn-go{margin-left:auto;font-size:20px;color:#e0b45d}.links a{white-space:nowrap}.brand,.lang{flex:none}@media(max-width:1500px){.links{gap:12px;font-size:13.5px}}@media(max-width:1130px){.links a[href="#overlay"],.links a[href="#screens"],.links a[href="#soundtrack"],.links a[href="#faq"]{display:none}}.nav-badge{font-style:normal;background:#e0b45d;color:#0d141c;font-size:10px;font-weight:800;padding:1px 5px;border-radius:4px;margin-left:3px}
 </style>
 </head>
 <body>
@@ -241,6 +242,7 @@ footer a{color:var(--mut)}
 <rect x="8" y="8" width="496" height="496" rx="90" fill="url(#bg)" stroke="#2c3d4f" stroke-width="10"/>
 <circle cx="256" cy="256" r="200" fill="url(#halo)"/><g filter="url(#glow)"><circle cx="256" cy="256" r="173" fill="none" stroke="#e0b45d" stroke-width="33"/></g><g><rect x="146.5" y="126" width="33" height="260" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/><rect x="201.5" y="126" width="164" height="33" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/><rect x="201.5" y="239.5" width="128" height="33" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/><rect x="201.5" y="353" width="164" height="33" rx="4" fill="#0d141c" stroke="#0d141c" stroke-width="14" stroke-linejoin="round"/></g><g filter="url(#glow)"><rect x="146.5" y="126" width="33" height="260" rx="4" fill="#86d1eb"/><rect x="201.5" y="126" width="164" height="33" rx="4" fill="#86d1eb"/><rect x="201.5" y="239.5" width="128" height="33" rx="4" fill="#e0b45d"/><rect x="201.5" y="353" width="164" height="33" rx="4" fill="#86d1eb"/></g></svg><span>EVE <b>OMNI</b></span></a>
     <nav class="links" aria-label="Main">
+      <a href="#mobile" class="nav-new"><span data-en>Phone app</span><span data-de>Handy-App</span> <em class="nav-badge"><span data-en>NEW</span><span data-de>NEU</span></em></a>
       <a href="#trailer">Trailer</a>
       <a href="#multi">Multi-Client</a>
       <a href="#overlay">Overlay</a>
@@ -266,7 +268,8 @@ footer a{color:var(--mut)}
   <svg class="stars" id="stars" aria-hidden="true"></svg>
   <div class="wrap">
     <div>
-      <span class="pill">BETA · FREE · OPEN SOURCE</span>
+      <span class="pill">BETA 5 · FREE · OPEN SOURCE</span>
+      <a class="hero-new" href="#mobile"><span class="hn-tag"><span data-en>NEW</span><span data-de>NEU</span></span><span class="hn-txt">📱 <b>EVEOmni Mobile</b> – <span data-en>free phone app for Android: wallet, orders with outbid alerts, skills &amp; your trades on your phone</span><span data-de>kostenlose Handy-App für Android: Wallet, Orders mit Überboten-Alarm, Skills &amp; deine Trades aufs Handy</span></span><span class="hn-go">→</span></a>
       <h1>EVE <b>OMNI</b></h1>
       <p class="lead"><span data-en>The all-in-one companion for EVE Online.</span><span data-de>Das All-in-One-Werkzeug für EVE Online.</span></p>
       <p class="sub">
@@ -275,6 +278,7 @@ footer a{color:var(--mut)}
       </p>
       <div class="cta">
         <a class="btn primary" href="#download" id="cta-dl">⬇ <span data-en>Download free beta</span><span data-de>Kostenlose Beta laden</span></a>
+        <a class="btn ghost" href="#mobile">📱 <span data-en>Phone app</span><span data-de>Handy-App</span></a>
         <a class="btn ghost" href="#trailer">▶ Trailer</a>
         <a class="btn ghost" href="https://discord.gg/Tyxt6J8yPR" target="_blank" rel="noopener">Discord</a>
         <a class="btn ghost" href="#highlights"><span data-en>Multi-client &amp; overlay</span><span data-de>Multi-Client &amp; Overlay</span></a>
@@ -288,6 +292,74 @@ footer a{color:var(--mut)}
   </div>
 </div>
 
+<section class="alt" id="new-b5">
+  <div class="wrap">
+    <span class="tag"><span data-en>NEW IN BETA 5</span><span data-de>NEU IN BETA 5</span></span>
+    <h2><span data-en>The new OmniBreaker, <b>and EVE Omni in your pocket</b></span><span data-de>Der neue OmniBreaker – <b>und EVE Omni in der Hosentasche</b></span></h2>
+    <p class="intro"><span data-en>A bigger mini-game, a free Android-ready mobile app and your watchlist synced from the PC to your phone.</span><span data-de>Ein größeres Minispiel, eine kostenlose Handy-App für Android und deine Watchlist vom PC direkt aufs Handy.</span></p>
+    <div class="nw-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+      <div class="card"><div class="nw-ic">🕹️</div><h3><span data-en>The new OmniBreaker</span><span data-de>Der neue OmniBreaker</span></h3><p><span data-en>150 levels, stone rails, 45 backgrounds – same game on PC and phone, one shared leaderboard.</span><span data-de>150 Level, Steinbahnen, 45 Hintergründe – dasselbe Spiel auf PC und Handy, eine gemeinsame Bestenliste.</span></p></div>
+      <div class="card"><div class="nw-ic">📱</div><h3>EVEOmni Mobile</h3><p><span data-en>Wallet, orders (outbid check with new price), push notifications, skills, characters, assets, profits, industry – in your phone's browser, installable like an app.</span><span data-de>Wallet, Orders (Überboten-Prüfung mit neuem Preis), Push-Benachrichtigungen, Skills, Charaktere, Assets, Gewinne, Industrie – im Handy-Browser, installierbar wie eine App.</span></p></div>
+      <div class="card"><div class="nw-ic">🔄</div><h3><span data-en>Watchlist from PC</span><span data-de>Watchlist vom PC</span></h3><p><span data-en>Your trades and runs with bought / sold / in stock and net profit – encrypted with a code, only you can read it.</span><span data-de>Deine Trades und Läufe mit gekauft / verkauft / Lager und Netto-Gewinn – per Code verschlüsselt, nur du kannst es lesen.</span></p></div>
+      <div class="card"><div class="nw-ic">🔔</div><h3><span data-en>Push notifications</span><span data-de>Push-Benachrichtigungen</span></h3><p><span data-en>Your phone tells you when an order is outbid, your skill queue runs low, a planet extractor runs out or a trade goal is reached – each one switchable. With push they also arrive when the app is fully closed.</span><span data-de>Dein Handy meldet sich, wenn eine Order überboten ist, die Skill-Warteschlange knapp wird, ein Planeten-Extraktor ausläuft oder ein Trade-Ziel erreicht ist – jedes einzeln abschaltbar. Mit Push kommen sie auch bei ganz geschlossener App.</span></p></div>
+      <div class="card"><div class="nw-ic">🌍</div><h3><span data-en>English &amp; German</span><span data-de>Englisch &amp; Deutsch</span></h3><p><span data-en>The phone app starts in English and switches to German in one tap.</span><span data-de>Die Handy-App startet auf Englisch und wechselt mit einem Tipp auf Deutsch.</span></p></div>
+    </div>
+    <div style="text-align:center"><img class="nw-shot" data-en data-zoom src="shots/en/omnibreaker-neu.webp" alt="The new OmniBreaker, level 56" width="544" height="967" loading="lazy" style="max-width:320px;margin:24px auto 0"><img class="nw-shot" data-de data-zoom src="shots/de/omnibreaker-neu.webp" alt="Der neue OmniBreaker, Level 56" width="544" height="967" loading="lazy" style="max-width:320px;margin:24px auto 0"></div>
+  </div>
+</section>
+
+<section id="mobile">
+  <div class="wrap">
+    <span class="tag"><span data-en>FREE · FOR ANDROID</span><span data-de>KOSTENLOS · FÜR ANDROID</span></span>
+    <h2>EVEOmni <b>Mobile</b></h2>
+    <p class="intro"><span data-en>Check your wallet, orders and skills on the go. No store, no download – open the page and add it to your home screen.</span><span data-de>Wallet, Orders und Skills unterwegs prüfen. Kein Store, kein Download – Seite öffnen und zum Startbildschirm hinzufügen.</span></p>
+    <div class="mgal" id="mgal">
+      <div class="mg-tabs" id="mg-tabs" role="tablist"></div>
+      <div class="mg-stage">
+        <button type="button" class="mg-nav" id="mg-prev" aria-label="Previous">‹</button>
+        <div class="mg-phone"><img id="mg-img" alt="" width="390" height="844" loading="lazy"></div>
+        <button type="button" class="mg-nav" id="mg-next" aria-label="Next">›</button>
+      </div>
+      <p class="cap" id="mg-cap" style="text-align:center"></p>
+    </div>
+    <style>
+    #mgal .mg-tabs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0 0 18px}
+    #mgal .mg-tabs button{background:var(--card);border:1px solid var(--line);color:var(--mut);font:600 13px/1 inherit;padding:8px 12px;border-radius:999px;cursor:pointer}
+    #mgal .mg-tabs button[aria-selected=true]{background:var(--gd);border-color:var(--gd);color:#0b1118}
+    #mgal .mg-stage{display:flex;align-items:center;justify-content:center;gap:12px}
+    #mgal .mg-phone{width:min(300px,62vw);border:8px solid #1b2733;border-radius:34px;overflow:hidden;background:#0d141c;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+    #mgal .mg-phone img{display:block;width:100%;height:auto;aspect-ratio:390/844}
+    #mgal .mg-nav{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:26px;line-height:1;cursor:pointer}
+    @media(max-width:600px){#mgal .mg-tabs button{font-size:12px;padding:7px 10px}}
+    </style>
+    <script>
+    (function(){
+      var IT=[["01-wallet", "Wallet of all your characters", "Wallet aller deiner Charaktere"], ["02-wallet-journal", "Wallet journal: every income and expense", "Wallet-Journal: jede Einnahme und Ausgabe"], ["03-wallet-overview", "Last 24 h and 7 days: income, costs, tax, broker fees", "Letzte 24 Std. und 7 Tage: Einnahmen, Kosten, Steuer, Maklergebühren"], ["04-wallet-transactions", "Market transactions with place and price", "Markt-Transaktionen mit Ort und Preis"], ["05-orders", "Orders: outbid check with the exact new price to copy", "Orders: Überboten-Prüfung mit dem genauen neuen Preis zum Kopieren"], ["06-skills", "Skill queue: what trains now and when it runs empty", "Skill-Warteschlange: was trainiert und wann sie leer läuft"], ["07-skill-details", "Skill details with end time of every skill", "Skill-Details mit Endzeit jedes Skills"], ["08-characters", "Characters: online status, place and ship", "Charaktere: Online-Status, Ort und Schiff"], ["09-menu", "All areas in the menu", "Alle Bereiche im Menü"], ["10-assets", "Assets by place, searchable", "Assets nach Ort, durchsuchbar"], ["11-profits", "Profits: net per piece and in total", "Gewinne: netto pro Stück und gesamt"], ["12-planets", "Planets: when extractors run out", "Planeten: wann Extraktoren enden"], ["13-industry", "Industry jobs, contracts and mining", "Industrie-Jobs, Verträge und Mining"], ["14-settings", "Settings: colours, size, language, navigation bar", "Einstellungen: Farben, Größe, Sprache, Leiste"], ["14b-notifications","Notifications: choose what your phone tells you about","Benachrichtigungen: wähle, worüber dein Handy dich informiert"],["15-sync-setup", "Sync with the PC: enter your code once", "Abgleich mit dem PC: Code einmal eintragen"], ["16-sync-trades", "Your PC trades on the phone: bought, sold, in stock, net profit", "Deine PC-Trades auf dem Handy: gekauft, verkauft, Lager, Netto-Gewinn"], ["17-sync-runs", "Hauling runs from the PC with progress", "Hauling-Läufe vom PC mit Fortschritt"], ["18-sync-watchlist", "Your PC watchlist", "Deine Watchlist vom PC"], ["19-omnibreaker", "OmniBreaker on the phone – touch controls, same leaderboard", "OmniBreaker auf dem Handy – Touch-Steuerung, dieselbe Bestenliste"]],GR=[['01','Wallet','Wallet'],['05','Orders','Orders'],['06','Skills','Skills'],['08','Characters','Charaktere'],['10','Assets','Assets'],['11','Profits','Gewinne'],['12','Planets','Planeten'],['13','Industry','Industrie'],['14','Settings','Einstellungen'],['15','Sync','Sync'],['19','OmniBreaker','OmniBreaker']];
+      var i=0,tabs=document.getElementById('mg-tabs'),img=document.getElementById('mg-img'),cap=document.getElementById('mg-cap');
+      function L(){return document.documentElement.lang==='de'?'de':'en';}
+      function grp(n){var g=0;GR.forEach(function(x,k){if(parseInt(x[0],10)<=n)g=k;});return g;}
+      function show(n){i=(n+IT.length)%IT.length;var l=L(),it=IT[i],t=it[l==='de'?2:1];img.src='shots/'+l+'/m/'+it[0]+'.webp';img.alt=t;cap.textContent=(i+1)+' / '+IT.length+' · '+t;
+        var g=grp(parseInt(it[0],10));Array.prototype.forEach.call(tabs.children,function(b,k){b.setAttribute('aria-selected',k===g?'true':'false');});}
+      function build(){var l=L();tabs.innerHTML='';GR.forEach(function(x){var b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.textContent=x[l==='de'?2:1];b.onclick=function(){for(var k=0;k<IT.length;k++)if(parseInt(IT[k][0],10)>=parseInt(x[0],10)){show(k);break;}};tabs.appendChild(b);});show(i);}
+      document.getElementById('mg-prev').onclick=function(){show(i-1);};document.getElementById('mg-next').onclick=function(){show(i+1);};
+      new MutationObserver(build).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});build();
+    })();
+    </script>
+    <div class="cta"><a class="btn primary" href="https://omni.nareya79.com/m/" target="_blank" rel="noopener">📱 <span data-en>Open EVEOmni Mobile</span><span data-de>EVEOmni Mobile öffnen</span></a></div>
+    <div class="card" style="margin-top:26px"><h3 style="margin-top:0">🔄 <span data-en>Sync with your PC</span><span data-de>Abgleich mit dem PC</span></h3><p><span data-en>Your PC trades, hauling runs and price list appear on your phone – with progress (bought / sold / in stock) and net profit per piece and in total. The data is encrypted on your PC with a 20-character code before it is sent; the sync server only stores unreadable data.</span><span data-de>Deine PC-Trades, Hauling-Läufe und Preisliste erscheinen auf dem Handy – mit Fortschritt (gekauft / verkauft / Lager) und Netto-Gewinn pro Stück und gesamt. Die Daten werden auf dem PC mit einem 20-stelligen Code verschlüsselt, bevor sie gesendet werden; der Sync-Server speichert nur unlesbare Daten.</span></p></div>
+    <div class="card" style="margin-top:16px"><h3 style="margin-top:0">🔔 <span data-en>Push notifications</span><span data-de>Push-Benachrichtigungen</span></h3><p><span data-en>Allow notifications once in the app (More › Settings) and get a message for outbid orders, a nearly empty skill queue (under 24 h), running-out extractors (under 8 h) and reached trade goals. The app checks every 5 minutes while it is open or briefly in the background. Switch on “Also when the app is closed (push)” and the messages also arrive with the app closed – this needs the connection to your PC (Sync with PC); outbid messages then come from the PC program while it is running.</span><span data-de>Einmal in der App (Mehr › Einstellungen) Benachrichtigungen erlauben – dann meldet sich das Handy bei überboteten Orders, fast leerer Skill-Warteschlange (unter 24 Std.), auslaufenden Extraktoren (unter 8 Std.) und erreichten Trade-Zielen. Die App prüft alle 5 Minuten, solange sie offen ist oder kurz im Hintergrund läuft. Mit „Auch bei geschlossener App (Push)“ kommen die Meldungen auch bei geschlossener App – dafür braucht es die Verbindung zum PC (Abgleich mit dem PC); „überboten“ meldet dann das PC-Programm, solange es läuft.</span></p></div>
+    <h3 style="margin-top:30px"><span data-en>Install on Android (Chrome)</span><span data-de>Auf Android installieren (Chrome)</span></h3>
+    <ol class="steps">
+      <li><b><span data-en>Open the page</span><span data-de>Seite öffnen</span></b> – <span data-en>go to <kbd>omni.nareya79.com/m/</kbd> in Chrome on your phone.</span><span data-de>rufe <kbd>omni.nareya79.com/m/</kbd> in Chrome auf dem Handy auf.</span></li>
+      <li><b><span data-en>Add to home screen</span><span data-de>Zum Startbildschirm</span></b> – <span data-en>tap the menu <kbd>⋮</kbd> → <kbd>Install app</kbd> (or <kbd>Add to Home screen</kbd>).</span><span data-de>Menü <kbd>⋮</kbd> antippen → <kbd>App installieren</kbd> (oder <kbd>Zum Startbildschirm hinzufügen</kbd>).</span></li>
+      <li><b><span data-en>Log in with EVE</span><span data-de>Mit EVE einloggen</span></b> – <span data-en>official EVE login on CCP's page; your password never reaches EVE Omni.</span><span data-de>offizieller EVE-Login auf der Seite von CCP; dein Passwort erreicht EVE Omni nie.</span></li>
+      <li><b><span data-en>Allow notifications</span><span data-de>Benachrichtigungen erlauben</span></b> – <span data-en>in <kbd>More</kbd> → <kbd>Settings</kbd> switch on <kbd>Notifications</kbd> and confirm Chrome's question.</span><span data-de>unter <kbd>Mehr</kbd> → <kbd>Einstellungen</kbd> <kbd>Benachrichtigungen</kbd> einschalten und die Frage von Chrome bestätigen.</span></li>
+      <li><b><span data-en>Optional: sync with your PC</span><span data-de>Optional: mit dem PC abgleichen</span></b> – <span data-en>in the PC program create a sync code, then in the phone app <kbd>More</kbd> → <kbd>Watchlist from PC</kbd> and enter it.</span><span data-de>im PC-Programm einen Sync-Code erzeugen, dann in der Handy-App <kbd>Mehr</kbd> → <kbd>Watchlist vom PC</kbd> und den Code eintragen.</span></li>
+    </ol>
+    <p class="small"><span data-en>Data stays on your phone. The phone app only reads data and sends nothing to the game.</span><span data-de>Die Daten bleiben auf deinem Handy. Die Handy-App liest nur und sendet nichts ans Spiel.</span></p>
+  </div>
+</section>
+
 <section id="trailer">
   <div class="wrap">
     <div class="tr-box" id="tr-box" style="background-image:url(trailer.jpg)">
@@ -297,9 +369,10 @@ footer a{color:var(--mut)}
   </div>
 </section>
 
-<section class="alt" id="new">
+
+<section id="new">
   <div class="wrap">
-    <span class="tag"><span data-en>NEW IN BETA 4.0.76</span><span data-de>NEU IN BETA 4.0.76</span></span>
+    <span class="tag"><span data-en>EARLIER: BETA 4.0.76</span><span data-de>FRÜHER: BETA 4.0.76</span></span>
     <h2><span data-en>Break some ore. <b>Trade faster.</b></span><span data-de>Erz knacken. <b>Schneller handeln.</b></span></h2>
     <p class="intro"><span data-en>OmniBreaker, a mini-game in EVE style for the waiting times between undocks – plus a faster trading overlay and an installer where you choose what you get.</span><span data-de>OmniBreaker, ein Minispiel im EVE-Stil für die Wartezeit zwischen zwei Abdockvorgängen – dazu ein schnelleres Handel-Overlay und ein Installer, bei dem du wählst, was du bekommst.</span></p>
     <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:24px;align-items:start" class="nw-ob">
@@ -559,7 +632,7 @@ footer a{color:var(--mut)}
 <section id="all-functions">
   <div class="wrap">
     <h2><span data-en>All functions</span><span data-de>Alle Funktionen</span></h2>
-    <p class="intro"><span data-en>61 functions – and where to find them in the app. ◱ = also available as an overlay on top of EVE.</span><span data-de>61 Funktionen – und wo du sie im Programm findest. ◱ = auch als Overlay über EVE.</span></p>
+    <p class="intro"><span data-en>62 functions – and where to find them in the app. ◱ = also available as an overlay on top of EVE.</span><span data-de>62 Funktionen – und wo du sie im Programm findest. ◱ = auch als Overlay über EVE.</span></p>
     <div class="fx-grid">
       <div class="fx-col"><h3><span data-en>Trading</span><span data-de>Handel</span></h3><ul>
         <li><span data-en>Market scanner: profitable items for station trading per hub</span><span data-de>Markt-Scanner: lohnende Waren fürs Station-Trading je Hub</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading › Station trading</span><span data-de>Handel › Station-Trading</span></small></li>
@@ -634,6 +707,7 @@ footer a{color:var(--mut)}
       <div class="fx-col"><h3><span data-en>Data &amp; account</span><span data-de>Daten &amp; Konto</span></h3><ul>
         <li><span data-en>Log in several characters and accounts (EVE SSO only)</span><span data-de>Mehrere Charaktere und Accounts einloggen (nur EVE-SSO)</span><small><span data-en>Settings › Account</span><span data-de>Einstellungen › Konto</span></small></li>
         <li><span data-en>Back up data and move it to another PC</span><span data-de>Daten sichern und auf einem anderen PC übernehmen</span><small><span data-en>Settings › Data</span><span data-de>Einstellungen › Daten</span></small></li>
+        <li><span data-en>Sync trades, runs and price watchlist encrypted with the phone app</span><span data-de>Trades, Läufe und Preis-Merkliste verschlüsselt mit der Handy-App abgleichen</span><small><span data-en>Settings › Data</span><span data-de>Einstellungen › Daten</span></small></li>
         <li><span data-en>German and English</span><span data-de>Deutsch und Englisch</span><small><span data-en>Settings › General</span><span data-de>Einstellungen › Allgemein</span></small></li>
         <li><span data-en>Colors, light/dark design</span><span data-de>Farben, helles/dunkles Design</span><small><span data-en>Settings › Appearance</span><span data-de>Einstellungen › Darstellung</span></small></li>
         <li><span data-en>Update notice for new versions</span><span data-de>Update-Hinweis bei neuer Version</span><small><span data-en>Settings › Program</span><span data-de>Einstellungen › Programm</span></small></li>
