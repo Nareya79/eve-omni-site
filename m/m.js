@@ -2,7 +2,7 @@
    Nur lesen. Eigener Speicher (Praefix eve-omni-m-), getrennt vom Desktop. */
 (function(){
 "use strict";
-var VERSION="0.4.0";
+var VERSION="0.5.0";
 var CLIENT_ID="26b3d504aaa6443daed268d2cea52bc7", OLD_ID="aa3a93ff84e84013967e34b5e35b5267";
 var REDIRECT="https://omni.nareya79.com/callback.html";
 var AUTH="https://login.eveonline.com/v2/oauth/authorize", TOKEN="https://login.eveonline.com/v2/oauth/token";
@@ -147,7 +147,7 @@ async function renderWallet(){
   $("wallet-sum").textContent=short(sum)+" ISK";var ex=el("small","",exact(sum));$("wallet-sum").appendChild(ex);
   var t=new Date();msg.textContent="Abgerufen "+now();
 }
-var MENU=[["assets","Assets","Was du wo hast"],["pnl","Gewinne","netto pro Stück und gesamt"],["route","Route","Sprünge, Sicherheit, Kills"],["appr","Wertschätzer","Liste einfügen → Jita-Wert"],["pi","Planeten (PI)","Extraktoren und Lager"],["ind","Industrie & Verträge","Jobs, Verträge, Mining"],["game","OmniBreaker","Spiel + Bestenliste"]];
+var MENU=[["assets","Assets","Was du wo hast"],["pnl","Gewinne","netto pro Stück und gesamt"],["route","Route","Sprünge, Sicherheit, Kills"],["appr","Wertschätzer","Liste einfügen → Jita-Wert"],["pi","Planeten (PI)","Extraktoren und Lager"],["ind","Industrie & Verträge","Jobs, Verträge, Mining"],["sync","Trades vom PC","Meine Trades, Läufe, Merkliste"],["game","OmniBreaker","Spiel + Bestenliste"]];
 async function statusLine(){
   var s=$("status");if(!s)return;s.textContent="";
   try{var st=await pub("/status/"),n=new Date(),dt=Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate(),11,0,0);if(dt<=n.getTime())dt+=86400000;
