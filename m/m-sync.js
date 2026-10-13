@@ -167,6 +167,23 @@ function draw(out,d,tab){
   }
   if(tab==="watch"){var c=el("div","card");watch.forEach(function(w){var r=el("div","row");r.appendChild(el("div","grow",w.name));c.appendChild(r);});if(!watch.length)c.appendChild(el("div","sub","Die Preis-Merkliste ist leer."));out.appendChild(c);}
 }
+/* Einstellungen › Abgleich mit dem PC: Code + Server speichern/trennen (gleicher Speicher wie die Watchlist) */
+M.syncCard=function(){
+  var cf=cfg(),c=el("div","card");c.id="sync-opt";c.appendChild(el("div","nm","Abgleich mit dem PC"));
+  var st=el("div","sub",cf.code&&S.validCode(cf.code)?"Verbunden · Code …"+cf.code.slice(-5):"Nicht verbunden. Den Code zeigt EVE Omni am PC unter Einstellungen › Daten › „Mit Handy abgleichen“.");c.appendChild(st);
+  function f(label,v,ph){var l=el("div","sub",label);l.style.marginTop="8px";c.appendChild(l);var i=el("input");i.type="text";i.value=v||"";i.placeholder=ph;i.autocomplete="off";i.spellcheck=false;i.style.cssText="width:100%;padding:10px;border-radius:8px;border:1px solid var(--ln);background:var(--sf2);color:var(--fg);font:inherit";c.appendChild(i);return i;}
+  var ci=f("Sync-Code",cf.code,"XXXXX-XXXXX-XXXXX-XXXXX");ci.id="set-sync-code";ci.style.textTransform="uppercase";ci.autocapitalize="characters";
+  var ui=f("Server",cf.url||DEFAULT_URL,DEFAULT_URL);ui.id="set-sync-url";ui.autocapitalize="none";
+  var r=el("div","row");r.style.cssText="gap:8px;margin-top:10px";var sv=el("button","","Speichern");sv.id="set-sync-save";sv.style.flex="1";var tr=el("button","ghost","Trennen");tr.id="set-sync-off";tr.style.flex="1";r.appendChild(sv);r.appendChild(tr);c.appendChild(r);
+  var msg=el("p","msg","");c.appendChild(msg);
+  sv.onclick=function(){var code=ci.value.trim(),url=ui.value.trim()||DEFAULT_URL;
+    if(code&&!S.validCode(code)){msg.className="msg bad";msg.textContent="Der Code ist nicht gültig (20 Zeichen, Buchstaben und Ziffern).";return;}
+    var old=cfg().code||"",nc=code?S.normalize(code).replace(/(.{5})(?=.)/g,"$1-"):"";if(nc!==old)lsSet(DATA,"");
+    saveCfg(nc?{code:nc,url:url}:{url:url});msg.className="msg";msg.textContent=nc?"Gespeichert. Die Watchlist holt den Stand beim nächsten Öffnen.":"Gespeichert (ohne Code).";
+    st.textContent=nc?"Verbunden · Code …"+nc.slice(-5):"Nicht verbunden.";};
+  tr.onclick=function(){saveCfg({url:ui.value.trim()||DEFAULT_URL});lsSet(DATA,"");ci.value="";msg.className="msg";msg.textContent="Getrennt. Der Code ist auf diesem Handy gelöscht.";st.textContent="Nicht verbunden.";};
+  return c;
+};
 M.VIEWS.sync=async function(sec){
   M.head(sec,"Watchlist vom PC","more");
   var cf=cfg(),box=el("div","card");sec.appendChild(box);

@@ -1,5 +1,5 @@
 // EVEOmni Mobile – Service Worker: nur die App-Huelle zwischenspeichern, EVE-/ESI-Daten nie
-const V='m-9';const SHELL=['/m/','/m/index.html','/m/m.css','/m/m-i18n.js','/m/m.js','/m/m-views.js','/m/sync-core.js','/m/m-sync.js','/m/ob-game.js','/m/ob-game.css','/m/ob-field.css','/m/m-game.js','/m/manifest.webmanifest'];
+const V='m-10';const SHELL=['/m/','/m/index.html','/m/m.css','/m/m-i18n.js','/m/m.js','/m/m-views.js','/m/sync-core.js','/m/m-sync.js','/m/ob-game.js','/m/ob-game.css','/m/ob-field.css','/m/m-game.js','/m/manifest.webmanifest'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.all(k.filter(x=>x!==V).map(x=>caches.delete(x)))).then(()=>self.clients.claim()));});
 self.addEventListener('fetch',e=>{

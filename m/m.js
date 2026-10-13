@@ -2,7 +2,7 @@
    Nur lesen. Eigener Speicher (Praefix eve-omni-m-), getrennt vom Desktop. */
 (function(){
 "use strict";
-var VERSION="0.7.1";
+var VERSION="0.8.0";
 var I18=window.OmniI18n||{en:false,th:".",dec:",",loc:"de-DE",units:["Tsd.","Mio.","Mrd."],int:function(n){return String(Math.round(n));},fix:function(n,d){return n.toFixed(d);}};
 var CLIENT_ID="26b3d504aaa6443daed268d2cea52bc7", OLD_ID="aa3a93ff84e84013967e34b5e35b5267";
 var REDIRECT="https://omni.nareya79.com/callback.html";
@@ -106,12 +106,38 @@ async function copy(txt,btn){try{await navigator.clipboard.writeText(txt);}catch
   if(btn){var o=btn.textContent;btn.textContent="Kopiert ✓";setTimeout(function(){btn.textContent=o;},1200);}}
 function now(){var t=new Date();return ("0"+t.getHours()).slice(-2)+":"+("0"+t.getMinutes()).slice(-2);}
 
+/* ---------- Darstellung (Mehr › Darstellung): Design, Akzentfarbe, Größe, Layout ---------- */
+var SIZES=[[0.9,"Klein"],[1,"Normal"],[1.12,"Groß"],[1.25,"Sehr groß"]];
+/* Farbschemata wie in der Desktop-App + Automatisch (folgt dem Handy) und Schwarz (OLED); Farbtupfer = Hintergrund, Akzent */
+var THEMES=[["auto","Automatisch",["#0b1118","#eef3f7"]],["photon","Photon · Türkis",["#121c26","#86d1eb"]],["caldari","Caldari · Stahlblau",["#0b1018","#6f9df2"]],["amarr","Amarr · Gold",["#12100c","#d8aa4c"]],
+  ["minmatar","Minmatar · Rost",["#130f0e","#de6b3f"]],["gallente","Gallente · Grün",["#0b1210","#3fc49c"]],["black","Schwarz",["#000000","#86d1eb"]],["light","Hell · Tag",["#ffffff","#0b7ea3"]]];
+function look(){var o={};try{o=JSON.parse(lsGet("eve-omni-m-look"))||{};}catch(e){}if(o.theme==="dark")o.theme="photon";
+  return {theme:THEMES.some(function(t){return t[0]===o.theme;})?o.theme:"auto",size:SIZES.some(function(z){return z[0]===o.size;})?o.size:1,dense:!!o.dense};}
+function lookApply(){var l=look(),r=document.documentElement;
+  if(l.theme==="auto"||l.theme==="photon")r.removeAttribute("data-theme");else r.setAttribute("data-theme",l.theme);
+  if(l.theme==="photon")r.setAttribute("data-theme","photon");   /* Photon = Standard-Dunkel, aber nie hell */
+  r.style.setProperty("--zoom",String(l.size));r.classList.toggle("dense",l.dense);
+  var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=getComputedStyle(r).getPropertyValue("--bg").trim()||"#0d141c";}
+function lookSet(k,v){var l=look();l[k]=v;lsSet("eve-omni-m-look",JSON.stringify(l));lookApply();}
+lookApply();if(window.matchMedia)matchMedia("(prefers-color-scheme: light)").addEventListener("change",lookApply);
+function lookCard(){
+  var c=el("div","card");c.id="look-opt";c.appendChild(el("div","nm","Darstellung"));var l=look();
+  c.appendChild(el("div","sub","Farbschema")).style.marginTop="10px";var sr=el("div","look-row");
+  THEMES.forEach(function(t){var b=el("button","look-sch"+(t[0]===l.theme?"":" ghost")),i=el("i");t[2].forEach(function(col){var d=el("b");d.style.background=col;i.appendChild(d);});
+    b.appendChild(i);b.appendChild(el("span","",t[1]));b.setAttribute("data-look","theme:"+t[0]);b.onclick=function(){lookSet("theme",t[0]);show("settings");};sr.appendChild(b);});c.appendChild(sr);
+  function row(label,items,cur,key){c.appendChild(el("div","sub",label)).style.marginTop="10px";var r=el("div","look-row");
+    items.forEach(function(it){var b=el("button",it[0]===cur?"":"ghost",it[1]);b.setAttribute("data-look",key+":"+it[0]);b.onclick=function(){lookSet(key,it[0]);show("settings");};r.appendChild(b);});c.appendChild(r);}
+  row("Größe",SIZES,l.size,"size");
+  row("Layout",[[false,"Normal"],[true,"Kompakt"]],l.dense,"dense");
+  return c;
+}
+
 /* ---------- Oberflaeche ---------- */
 var view="wallet";
 var VIEWS={},LEAVE={},TABOF={wdet:"wallet",sdet:"skills"},param=null;
 var CORE=["login","wallet","orders","skills","chars","more"];
 /* Navigationsleiste: frei waehlbar (bis zu 4 + "Mehr") */
-var NAVCAT={wallet:["◈","Wallet"],orders:["⇄","Orders"],skills:["✦","Skills"],chars:["☺","Chars"],sync:["★","Watchlist"],assets:["▤","Assets"],pnl:["Σ","Gewinne"],route:["➤","Route"],appr:["≈","Wert"],pi:["◍","PI"],ind:["⚙","Industrie"],game:["▶","Spiel"]};
+var NAVCAT={wallet:["◈","Wallet"],orders:["⇄","Orders"],skills:["✦","Skills"],chars:["☺","Chars"],sync:["★","Watchlist"],assets:["▤","Assets"],pnl:["Σ","Gewinne"],pi:["◍","PI"],ind:["⚙","Industrie"],game:["▶","Spiel"]};
 var NAVDEF=["wallet","orders","skills","chars"];
 function navList(){var a=null;try{a=JSON.parse(lsGet("eve-omni-m-nav"));}catch(e){}
 if(!Array.isArray(a))return NAVDEF.slice();return a.filter(function(k,i){return NAVCAT[k]&&a.indexOf(k)===i;}).slice(0,4);}
@@ -157,7 +183,7 @@ async function renderWallet(){
   $("wallet-sum").textContent=short(sum)+" ISK";var ex=el("small","",exact(sum));$("wallet-sum").appendChild(ex);
   var t=new Date();msg.textContent="Abgerufen "+now();
 }
-var MENU=[["assets","Assets","Was du wo hast"],["pnl","Gewinne","netto pro Stück und gesamt"],["route","Route","Sprünge, Sicherheit, Kills"],["appr","Wertschätzer","Liste einfügen → Jita-Wert"],["pi","Planeten (PI)","Extraktoren und Lager"],["ind","Industrie & Verträge","Jobs, Verträge, Mining"],["sync","Watchlist vom PC","Trades, Läufe, Merkliste (vom PC abgeglichen)"],["game","OmniBreaker","Spiel + Bestenliste"]];
+var MENU=[["assets","Assets","Was du wo hast"],["pnl","Gewinne","netto pro Stück und gesamt"],["pi","Planeten (PI)","Extraktoren und Lager"],["ind","Industrie & Verträge","Jobs, Verträge, Mining"],["sync","Watchlist vom PC","Trades, Läufe, Merkliste (vom PC abgeglichen)"],["game","OmniBreaker","Spiel + Bestenliste"]];
 async function statusLine(){
   var s=$("status");if(!s)return;s.textContent="";
   try{var st=await pub("/status/"),n=new Date(),dt=Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate(),11,0,0);if(dt<=n.getTime())dt+=86400000;
@@ -165,23 +191,34 @@ async function statusLine(){
 }
 function renderMore(){
   var mm=$("menu");mm.textContent="";
+  var sb=el("button","ghost");sb.id="b-settings";sb.style.cssText="width:100%;text-align:left;margin:0 0 8px;display:block;border-color:var(--cy)";sb.appendChild(el("div","nm","⚙ Einstellungen"));sb.appendChild(el("div","sub","Darstellung, Sprache, Leiste, Charaktere, Abgleich mit dem PC"));sb.onclick=function(){show("settings");};mm.appendChild(sb);
   MENU.forEach(function(m){if(!VIEWS[m[0]])return;var b=el("button","ghost");b.style.cssText="width:100%;text-align:left;margin:0 0 8px;display:block";b.appendChild(el("div","nm",m[1]));b.appendChild(el("div","sub",m[2]));b.onclick=function(){show(m[0]);};mm.appendChild(b);});
   statusLine();
   $("ver").textContent=VERSION;
-var sc=$("sp-opt");if(!sc){var lab=el("label","sub");lab.style.cssText="display:flex;gap:8px;align-items:center;margin:10px 0";sc=document.createElement("input");sc.type="checkbox";sc.id="sp-opt";sc.onchange=function(){lsSet("eve-omni-m-splash",sc.checked?"1":"0");};lab.appendChild(sc);lab.appendChild(document.createTextNode("Startbild beim Öffnen zeigen"));$("menu").parentNode.insertBefore(lab,$("status"));}
-sc.checked=lsGet("eve-omni-m-splash")!=="0";
+}
+/* Einstellungen (eigene Ansicht, aus Mehr): Darstellung, Sprache, Navigationsleiste, Startbild, Charaktere, Abgleich mit dem PC */
+TABOF.settings="more";
+VIEWS.settings=function(sec){
+  sec.textContent="";var h=el("div","row");h.style.margin="18px 0 8px";var bk=el("button","ghost","‹ Mehr");bk.style.cssText="min-height:36px;padding:4px 12px";bk.onclick=function(){show("more");};h.appendChild(bk);
+  var t=el("h2","grow","Einstellungen");t.style.margin="0";h.appendChild(t);sec.appendChild(h);
+  sec.appendChild(lookCard());
 var lg=$("lang-opt");if(lg)lg.remove();lg=el("div","card");lg.id="lang-opt";lg.setAttribute("data-keep","1");lg.appendChild(el("div","nm","Sprache / Language"));var lr=el("div","row");lr.style.cssText="gap:8px;margin-top:8px";
-[["en","English"],["de","Deutsch"]].forEach(function(o){var b=el("button",I18.lang===o[0]?"":"ghost",o[1]);b.setAttribute("data-lang",o[0]);b.style.cssText="flex:1;min-height:40px";b.onclick=function(){if(I18.set)I18.set(o[0]);};lr.appendChild(b);});lg.appendChild(lr);$("menu").parentNode.insertBefore(lg,$("status"));
+[["en","English"],["de","Deutsch"]].forEach(function(o){var b=el("button",I18.lang===o[0]?"":"ghost",o[1]);b.setAttribute("data-lang",o[0]);b.style.cssText="flex:1;min-height:40px";b.onclick=function(){if(I18.set)I18.set(o[0]);};lr.appendChild(b);});lg.appendChild(lr);sec.appendChild(lg);
 var np=$("nav-opt");if(np)np.remove();np=el("div","card");np.id="nav-opt";np.appendChild(el("div","nm","Navigationsleiste"));np.appendChild(el("div","sub","Wähle bis zu 4 Punkte für die untere Leiste (Mehr bleibt immer dabei)."));
 var chosen=navList(),chips=el("div","row");chips.style.cssText="flex-wrap:wrap;gap:6px;margin-top:8px";
 Object.keys(NAVCAT).forEach(function(k){var on=chosen.indexOf(k)>=0,b=el("button",on?"":"ghost",NAVCAT[k][0]+" "+NAVCAT[k][1]);b.style.cssText="min-height:36px;padding:4px 10px;font-size:13px";b.setAttribute("data-nav",k);
-b.onclick=function(){var l=navList(),i=l.indexOf(k);if(i>=0)l.splice(i,1);else if(l.length<4)l.push(k);else{np.querySelector(".msg").textContent="Höchstens 4 – erst einen abwählen.";return;}lsSet("eve-omni-m-nav",JSON.stringify(l));renderNav();renderMore();};chips.appendChild(b);});
-np.appendChild(chips);np.appendChild(el("p","msg",""));$("menu").parentNode.insertBefore(np,$("status"));
-var box=$("chars");box.textContent="";
+b.onclick=function(){var l=navList(),i=l.indexOf(k);if(i>=0)l.splice(i,1);else if(l.length<4)l.push(k);else{np.querySelector(".msg").textContent="Höchstens 4 – erst einen abwählen.";return;}lsSet("eve-omni-m-nav",JSON.stringify(l));renderNav();show("settings");};chips.appendChild(b);});
+np.appendChild(chips);np.appendChild(el("p","msg",""));sec.appendChild(np);
+var sc=null;{var lab=el("label","sub");lab.style.cssText="display:flex;gap:8px;align-items:center;margin:10px 0";sc=document.createElement("input");sc.type="checkbox";sc.id="sp-opt";sc.onchange=function(){lsSet("eve-omni-m-splash",sc.checked?"1":"0");};lab.appendChild(sc);lab.appendChild(document.createTextNode("Startbild beim Öffnen zeigen"));sec.appendChild(lab);}
+sc.checked=lsGet("eve-omni-m-splash")!=="0";
+  var cc=el("div","card");cc.appendChild(el("div","nm","Eingeloggte Charaktere"));var box=el("div");box.id="chars";cc.appendChild(box);
   loadChars().forEach(function(c){var r=el("div","row"),g=el("div","grow nm",c.character_name),b=el("button","ghost","Entfernen");b.style.minHeight="36px";b.style.padding="4px 12px";
-    b.onclick=function(){saveChars(loadChars().filter(function(x){return x.character_id!==c.character_id;}));show();};
+    b.onclick=function(){saveChars(loadChars().filter(function(x){return x.character_id!==c.character_id;}));show(loadChars().length?"settings":null);};
     r.appendChild(g);r.appendChild(b);box.appendChild(r);});
-}
+  var ad=el("button","ghost","Weiteren Charakter einloggen");ad.style.cssText="width:100%;margin-top:8px";ad.onclick=loginStart;cc.appendChild(ad);sec.appendChild(cc);
+  if(window.OmniM&&OmniM.syncCard)sec.appendChild(OmniM.syncCard());
+  var out=el("button","ghost","Alle ausloggen");out.id="b-out";out.style.width="100%";out.onclick=function(){saveChars([]);show();};sec.appendChild(out);
+};
 
 /* ---------- Orders + Ueberboten-Check ---------- */
 async function bestAt(o,own){   /* beste Konkurrenz-Order am selben Ort (eigene Orders ausgenommen) */
@@ -293,7 +330,6 @@ async function main(){
 if(I18.stored&&!I18.stored()&&location.search.indexOf("state=")<0&&location.search.indexOf("error=")<0){chooser();return;}
 splash();
   $("b-login").onclick=loginStart;$("b-add").onclick=loginStart;
-  $("b-out").onclick=function(){saveChars([]);show();};
   $("b-refresh").onclick=function(){show();};
   renderNav();
   var q=new URLSearchParams(location.search);

@@ -1,9 +1,9 @@
 :root{--bg:#0b1118;--sf:#121c26;--sf2:#16222d;--ln:#2c3d4f;--fg:#e6f4fb;--mu:#9fb3c2;--cy:#86d1eb;--gd:#e0b45d;--ok:#5fd08a;--bad:#ff6b6b;--nav:58px}
-@media (prefers-color-scheme:light){:root{--bg:#eef3f7;--sf:#fff;--sf2:#f3f7fa;--ln:#cfd9e2;--fg:#13202b;--mu:#566878;--cy:#0b7ea3;--gd:#9a6b00}}
+@media (prefers-color-scheme:light){:root:not([data-theme]){--bg:#eef3f7;--sf:#fff;--sf2:#f3f7fa;--ln:#cfd9e2;--fg:#13202b;--mu:#566878;--cy:#0b7ea3;--gd:#9a6b00}}
 *{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,-apple-system,Roboto,sans-serif;-webkit-text-size-adjust:100%}
 body{min-height:100dvh;padding:0 16px calc(var(--nav) + 16px + env(safe-area-inset-bottom))}
 header{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 0 10px;border-bottom:1px solid var(--ln)}
-header h1{font-size:18px;margin:0;flex:1;letter-spacing:.04em}header h1 b{color:var(--gd)}
+header h1{font-size:18px;margin:0;flex:1;letter-spacing:.04em;display:flex;align-items:center;gap:8px}header h1 .logo{width:28px;height:28px;flex:none;filter:drop-shadow(0 0 6px rgba(224,180,93,.45))}header h1 b{color:var(--gd)}
 h2{font-size:15px;color:var(--cy);margin:18px 0 8px;letter-spacing:.04em;text-transform:uppercase}
 .card{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:12px 14px;margin:0 0 10px}
 .row{display:flex;align-items:center;gap:10px}.row .grow{flex:1;min-width:0}
@@ -29,3 +29,19 @@ nav button.on{color:var(--gd)}nav button span{font-size:20px;line-height:1}
 .sp-l{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px}
 .sp-l a{color:#dff4fb;text-decoration:none;border:1px solid #4cb2d4;border-radius:4px;padding:8px 14px;background:rgba(76,178,212,.18);min-height:40px;display:inline-flex;align-items:center}
 .sp-h{font-size:12px;color:#6c8a9a;margin-top:14px}
+
+/* Darstellung (Mehr › Darstellung): Design, Akzentfarbe, Größe, Layout – gesetzt in m.js lookApply() */
+:root[data-theme=light]{--bg:#eef3f7;--sf:#fff;--sf2:#f3f7fa;--ln:#cfd9e2;--fg:#13202b;--mu:#566878;--cy:#0b7ea3;--gd:#9a6b00}
+:root[data-theme=black]{--bg:#000;--sf:#0b1016;--sf2:#10171f;--ln:#22303d}
+/* Farbschemata wie in der Desktop-App (EVE-Omni.html :root[data-scheme=…]): bg/surface/surface-2/border-strong/accent */
+:root[data-theme=caldari]{--bg:#04070c;--sf:#0b1018;--sf2:#111823;--ln:#2e3b4f;--cy:#6f9df2}
+:root[data-theme=amarr]{--bg:#080705;--sf:#12100c;--sf2:#1a1711;--ln:#40382a;--cy:#d8aa4c;--gd:#e9c46a}
+:root[data-theme=minmatar]{--bg:#080606;--sf:#130f0e;--sf2:#1b1614;--ln:#43362f;--cy:#de6b3f}
+:root[data-theme=gallente]{--bg:#040807;--sf:#0b1210;--sf2:#111a17;--ln:#2c403a;--cy:#3fc49c}
+body{zoom:var(--zoom,1)}
+:root.dense .card{padding:8px 11px;margin-bottom:6px;border-radius:10px}
+:root.dense h2{margin:12px 0 6px}
+:root.dense button,:root.dense .btn{min-height:38px;padding:8px 14px}
+:root.dense .card img.pt{width:38px;height:38px}
+.look-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.look-row button{flex:1;min-height:38px;padding:4px 10px;font-size:13px}
+.look-sch{display:flex;align-items:center;gap:8px;justify-content:flex-start;flex:1 1 45%!important}.look-sch i{display:inline-flex;flex:none}.look-sch i b{width:14px;height:14px;border-radius:50%;border:1px solid rgba(255,255,255,.25);margin-right:-4px}
