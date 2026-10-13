@@ -2,7 +2,7 @@
    Nur lesen. Eigener Speicher (Praefix eve-omni-m-), getrennt vom Desktop. */
 (function(){
 "use strict";
-var VERSION="0.8.0";
+var VERSION="0.8.1";
 var I18=window.OmniI18n||{en:false,th:".",dec:",",loc:"de-DE",units:["Tsd.","Mio.","Mrd."],int:function(n){return String(Math.round(n));},fix:function(n,d){return n.toFixed(d);}};
 var CLIENT_ID="26b3d504aaa6443daed268d2cea52bc7", OLD_ID="aa3a93ff84e84013967e34b5e35b5267";
 var REDIRECT="https://omni.nareya79.com/callback.html";
@@ -216,7 +216,8 @@ sc.checked=lsGet("eve-omni-m-splash")!=="0";
     b.onclick=function(){saveChars(loadChars().filter(function(x){return x.character_id!==c.character_id;}));show(loadChars().length?"settings":null);};
     r.appendChild(g);r.appendChild(b);box.appendChild(r);});
   var ad=el("button","ghost","Weiteren Charakter einloggen");ad.style.cssText="width:100%;margin-top:8px";ad.onclick=loginStart;cc.appendChild(ad);sec.appendChild(cc);
-  if(window.OmniM&&OmniM.syncCard)sec.appendChild(OmniM.syncCard());
+  var sy=window.OmniM&&OmniM.syncCard?OmniM.syncCard():el("div");sec.appendChild(sy);
+  if(window.OmniNotify)window.OmniNotify.card(sec,sy);   /* Benachrichtigungen (m-notify.js) vor dem PC-Abgleich; zeichnet sich dort selbst neu */
   var out=el("button","ghost","Alle ausloggen");out.id="b-out";out.style.width="100%";out.onclick=function(){saveChars([]);show();};sec.appendChild(out);
 };
 

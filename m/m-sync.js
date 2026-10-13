@@ -167,6 +167,13 @@ function draw(out,d,tab){
   }
   if(tab==="watch"){var c=el("div","card");watch.forEach(function(w){var r=el("div","row");r.appendChild(el("div","grow",w.name));c.appendChild(r);});if(!watch.length)c.appendChild(el("div","sub","Die Preis-Merkliste ist leer."));out.appendChild(c);}
 }
+M.tradeGoals=async function(){
+  var d=cached(),out=[];if(!d||!d.data)return out;TX={};
+  var tr=(d.data.trades||[]).filter(function(t){return t.status!=="done"&&t.qty>0;});
+  for(var i=0;i<tr.length;i++){var t=tr[i],ch=charFor(t.charId,t.charName);if(!ch||!M.hasScope(ch,"esi-wallet.read_character_wallet.v1"))continue;
+    try{var k=calc(await getTx(ch),t.tid,sinceOf(t.created),{tax:0,broker:0},0);if(k.s>=t.qty)out.push({key:"goal:"+t.id,name:t.name,qty:t.qty});}catch(e){}}
+  return out;
+};
 /* Einstellungen › Abgleich mit dem PC: Code + Server speichern/trennen (gleicher Speicher wie die Watchlist) */
 M.syncCard=function(){
   var cf=cfg(),c=el("div","card");c.id="sync-opt";c.appendChild(el("div","nm","Abgleich mit dem PC"));
