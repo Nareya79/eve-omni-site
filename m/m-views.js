@@ -88,9 +88,10 @@ M.VIEWS.sdet=async function(sec,p){
 };
 
 /* ================= Assets ================= */
-var as={cid:null,q:""};
+var as={cid:null,q:""};try{var asv=JSON.parse(M.lsGet("eve-omni-m-pick")||"{}");as.cid=asv.cid||null;as.pcid=asv.pcid||null;}catch(e){}   /* zuletzt gewählter Charakter (Assets, Gewinne) bleibt gespeichert */
+function asSave(){M.lsSet("eve-omni-m-pick",JSON.stringify({cid:as.cid,pcid:as.pcid}));}
 M.VIEWS.assets=async function(sec){
-  var c=as.cid?charById(as.cid):M.activeChar();as.cid=c.character_id;head(sec,"Assets","more");chip(sec,c.character_id,function(id){as.cid=id;M.show("assets");});
+  var c=as.cid?charById(as.cid):M.activeChar();as.cid=c.character_id;head(sec,"Assets","more");chip(sec,c.character_id,function(id){as.cid=id;asSave();M.show("assets");});
   var inp=document.createElement("input");inp.type="search";inp.placeholder="Suchen (Name oder Ort)";inp.value=as.q;inp.style.cssText="width:100%;padding:12px;border-radius:10px;border:1px solid var(--ln);background:var(--sf);color:var(--fg);font:inherit;margin:6px 0";sec.appendChild(inp);
   var out=el("div");sec.appendChild(out);var msg=msgEl(sec);msg.textContent="Lade …";
   try{
@@ -124,7 +125,7 @@ async function fees(c){
 }
 /* ================= Gewinne (FIFO, geschätzt) ================= */
 M.VIEWS.pnl=async function(sec){
-  var c=as.pcid?charById(as.pcid):M.activeChar();head(sec,"Gewinne","more");chip(sec,c.character_id,function(id){as.pcid=id;M.show("pnl");});
+  var c=as.pcid?charById(as.pcid):M.activeChar();head(sec,"Gewinne","more");chip(sec,c.character_id,function(id){as.pcid=id;asSave();M.show("pnl");});
   var top=el("div","card");sec.appendChild(top);var out=el("div");sec.appendChild(out);var msg=msgEl(sec);msg.textContent="Lade …";
   try{
     if(!hasScope(c,"esi-wallet.read_character_wallet.v1"))throw new Error("Berechtigung fehlt – neu einloggen.");

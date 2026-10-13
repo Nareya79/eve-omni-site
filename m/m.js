@@ -2,7 +2,7 @@
    Nur lesen. Eigener Speicher (Praefix eve-omni-m-), getrennt vom Desktop. */
 (function(){
 "use strict";
-var VERSION="0.9.0";
+var VERSION="0.9.1";
 var I18=window.OmniI18n||{en:false,th:".",dec:",",loc:"de-DE",units:["Tsd.","Mio.","Mrd."],int:function(n){return String(Math.round(n));},fix:function(n,d){return n.toFixed(d);}};
 var CLIENT_ID="26b3d504aaa6443daed268d2cea52bc7", OLD_ID="aa3a93ff84e84013967e34b5e35b5267";
 var REDIRECT="https://omni.nareya79.com/callback.html";
@@ -153,6 +153,7 @@ function show(v,p){
   $("nav").hidden=!chars.length;$("b-refresh").hidden=!chars.length;
   if(!chars.length){$("v-login").hidden=false;return;}
   if(v){view=v;param=p||null;}
+  try{sessionStorage.setItem("eve-omni-m-view",JSON.stringify([view,param]));}catch(e){}   /* Neuladen (nach unten wischen) bleibt auf dieser Seite */
   var sec=$("v-"+view);if(!sec){sec=document.createElement("section");sec.id="v-"+view;document.querySelector("main").appendChild(sec);}
   sec.hidden=false;window.scrollTo(0,0);$("b-refresh").hidden=view==="game";
   markNav();
@@ -338,7 +339,8 @@ splash();
     var ok=await loginFinish(q);history.replaceState(null,"","/m/");
     if(!ok){$("v-login").hidden=false;$("nav").hidden=true;return;}
   }
-  show("wallet");
+  var last=null;try{last=JSON.parse(sessionStorage.getItem("eve-omni-m-view"));}catch(e){}
+  if(last&&last[0]&&last[0]!=="login"&&(CORE.indexOf(last[0])>=0||VIEWS[last[0]]))show(last[0],last[1]);else show("wallet");
   if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("/m/sw.js",{scope:"/m/"}).catch(function(){});
 }
 window.OmniM={VIEWS:VIEWS,bestAt:bestAt,leave:LEAVE,loadChars:loadChars,show:show,esi:esi,esiRaw:esiRaw,pub:pub,names:names,nm:nm,el:el,copy:copy,I18:I18,now:now,hasScope:hasScope,activeChar:activeChar,lsGet:lsGet,lsSet:lsSet,$:$,fmtDur:fmtDur,tick:tick,snap:snap,newPrice:newPrice,priceTxt:priceTxt,fmtDur:fmtDur,VERSION:VERSION,SCOPES:SCOPES,b64url:b64url,jwt:jwt,short:short,exact:exact,tokFromData:tokFromData,challenge:challenge,loadChars:loadChars,saveChars:saveChars,accessToken:accessToken,loginFinish:loginFinish,errText:errText};
