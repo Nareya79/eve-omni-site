@@ -2,7 +2,7 @@
    Nur lesen. Eigener Speicher (Praefix eve-omni-m-), getrennt vom Desktop. */
 (function(){
 "use strict";
-var VERSION="0.5.1";
+var VERSION="0.6.0";
 var CLIENT_ID="26b3d504aaa6443daed268d2cea52bc7", OLD_ID="aa3a93ff84e84013967e34b5e35b5267";
 var REDIRECT="https://omni.nareya79.com/callback.html";
 var AUTH="https://login.eveonline.com/v2/oauth/authorize", TOKEN="https://login.eveonline.com/v2/oauth/token";
@@ -109,6 +109,16 @@ function now(){var t=new Date();return ("0"+t.getHours()).slice(-2)+":"+("0"+t.g
 var view="wallet";
 var VIEWS={},LEAVE={},TABOF={wdet:"wallet",sdet:"skills"},param=null;
 var CORE=["login","wallet","orders","skills","chars","more"];
+/* Navigationsleiste: frei waehlbar (bis zu 4 + "Mehr") */
+var NAVCAT={wallet:["◈","Wallet"],orders:["⇄","Orders"],skills:["✦","Skills"],chars:["☺","Chars"],sync:["★","Watchlist"],assets:["▤","Assets"],pnl:["Σ","Gewinne"],route:["➤","Route"],appr:["≈","Wert"],pi:["◍","PI"],ind:["⚙","Industrie"],game:["▶","Spiel"]};
+var NAVDEF=["wallet","orders","skills","chars"];
+function navList(){var a=null;try{a=JSON.parse(lsGet("eve-omni-m-nav"));}catch(e){}
+if(!Array.isArray(a))return NAVDEF.slice();return a.filter(function(k,i){return NAVCAT[k]&&a.indexOf(k)===i;}).slice(0,4);}
+function renderNav(){var n=$("nav");n.textContent="";
+navList().concat(["more"]).forEach(function(k){var b=document.createElement("button");b.setAttribute("data-v",k);var s=document.createElement("span");s.textContent=k==="more"?"☰":NAVCAT[k][0];b.appendChild(s);b.appendChild(document.createTextNode(k==="more"?"Mehr":NAVCAT[k][1]));b.onclick=function(){show(k);};n.appendChild(b);});
+var cur=document.querySelector("main > section:not([hidden])");if(cur)markNav();}
+function markNav(){var tab=TABOF[view]||view,l=navList();if(l.indexOf(tab)<0)tab="more";
+document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-v")===tab);});}
 function show(v,p){
   var chars=loadChars();
   if(LEAVE[view])LEAVE[view]();
@@ -118,8 +128,7 @@ function show(v,p){
   if(v){view=v;param=p||null;}
   var sec=$("v-"+view);if(!sec){sec=document.createElement("section");sec.id="v-"+view;document.querySelector("main").appendChild(sec);}
   sec.hidden=false;window.scrollTo(0,0);$("b-refresh").hidden=view==="game";
-  var tab=TABOF[view]||(CORE.indexOf(view)>=0?view:"more");
-  document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-v")===tab);});
+  markNav();
   var core={wallet:renderWallet,orders:renderOrders,skills:renderSkills,chars:renderChars,more:renderMore}[view];
   if(core)core();else if(VIEWS[view]){sec.textContent="";VIEWS[view](sec,param);}
 }
@@ -147,7 +156,7 @@ async function renderWallet(){
   $("wallet-sum").textContent=short(sum)+" ISK";var ex=el("small","",exact(sum));$("wallet-sum").appendChild(ex);
   var t=new Date();msg.textContent="Abgerufen "+now();
 }
-var MENU=[["assets","Assets","Was du wo hast"],["pnl","Gewinne","netto pro Stück und gesamt"],["route","Route","Sprünge, Sicherheit, Kills"],["appr","Wertschätzer","Liste einfügen → Jita-Wert"],["pi","Planeten (PI)","Extraktoren und Lager"],["ind","Industrie & Verträge","Jobs, Verträge, Mining"],["sync","Trades vom PC","Meine Trades, Läufe, Merkliste"],["game","OmniBreaker","Spiel + Bestenliste"]];
+var MENU=[["assets","Assets","Was du wo hast"],["pnl","Gewinne","netto pro Stück und gesamt"],["route","Route","Sprünge, Sicherheit, Kills"],["appr","Wertschätzer","Liste einfügen → Jita-Wert"],["pi","Planeten (PI)","Extraktoren und Lager"],["ind","Industrie & Verträge","Jobs, Verträge, Mining"],["sync","Watchlist vom PC","Trades, Läufe, Merkliste (vom PC abgeglichen)"],["game","OmniBreaker","Spiel + Bestenliste"]];
 async function statusLine(){
   var s=$("status");if(!s)return;s.textContent="";
   try{var st=await pub("/status/"),n=new Date(),dt=Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate(),11,0,0);if(dt<=n.getTime())dt+=86400000;
@@ -160,6 +169,11 @@ function renderMore(){
   $("ver").textContent=VERSION;
 var sc=$("sp-opt");if(!sc){var lab=el("label","sub");lab.style.cssText="display:flex;gap:8px;align-items:center;margin:10px 0";sc=document.createElement("input");sc.type="checkbox";sc.id="sp-opt";sc.onchange=function(){lsSet("eve-omni-m-splash",sc.checked?"1":"0");};lab.appendChild(sc);lab.appendChild(document.createTextNode("Startbild beim Öffnen zeigen"));$("menu").parentNode.insertBefore(lab,$("status"));}
 sc.checked=lsGet("eve-omni-m-splash")!=="0";
+var np=$("nav-opt");if(np)np.remove();np=el("div","card");np.id="nav-opt";np.appendChild(el("div","nm","Navigationsleiste"));np.appendChild(el("div","sub","Wähle bis zu 4 Punkte für die untere Leiste (Mehr bleibt immer dabei)."));
+var chosen=navList(),chips=el("div","row");chips.style.cssText="flex-wrap:wrap;gap:6px;margin-top:8px";
+Object.keys(NAVCAT).forEach(function(k){var on=chosen.indexOf(k)>=0,b=el("button",on?"":"ghost",NAVCAT[k][0]+" "+NAVCAT[k][1]);b.style.cssText="min-height:36px;padding:4px 10px;font-size:13px";b.setAttribute("data-nav",k);
+b.onclick=function(){var l=navList(),i=l.indexOf(k);if(i>=0)l.splice(i,1);else if(l.length<4)l.push(k);else{np.querySelector(".msg").textContent="Höchstens 4 – erst einen abwählen.";return;}lsSet("eve-omni-m-nav",JSON.stringify(l));renderNav();renderMore();};chips.appendChild(b);});
+np.appendChild(chips);np.appendChild(el("p","msg",""));$("menu").parentNode.insertBefore(np,$("status"));
 var box=$("chars");box.textContent="";
   loadChars().forEach(function(c){var r=el("div","row"),g=el("div","grow nm",c.character_name),b=el("button","ghost","Entfernen");b.style.minHeight="36px";b.style.padding="4px 12px";
     b.onclick=function(){saveChars(loadChars().filter(function(x){return x.character_id!==c.character_id;}));show();};
@@ -270,7 +284,7 @@ splash();
   $("b-login").onclick=loginStart;$("b-add").onclick=loginStart;
   $("b-out").onclick=function(){saveChars([]);show();};
   $("b-refresh").onclick=function(){show();};
-  document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){show(b.getAttribute("data-v"));};});
+  renderNav();
   var q=new URLSearchParams(location.search);
   if(q.get("state")||q.get("error")){
     var ok=await loginFinish(q);history.replaceState(null,"","/m/");

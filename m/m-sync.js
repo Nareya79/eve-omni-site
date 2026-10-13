@@ -42,10 +42,12 @@ function draw(out,d,tab){
   if(tab==="watch"){var c=el("div","card");watch.forEach(function(w){var r=el("div","row");r.appendChild(el("div","grow",w.name));c.appendChild(r);});if(!watch.length)c.appendChild(el("div","sub","Die Preis-Merkliste ist leer."));out.appendChild(c);}
 }
 M.VIEWS.sync=async function(sec){
-  M.head(sec,"Trades vom PC","more");
+  M.head(sec,"Watchlist vom PC","more");
   var cf=cfg(),box=el("div","card");sec.appendChild(box);
   var out=el("div");sec.appendChild(out);var msg=el("p","msg","");sec.appendChild(msg);
   function field(label,val,ph){var l=el("div","sub",label);l.style.marginTop="8px";box.appendChild(l);var i=el("input");i.type="text";i.value=val||"";i.placeholder=ph||"";i.autocapitalize="characters";i.autocomplete="off";i.spellcheck=false;i.style.cssText="width:100%;box-sizing:border-box;padding:10px;font-size:16px;border-radius:8px;border:1px solid var(--ln);background:var(--sf2);color:var(--fg)";box.appendChild(i);return i;}
+  var sum=el("div","row");sum.style.display="none";box.appendChild(sum);var form=el("div");box.appendChild(form);var realBox=box;box=form;
+  function collapse(on){form.style.display=on?"none":"";sum.style.display=on?"flex":"none";}
   box.appendChild(el("div","nm","Sync-Code"));
   var note=el("div","sub","Den Code zeigt EVE Omni am PC unter Einstellungen › Daten › „Mit Handy abgleichen“. Der Code bleibt nur auf deinen Geräten.");box.appendChild(note);
   var ci=field("Code",cf.code,"XXXXX-XXXXX-XXXXX-XXXXX");ci.id="sync-code";ci.style.textTransform="uppercase";
@@ -59,12 +61,15 @@ M.VIEWS.sync=async function(sec){
       var r=await S.pull(url,code);
       if(!r){msg.className="msg bad";msg.textContent="Auf dem Server liegt zu diesem Code noch nichts. Am PC „Jetzt senden“ drücken.";return;}
       lsSet(DATA,JSON.stringify({data:r.data,v:r.v,t:r.t,got:Date.now()}));
-      draw(out,r.data,"act");msg.textContent="Stand vom PC: "+when(r.data.t||r.t)+" · abgerufen "+M.now();
+      draw(out,r.data,"act");msg.textContent="Stand vom PC: "+when(r.data.t||r.t)+" · abgerufen "+M.now();summary(when(r.data.t||r.t));collapse(true);
     }catch(e){msg.className="msg bad";msg.textContent="Abgleich ging nicht: "+(e.name==="OperationError"?"Der Code passt nicht zu den Daten.":e.message);}
   }
+  var tr=el("button","ghost","Trennen");tr.id="sync-off";tr.style.cssText="width:100%;margin-top:8px";tr.onclick=function(){saveCfg({url:ui.value.trim()||DEFAULT_URL});lsSet(DATA,"");ci.value="";out.textContent="";msg.textContent="Getrennt. Der Code ist auf diesem Handy gelöscht.";msg.className="msg";collapse(false);};box.appendChild(tr);
+  var sg=el("div","grow sub","");sum.appendChild(sg);var ch=el("button","ghost","Ändern");ch.id="sync-edit";ch.style.cssText="min-height:36px;padding:4px 12px";ch.onclick=function(){collapse(false);};sum.appendChild(ch);
+  function summary(t){var c=cfg().code||"";sg.textContent="Verbunden · Code …"+c.slice(-5)+(t?" · Stand "+t:"");}
   b.onclick=load;
   var c=cached();
-  if(c&&c.data){draw(out,c.data,"act");msg.textContent="Gespeicherter Stand vom PC: "+when(c.data.t||c.t)+" (Handy hat ihn am "+when(c.got)+" geholt)";}
+  if(c&&c.data){draw(out,c.data,"act");if(cf.code&&S.validCode(cf.code)){summary(when(c.data.t||c.t));collapse(true);}msg.textContent="Gespeicherter Stand vom PC: "+when(c.data.t||c.t)+" (Handy hat ihn am "+when(c.got)+" geholt)";}
   if(cf.code&&S.validCode(cf.code))load();
 };
 })();
