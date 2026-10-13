@@ -15,8 +15,8 @@ function granted(){return typeof Notification!=="undefined"&&Notification.permis
 async function show(title,body,tag){
   title=T(title);body=T(body);N.log.push({title:title,body:body,tag:tag});
   if(!granted())return;
-  try{var reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration("/m/");if(reg&&reg.showNotification){await reg.showNotification(title,{body:body,tag:tag,icon:"/m/notify-icon.png",badge:"/m/notify-badge.png"});return;}}catch(e){}
-  try{new Notification(title,{body:body,tag:tag,icon:"/m/notify-icon.png"});}catch(e){}
+  try{var reg=navigator.serviceWorker&&await navigator.serviceWorker.getRegistration("/m/");if(reg&&reg.showNotification){await reg.showNotification(title,{body:body,tag:tag,icon:"/m/notify-icon.png?v=2",badge:"/m/notify-badge.png"});return;}}catch(e){}
+  try{new Notification(title,{body:body,tag:tag,icon:"/m/notify-icon.png?v=2"});}catch(e){}
 }
 function num(n){return M.exact(n);}
 function price(p){return (Math.round(p*100)/100).toFixed(2).replace(".",I.dec);}
