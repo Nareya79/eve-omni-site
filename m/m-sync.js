@@ -4,6 +4,7 @@
 "use strict";
 var M=window.OmniM,el=M.el,exact=M.exact,short=M.short,lsGet=M.lsGet,lsSet=M.lsSet,S=window.OmniSync;
 var KEY="eve-omni-m-sync",DATA="eve-omni-m-sync-data",DEFAULT_URL="https://fluxserver01.taileafff1.ts.net:8443/sync-omni";
+M.syncDefaultUrl=DEFAULT_URL;
 function cfg(){try{return JSON.parse(lsGet(KEY))||{};}catch(e){return {};}}
 function saveCfg(o){lsSet(KEY,JSON.stringify(o));}
 function cached(){try{return JSON.parse(lsGet(DATA));}catch(e){return null;}}

@@ -51,5 +51,34 @@
       return r.json().then(function(j){ if (!r.ok) throw new Error(j.err || ("HTTP " + r.status)); return decrypt(code, j.c).then(function(o){ return { data: o, v: j.v, t: j.t }; }); });
     });
   }
-  root.OmniSync = { newCode: newCode, validCode: validCode, normalize: normalize, derive: derive, encrypt: encrypt, decrypt: decrypt, push: push, pull: pull };
+  /* ---- Push (Stufe 2): Texte werden mit demselben Schlüssel verschlüsselt, der Server sieht nur Chiffre + Zeit ---- */
+  function purl(base, id, what){ return String(base).replace(/\/+$/, "") + "/push/" + id + (what ? "/" + what : ""); }
+  function jfetch(u, method, body){
+    return fetch(u, { method: method, headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined }).then(function(r){
+      return r.json().then(function(j){ if (!r.ok) throw new Error(j.err || ("HTTP " + r.status)); return j; });
+    });
+  }
+  function pushKey(base){ return jfetch(String(base).replace(/\/+$/, "") + "/push/key", "GET").then(function(j){ return j.key; }); }
+  function pushSubscribe(base, code, sub){ return derive(code).then(function(d){ return jfetch(purl(base, d.id), "PUT", { sub: sub }); }); }
+  function pushOff(base, code, endpoint){ return derive(code).then(function(d){ return jfetch(purl(base, d.id), "PUT", { off: endpoint }); }); }
+  function pushEvents(base, code, list){   /* list: [{key, at, msg:{title,body,tag}}] ersetzt alle geplanten Meldungen */
+    return derive(code).then(function(d){
+      return Promise.all(list.map(function(e){ return encrypt(code, e.msg).then(function(c){ return { key: e.key, at: e.at, c: c }; }); })).then(function(ev){
+        return jfetch(purl(base, d.id, "events"), "PUT", { events: ev });
+      });
+    });
+  }
+  function pushNow(base, code, msg){ return Promise.all([derive(code), encrypt(code, msg)]).then(function(a){ return jfetch(purl(base, a[0].id, "event"), "POST", { c: a[1] }); }); }
+  function decryptKey(key, text){
+    var c = b64ToBytes(text);
+    return crypto.subtle.decrypt({ name: "AES-GCM", iv: c.slice(0, 12) }, key, c.slice(12)).then(function(pt){ return JSON.parse(new TextDecoder().decode(pt)); });
+  }
+  function pushPending(base, id, key, after){
+    return jfetch(purl(base, id, "pending") + "?after=" + (after || 0), "GET").then(function(j){
+      return Promise.all((j.items || []).map(function(it){ return decryptKey(key, it.c).then(function(m){ return { n: it.n, msg: m }; }, function(){ return null; }); })).then(function(a){
+        return { items: a.filter(Boolean), last: j.last };
+      });
+    });
+  }
+  root.OmniSync = { pushKey: pushKey, pushSubscribe: pushSubscribe, pushOff: pushOff, pushEvents: pushEvents, pushNow: pushNow, pushPending: pushPending, decryptKey: decryptKey, newCode: newCode, validCode: validCode, normalize: normalize, derive: derive, encrypt: encrypt, decrypt: decrypt, push: push, pull: pull };
 })(typeof window !== "undefined" ? window : globalThis);
