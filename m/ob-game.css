@@ -19,8 +19,8 @@
 .ob-stat small{display:block; color:var(--ob-dim); font-size:10.5px; text-transform:uppercase; letter-spacing:.09em; white-space:nowrap}
 .ob-stat b{display:block; font-size:18px; font-variant-numeric:tabular-nums; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
 .ob-stat b .ob-of{font-size:.55em; opacity:.75; margin-left:1px}   /* Level: „/100“ klein hinter der Zahl */
-.ob-stage{position:relative; width:min(100%, calc((100vh - 190px) * .8)); min-width:260px; margin:0 auto}
-.ob-stage canvas{display:block; width:100%; aspect-ratio:4/5; border:1px solid var(--ob-line); border-radius:3px; touch-action:none; cursor:none; background:#05070b}
+.ob-stage{position:relative; width:min(100%, calc((100vh - 190px) * .5625)); min-width:220px; margin:0 auto; overscroll-behavior:contain; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none}   /* OB2: Hochformat 9:16 */
+.ob-stage canvas{display:block; width:100%; aspect-ratio:9/16; border:1px solid var(--ob-line); border-radius:3px; touch-action:none; cursor:none; background:#05070b}
 .ob-msg{position:absolute; inset:0; display:none; align-items:center; justify-content:center; padding:14px; background:rgba(3,5,8,.72); border-radius:3px}
 .ob-msg.ob-show{display:flex}
 .ob-card{width:min(380px,100%); background:var(--ob-panel); border:1px solid var(--ob-orange); border-radius:4px; padding:16px 18px; text-align:center; box-shadow:0 0 30px rgba(255,154,31,.18)}
@@ -39,6 +39,7 @@
 .ob-bar{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:8px}
 .ob-bar .ob-hint{flex:1 1 220px; color:var(--ob-dim); font-size:12px}
 .ob-lv{flex:1 1 100%}
+.ob-ww-pick{width:100%; margin:2px 0 6px; font:inherit; font-size:12px; color:var(--ob-text); background:var(--ob-panel2); border:1px solid var(--ob-line); border-radius:3px; padding:4px 6px}
 .ob-lv-h{font-size:12px;color:var(--ob-dim);margin:2px 0 4px}
 .ob-lvgrid{display:grid;grid-template-columns:repeat(10,1fr);gap:3px}
 .ob-lv-c{font:inherit;font-size:11px;padding:4px 0;color:var(--ob-text);background:var(--ob-panel2);border:1px solid var(--ob-line);border-radius:3px;cursor:pointer}
@@ -65,8 +66,20 @@
 @media (max-width:820px){
   .ob-root{grid-template-columns:minmax(0,1fr)}
   .ob-side{border-left:0; border-top:1px solid var(--ob-line); border-radius:0 0 6px 6px}
-  .ob-stage{width:100%}
   .ob-hud{grid-template-columns:repeat(3,minmax(0,1fr))}
+  /* OB2 Handy: Titel und Anzeigen kompakt oben, das Feld nimmt die volle Breite (bzw. die volle Höhe darunter) */
+  .ob-root{border:0; border-radius:0}
+  .ob-main{padding:4px 4px 6px}
+  .ob-title{margin:0 2px 3px; gap:6px}
+  .ob-title b{font-size:14px; white-space:nowrap}
+  .ob-title svg{width:22px; height:22px; flex-basis:22px}
+  .ob-title span{font-size:10.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0}
+  .ob-hud{gap:3px; margin-bottom:4px}
+  .ob-stat{padding:1px 6px}
+  .ob-stat small{font-size:9px}
+  .ob-stat b{font-size:14px}
+  .ob-stage{width:min(100%, calc((100svh - 110px) * .5625))}
 }
 body.ob-standalone{margin:0; padding:14px; background:#020305; min-height:100vh}
+@media (max-width:820px){ body.ob-standalone{padding:0} }
 /* ===== OMNIBREAKER-STYLE-END ===== */

@@ -2,7 +2,7 @@
    Nur lesen. Eigener Speicher (Praefix eve-omni-m-), getrennt vom Desktop. */
 (function(){
 "use strict";
-var VERSION="0.9.5";
+var VERSION="1.0.0";
 var I18=window.OmniI18n||{en:false,th:".",dec:",",loc:"de-DE",units:["Tsd.","Mio.","Mrd."],int:function(n){return String(Math.round(n));},fix:function(n,d){return n.toFixed(d);}};
 var CLIENT_ID="26b3d504aaa6443daed268d2cea52bc7", OLD_ID="aa3a93ff84e84013967e34b5e35b5267";
 var REDIRECT="https://omni.nareya79.com/callback.html";
@@ -195,7 +195,7 @@ function renderMore(){
   var sb=el("button","ghost");sb.id="b-settings";sb.style.cssText="width:100%;text-align:left;margin:0 0 8px;display:block;border-color:var(--cy)";sb.appendChild(el("div","nm","⚙ Einstellungen"));sb.appendChild(el("div","sub","Darstellung, Sprache, Leiste, Charaktere, Abgleich mit dem PC"));sb.onclick=function(){show("settings");};mm.appendChild(sb);
   MENU.forEach(function(m){if(!VIEWS[m[0]])return;var b=el("button","ghost");b.style.cssText="width:100%;text-align:left;margin:0 0 8px;display:block";b.appendChild(el("div","nm",m[1]));b.appendChild(el("div","sub",m[2]));b.onclick=function(){show(m[0]);};mm.appendChild(b);});
   statusLine();
-  $("ver").textContent=VERSION;
+  $("ver").textContent=VERSION+" (Beta 5)";
 }
 /* Einstellungen (eigene Ansicht, aus Mehr): Darstellung, Sprache, Navigationsleiste, Startbild, Charaktere, Abgleich mit dem PC */
 TABOF.settings="more";

@@ -7,6 +7,7 @@ var URL_ONLINE="https://fluxserver01.taileafff1.ts.net:8443/omni",inst=null,onRe
 function online(){
   return {
     me:function(){try{var a=M.loadChars(),c=M.activeChar();return c&&c.character_name?{cid:String(c.character_id),n:String(c.character_name)}:null;}catch(e){return null;}},
+    chars:function(){try{return M.loadChars().filter(function(c){return c&&c.character_name;}).map(function(c){return {cid:String(c.character_id),n:String(c.character_name)};});}catch(e){return [];}},   /* 4.0: im Spiel wählbar, wer in die Bestenliste kommt */
     send:function(e){return fetch(URL_ONLINE+"/score",{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(e)}).then(function(r){return r.json();});},
     top:function(l){return fetch(URL_ONLINE+"/top?l="+Number(l)).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();});}
   };
@@ -29,7 +30,7 @@ M.VIEWS.game=function(sec){
   fieldOnly(host,inst);
   var stage=host.querySelector(".ob-stage");
   function fit(){var top=host.getBoundingClientRect().top,avail=window.innerHeight-Math.max(top,0)-72-(parseInt(getComputedStyle(document.documentElement).getPropertyValue("--sab"))||0);
-    var w=Math.max(200,Math.floor(Math.min(sec.clientWidth,avail*0.8)));stage.style.width=w+"px";stage.classList.toggle("ob-sm",w<380);}
+    var w=Math.max(200,Math.floor(Math.min(sec.clientWidth,avail*0.5625)));   /* 4.0: Feld 9:16 */stage.style.width=w+"px";stage.classList.toggle("ob-sm",w<380);}
   onResize=fit;window.addEventListener("resize",fit);fit();setTimeout(fit,50);
   if(inst&&inst.intro)setTimeout(inst.intro,300);
 };
