@@ -4,7 +4,7 @@
 <meta name="theme-color" content="#0d141c"><meta name="referrer" content="no-referrer">
 <title>EVEOmni Mobile</title>
 <link rel="manifest" href="/m/manifest.webmanifest"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="stylesheet" href="/m/m.css"></head>
+<link rel="stylesheet" href="/m/m.css"><link rel="stylesheet" href="/m/ob-game.css"><link rel="stylesheet" href="/m/ob-field.css"></head>
 <body>
 <header><h1>EVE<b>Omni</b> Mobile</h1><button class="ghost" id="b-refresh" hidden aria-label="Aktualisieren">⟳</button></header>
 <main>
@@ -20,11 +20,14 @@
  <section id="v-skills" hidden><h2>Skills</h2><div id="skills-list"></div><p class="msg" id="skills-msg"></p></section>
  <section id="v-chars" hidden><h2>Charaktere</h2><div id="chars-list"></div><p class="msg" id="chars-msg"></p></section>
  <section id="v-more" hidden><h2>Mehr</h2>
-  <div class="card"><div class="nm">Bald hier</div><div class="sub">Gewinne · Assets · Route · OmniBreaker</div></div>
+  <div id="menu"></div><p class="msg" id="status"></p>
   <div class="card"><div class="nm">Eingeloggte Charaktere</div><div id="chars"></div></div>
   <button class="ghost" id="b-out" style="width:100%">Alle ausloggen</button>
   <p class="msg">Version <span id="ver"></span> · Fanprojekt, nicht mit CCP verbunden.</p></section>
 </main>
 <nav id="nav" hidden><button data-v="wallet" class="on"><span>◈</span>Wallet</button><button data-v="orders"><span>⇄</span>Orders</button><button data-v="skills"><span>✦</span>Skills</button><button data-v="chars"><span>☺</span>Chars</button><button data-v="more"><span>☰</span>Mehr</button></nav>
 <script src="/m/m.js"></script>
+<script src="/m/m-views.js"></script>
+<script src="/m/ob-game.js" defer></script>
+<script src="/m/m-game.js" defer></script>
 </body></html>

@@ -1,0 +1,40 @@
+/* Spielfeld-Hülle (aus EVE-Omni.html, Block „OmniBreaker als Vollbild-Overlay“ – bei Änderungen dort hier nachziehen). Nur .ob-field-Regeln. */
+.ob-field .ob-root{display:block;max-width:none;background:none;border:0}
+.ob-field .ob-main{padding:0}
+.ob-field .ob-title,.ob-field .ob-main > .ob-bar,.ob-field .ob-root > .ob-side{display:none}
+.ob-field .ob-root .ob-stage{min-width:0;margin:0 auto;container-type:inline-size}
+.ob-field .ob-hud{position:absolute;top:0;left:0;right:0;z-index:3;margin:0;padding:.8cqw;gap:.6cqw;grid-template-columns:repeat(2,minmax(0,1fr)) 30% repeat(2,minmax(0,1fr));grid-template-areas:"balls targets . mult combo" "score score . level level";pointer-events:none}
+/* 13.10.: Punkte + Level eigene Zeile darunter und groß – in der schmalen Box wurde die Punktzahl abgeschnitten */
+.ob-field .ob-s-score{grid-area:score}.ob-field .ob-s-balls{grid-area:balls}.ob-field .ob-s-targets{grid-area:targets}.ob-field .ob-s-mult{grid-area:mult}.ob-field .ob-s-level{grid-area:level}.ob-field .ob-s-combo{grid-area:combo}
+.ob-field .ob-stat{background:#0f141b;padding:.4cqw .9cqw;border-left-width:2px}
+.ob-field .ob-stat small{font-size:clamp(6px,1.9cqw,10px);letter-spacing:0;overflow:hidden}
+.ob-field .ob-stat b{font-size:clamp(8px,3cqw,16px);text-overflow:clip}
+/* 13.10.: Höhe der zweizeiligen Anzeige (feste Zeilenhöhe 1.2) – ☰/✕ und Menü-Inhalt beginnen darunter */
+.ob-field .ob-stat small,.ob-field .ob-stat b{line-height:1.2}
+.ob-field .ob-stage{--ob-hud-h:calc(3.8cqw + 4px + 1.2 * (2 * clamp(6px,1.9cqw,10px) + clamp(8px,3cqw,16px) + clamp(12px,5cqw,26px)))}
+.ob-field .ob-s-level b,.ob-field .ob-s-score b{font-size:clamp(12px,5cqw,26px)}   /* PR5: Level im Overlay größer, 13.10. Punkte auch */
+/* PQ8: Anzeigen oben mittig, je Wert eine eigene leuchtende Farbe */
+.ob-root .ob-stat{text-align:center;border-left-color:var(--ob-c,#ff9a1f);box-shadow:inset 0 0 10px -4px var(--ob-c,#ff9a1f)}
+.ob-root .ob-stat b{color:var(--ob-c,#ff9a1f);text-shadow:0 0 6px var(--ob-c,#ff9a1f),0 0 14px color-mix(in srgb,var(--ob-c,#ff9a1f) 55%,transparent)}
+.ob-root .ob-s-score{--ob-c:#ffc94a}.ob-root .ob-s-balls{--ob-c:#4cc3ff}.ob-root .ob-s-targets{--ob-c:#ff9a1f}
+.ob-root .ob-s-mult{--ob-c:#ff6bd6}.ob-root .ob-s-level{--ob-c:#6dffa8}.ob-root .ob-s-combo{--ob-c:#b46bff}
+.ob-field .ob-close,.ob-field .ob-menu-btn{position:absolute;right:6px;z-index:5;top:calc(var(--ob-hud-h) + 6px);width:28px;height:28px;border:1px solid #26303c;border-radius:4px;background:rgba(15,20,27,.85);color:#d7dde6;font-size:15px;line-height:1;cursor:pointer;padding:0}
+.ob-field .ob-stage.ob-sm .ob-close,.ob-field .ob-stage.ob-sm .ob-menu-btn{width:26px;height:26px;font-size:13px}
+/* 12.10.: im Zielmodus feuert jeder Klick aufs Feld – knapp daneben traf man nie das Menü. Unsichtbarer Rand fängt Klicks rund um ☰/✕ ab */
+.ob-field .ob-close::before,.ob-field .ob-menu-btn::before{content:"";position:absolute;inset:-12px -6px}
+.ob-field .ob-close,.ob-field .ob-menu-btn{cursor:pointer}
+.ob-field .ob-menu-btn:has(~ .ob-close){right:40px}
+.ob-field .ob-close:hover,.ob-field .ob-menu-btn:hover,.ob-field .ob-menu-btn[aria-expanded="true"]{border-color:#ff9a1f;color:#ff9a1f}
+.ob-field .ob-menu{position:absolute;inset:0;z-index:4;display:none;overflow:auto;padding:calc(var(--ob-hud-h) + 40px) 14px 14px;background:rgba(6,8,12,.95);border-radius:3px}
+.ob-field .ob-menu.open{display:block}
+.ob-field .ob-menu .ob-bar{margin:0 0 12px}
+.ob-field .ob-menu .ob-side{display:block;border:0;background:none;padding:0}
+/* Overlay-Fenster „spiel“: nur das hochkante Feld, wächst und schrumpft mit dem Fenster */
+.ob-ww-on{display:flex;align-items:center;gap:6px;margin:4px 0}.ob-ww-who,.ob-ww-st{margin:2px 0 6px;font-size:12px;color:var(--ob-dim)}.ob-ww-row{display:flex;gap:6px;margin-bottom:6px}.ob-ww-row select{flex:1;min-width:0}
+.ob-bga{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ob-dim)}.ob-bga input{width:110px;accent-color:#ff9a1f}.ob-bga em{font-style:normal;min-width:3em;color:var(--ob-text)}
+.ob-root.ob-see .ob-stage canvas,.ob-see .ob-root .ob-stage canvas{background:transparent}
+
+/* Handy: ganze Breite, Menü scrollt, Fingerziele */
+.ob-field{width:100%}
+.ob-field .ob-menu .ob-btn{min-height:40px}
+.ob-field .ob-close,.ob-field .ob-menu-btn{width:34px;height:34px}

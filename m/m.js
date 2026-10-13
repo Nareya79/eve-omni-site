@@ -2,7 +2,7 @@
    Nur lesen. Eigener Speicher (Praefix eve-omni-m-), getrennt vom Desktop. */
 (function(){
 "use strict";
-var VERSION="0.2.0";
+var VERSION="0.4.0";
 var CLIENT_ID="26b3d504aaa6443daed268d2cea52bc7", OLD_ID="aa3a93ff84e84013967e34b5e35b5267";
 var REDIRECT="https://omni.nareya79.com/callback.html";
 var AUTH="https://login.eveonline.com/v2/oauth/authorize", TOKEN="https://login.eveonline.com/v2/oauth/token";
@@ -74,7 +74,7 @@ async function accessToken(c){
 /* ---------- ESI ---------- */
 async function esiRaw(c,path,retry,body){
   var h={"X-Compatibility-Date":COMPAT};if(c)h.Authorization="Bearer "+await accessToken(c);
-  var o={headers:h};if(body){o.method="POST";h["Content-Type"]="application/json";o.body=JSON.stringify(body);}
+  var o={headers:h};if(body===null)o.method="POST";else if(body){o.method="POST";h["Content-Type"]="application/json";o.body=JSON.stringify(body);}
   var r=await fetch(ESI+path,o);
   if(r.status===429&&!retry){var w=Math.min(30,parseInt(r.headers.get("Retry-After")||"5",10)||5);await new Promise(function(x){setTimeout(x,w*1000);});return esiRaw(c,path,true,body);}
   if(!r.ok){var e=new Error("ESI "+r.status);e.status=r.status;throw e;}
@@ -107,22 +107,30 @@ function now(){var t=new Date();return ("0"+t.getHours()).slice(-2)+":"+("0"+t.g
 
 /* ---------- Oberflaeche ---------- */
 var view="wallet";
-function show(v){
+var VIEWS={},LEAVE={},TABOF={wdet:"wallet",sdet:"skills"},param=null;
+var CORE=["login","wallet","orders","skills","chars","more"];
+function show(v,p){
   var chars=loadChars();
-  ["login","wallet","orders","skills","chars","more"].forEach(function(x){$("v-"+x).hidden=true;});
+  if(LEAVE[view])LEAVE[view]();
+  document.querySelectorAll("main > section").forEach(function(s){s.hidden=true;});
   $("nav").hidden=!chars.length;$("b-refresh").hidden=!chars.length;
   if(!chars.length){$("v-login").hidden=false;return;}
-  view=v||view;$("v-"+view).hidden=false;
-  document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-v")===view);});
-  ({wallet:renderWallet,orders:renderOrders,skills:renderSkills,chars:renderChars,more:renderMore})[view]();
+  if(v){view=v;param=p||null;}
+  var sec=$("v-"+view);if(!sec){sec=document.createElement("section");sec.id="v-"+view;document.querySelector("main").appendChild(sec);}
+  sec.hidden=false;window.scrollTo(0,0);$("b-refresh").hidden=view==="game";
+  var tab=TABOF[view]||(CORE.indexOf(view)>=0?view:"more");
+  document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-v")===tab);});
+  var core={wallet:renderWallet,orders:renderOrders,skills:renderSkills,chars:renderChars,more:renderMore}[view];
+  if(core)core();else if(VIEWS[view]){sec.textContent="";VIEWS[view](sec,param);}
 }
+function activeChar(){var all=loadChars(),id=lsGet("eve-omni-m-active");for(var i=0;i<all.length;i++)if(all[i].character_id===id)return all[i];return all[0];}
 function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
 async function renderWallet(){
   var list=$("wallet-list"),msg=$("wallet-msg"),chars=loadChars(),sum=0;list.textContent="";msg.textContent="Lade …";msg.className="msg";
   var rows=chars.map(function(c){
     var card=el("div","card row"),img=el("img","pt");img.src="https://images.evetech.net/characters/"+c.character_id+"/portrait?size=64";img.alt="";img.loading="lazy";
     var g=el("div","grow"),n=el("div","nm",c.character_name),s=el("div","sub","…"),isk=el("div","isk","…");
-    g.appendChild(n);g.appendChild(s);card.appendChild(img);card.appendChild(g);card.appendChild(isk);list.appendChild(card);return {c:c,s:s,isk:isk};
+    g.appendChild(n);g.appendChild(s);card.appendChild(img);card.appendChild(g);card.appendChild(isk);card.style.cursor="pointer";card.onclick=function(){show("wdet",{id:c.character_id});};list.appendChild(card);return {c:c,s:s,isk:isk};
   });
   var bad=[];
   await Promise.all(rows.map(async function(r){
@@ -139,7 +147,16 @@ async function renderWallet(){
   $("wallet-sum").textContent=short(sum)+" ISK";var ex=el("small","",exact(sum));$("wallet-sum").appendChild(ex);
   var t=new Date();msg.textContent="Abgerufen "+now();
 }
+var MENU=[["assets","Assets","Was du wo hast"],["pnl","Gewinne","netto pro Stück und gesamt"],["route","Route","Sprünge, Sicherheit, Kills"],["appr","Wertschätzer","Liste einfügen → Jita-Wert"],["pi","Planeten (PI)","Extraktoren und Lager"],["ind","Industrie & Verträge","Jobs, Verträge, Mining"],["game","OmniBreaker","Spiel + Bestenliste"]];
+async function statusLine(){
+  var s=$("status");if(!s)return;s.textContent="";
+  try{var st=await pub("/status/"),n=new Date(),dt=Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate(),11,0,0);if(dt<=n.getTime())dt+=86400000;
+    s.textContent="Tranquility: "+exact(st.players)+" Piloten online · Downtime in "+fmtDur(dt-n.getTime());}catch(e){s.textContent="Serverstatus nicht abrufbar.";}
+}
 function renderMore(){
+  var mm=$("menu");mm.textContent="";
+  MENU.forEach(function(m){if(!VIEWS[m[0]])return;var b=el("button","ghost");b.style.cssText="width:100%;text-align:left;margin:0 0 8px;display:block";b.appendChild(el("div","nm",m[1]));b.appendChild(el("div","sub",m[2]));b.onclick=function(){show(m[0]);};mm.appendChild(b);});
+  statusLine();
   $("ver").textContent=VERSION;var box=$("chars");box.textContent="";
   loadChars().forEach(function(c){var r=el("div","row"),g=el("div","grow nm",c.character_name),b=el("button","ghost","Entfernen");b.style.minHeight="36px";b.style.padding="4px 12px";
     b.onclick=function(){saveChars(loadChars().filter(function(x){return x.character_id!==c.character_id;}));show();};
@@ -204,7 +221,7 @@ async function renderSkills(){
   }));
   var ids=[];res.forEach(function(r){(r.q||[]).forEach(function(s){ids.push(s.skill_id);});});await names(ids);
   res.forEach(function(r){
-    var card=el("div","card"),row=el("div","row");row.appendChild(el("div","grow nm",r.c.character_name));card.appendChild(row);
+    var card=el("div","card"),row=el("div","row");row.appendChild(el("div","grow nm",r.c.character_name));card.appendChild(row);card.style.cursor="pointer";card.onclick=function(){show("sdet",{id:r.c.character_id});};
     if(r.err){card.appendChild(el("div","msg bad",r.err));list.appendChild(card);return;}
     var q=r.q.filter(function(s){return s.finish_date;}).sort(function(a,b){return a.queue_position-b.queue_position;});
     if(!q.length){card.appendChild(el("div","msg bad","Keine Skills in der Warteschlange!"));card.style.borderColor="var(--bad)";list.appendChild(card);return;}
@@ -249,6 +266,6 @@ async function main(){
   show("wallet");
   if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("/m/sw.js",{scope:"/m/"}).catch(function(){});
 }
-window.OmniM={tick:tick,snap:snap,newPrice:newPrice,priceTxt:priceTxt,fmtDur:fmtDur,VERSION:VERSION,SCOPES:SCOPES,b64url:b64url,jwt:jwt,short:short,exact:exact,tokFromData:tokFromData,challenge:challenge,loadChars:loadChars,saveChars:saveChars,accessToken:accessToken,loginFinish:loginFinish,errText:errText};
+window.OmniM={VIEWS:VIEWS,leave:LEAVE,loadChars:loadChars,show:show,esi:esi,esiRaw:esiRaw,pub:pub,names:names,nm:nm,el:el,copy:copy,now:now,hasScope:hasScope,activeChar:activeChar,lsGet:lsGet,lsSet:lsSet,$:$,fmtDur:fmtDur,tick:tick,snap:snap,newPrice:newPrice,priceTxt:priceTxt,fmtDur:fmtDur,VERSION:VERSION,SCOPES:SCOPES,b64url:b64url,jwt:jwt,short:short,exact:exact,tokFromData:tokFromData,challenge:challenge,loadChars:loadChars,saveChars:saveChars,accessToken:accessToken,loginFinish:loginFinish,errText:errText};
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",main);else main();
 })();
