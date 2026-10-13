@@ -2,7 +2,7 @@
    Nur lesen. Eigener Speicher (Praefix eve-omni-m-), getrennt vom Desktop. */
 (function(){
 "use strict";
-var VERSION="0.5.0";
+var VERSION="0.5.1";
 var CLIENT_ID="26b3d504aaa6443daed268d2cea52bc7", OLD_ID="aa3a93ff84e84013967e34b5e35b5267";
 var REDIRECT="https://omni.nareya79.com/callback.html";
 var AUTH="https://login.eveonline.com/v2/oauth/authorize", TOKEN="https://login.eveonline.com/v2/oauth/token";
@@ -157,7 +157,10 @@ function renderMore(){
   var mm=$("menu");mm.textContent="";
   MENU.forEach(function(m){if(!VIEWS[m[0]])return;var b=el("button","ghost");b.style.cssText="width:100%;text-align:left;margin:0 0 8px;display:block";b.appendChild(el("div","nm",m[1]));b.appendChild(el("div","sub",m[2]));b.onclick=function(){show(m[0]);};mm.appendChild(b);});
   statusLine();
-  $("ver").textContent=VERSION;var box=$("chars");box.textContent="";
+  $("ver").textContent=VERSION;
+var sc=$("sp-opt");if(!sc){var lab=el("label","sub");lab.style.cssText="display:flex;gap:8px;align-items:center;margin:10px 0";sc=document.createElement("input");sc.type="checkbox";sc.id="sp-opt";sc.onchange=function(){lsSet("eve-omni-m-splash",sc.checked?"1":"0");};lab.appendChild(sc);lab.appendChild(document.createTextNode("Startbild beim Öffnen zeigen"));$("menu").parentNode.insertBefore(lab,$("status"));}
+sc.checked=lsGet("eve-omni-m-splash")!=="0";
+var box=$("chars");box.textContent="";
   loadChars().forEach(function(c){var r=el("div","row"),g=el("div","grow nm",c.character_name),b=el("button","ghost","Entfernen");b.style.minHeight="36px";b.style.padding="4px 12px";
     b.onclick=function(){saveChars(loadChars().filter(function(x){return x.character_id!==c.character_id;}));show();};
     r.appendChild(g);r.appendChild(b);box.appendChild(r);});
@@ -253,7 +256,17 @@ async function renderChars(){
   });
   msg.textContent="Abgerufen "+now();
 }
+/* ---------- Startbild (wie am PC: Logo, Name, Version, Links; 4 s, Tippen schliesst) ---------- */
+function splash(){
+var s=$("splash");if(!s||lsGet("eve-omni-m-splash")==="0")return;
+try{if(sessionStorage.getItem("eve-omni-m-splash-shown"))return;sessionStorage.setItem("eve-omni-m-splash-shown","1");}catch(e){}
+if(location.search.indexOf("state=")>=0)return; /* nicht direkt nach dem EVE-Login */
+$("sp-ver").textContent=VERSION;s.hidden=false;
+var t=setTimeout(close,4000);function close(){clearTimeout(t);s.classList.add("off");setTimeout(function(){s.hidden=true;},400);}
+s.onclick=function(e){if(e.target.closest("a")){clearTimeout(t);return;}close();};
+}
 async function main(){
+splash();
   $("b-login").onclick=loginStart;$("b-add").onclick=loginStart;
   $("b-out").onclick=function(){saveChars([]);show();};
   $("b-refresh").onclick=function(){show();};

@@ -19,3 +19,13 @@ nav button{flex:1;background:none;color:var(--mu);border-radius:0;font-size:12px
 nav button.on{color:var(--gd)}nav button span{font-size:20px;line-height:1}
 .hero{text-align:center;padding:48px 0 20px}.hero h1{font-size:34px;margin:0 0 6px;letter-spacing:.06em}.hero h1 b{color:var(--gd)}
 [hidden]{display:none!important}
+
+#splash{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#16222d 0,#0b1118 70%);color:#dff4fb;transition:opacity .4s}
+#splash[hidden]{display:none}#splash.off{opacity:0}
+.sp-c{display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px;text-align:center}
+.sp-logo{width:min(46vw,190px);height:auto;filter:drop-shadow(0 0 22px rgba(76,178,212,.55))}
+.sp-t{font:700 32px system-ui,sans-serif;letter-spacing:.12em;text-shadow:0 0 12px rgba(76,178,212,.6)}
+.sp-v{font-size:14px;color:#8fb3c4}
+.sp-l{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px}
+.sp-l a{color:#dff4fb;text-decoration:none;border:1px solid #4cb2d4;border-radius:4px;padding:8px 14px;background:rgba(76,178,212,.18);min-height:40px;display:inline-flex;align-items:center}
+.sp-h{font-size:12px;color:#6c8a9a;margin-top:14px}
