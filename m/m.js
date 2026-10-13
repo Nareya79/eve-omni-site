@@ -2,7 +2,8 @@
    Nur lesen. Eigener Speicher (Praefix eve-omni-m-), getrennt vom Desktop. */
 (function(){
 "use strict";
-var VERSION="0.6.0";
+var VERSION="0.7.0";
+var I18=window.OmniI18n||{en:false,th:".",dec:",",loc:"de-DE",units:["Tsd.","Mio.","Mrd."],int:function(n){return String(Math.round(n));},fix:function(n,d){return n.toFixed(d);}};
 var CLIENT_ID="26b3d504aaa6443daed268d2cea52bc7", OLD_ID="aa3a93ff84e84013967e34b5e35b5267";
 var REDIRECT="https://omni.nareya79.com/callback.html";
 var AUTH="https://login.eveonline.com/v2/oauth/authorize", TOKEN="https://login.eveonline.com/v2/oauth/token";
@@ -27,10 +28,10 @@ function jwt(t){var p=t.split(".")[1].replace(/-/g,"+").replace(/_/g,"/");while(
 function tokFromData(d){var p=jwt(d.access_token);return {character_id:String(p.sub.split(":")[2]),character_name:p.name,access_token:d.access_token,refresh_token:d.refresh_token,expires_at:Date.now()+d.expires_in*1000-30000,scp:[].concat(p.scp||[])};}
 
 /* ---------- Zahlen: Tsd./Mio./Mrd. + exakt mit Punkten ---------- */
-function exact(n){var neg=n<0,s=Math.round(Math.abs(n)).toString().replace(/\B(?=(\d{3})+(?!\d))/g,".");return (neg?"-":"")+s;}
-function short(n){var a=Math.abs(n),s=n<0?"-":"";
-  function f(v,u){return s+(Math.round(v*100)/100).toString().replace(".",",")+" "+u;}
-  if(a>=1e9)return f(a/1e9,"Mrd.");if(a>=1e6)return f(a/1e6,"Mio.");if(a>=1e3)return f(a/1e3,"Tsd.");return s+Math.round(a*100)/100;}
+function exact(n){return I18.int(n);}
+function short(n){var a=Math.abs(n),s=n<0?"-":"",u=I18.units;
+  function f(v,x){return s+(Math.round(v*100)/100).toString().replace(".",I18.dec)+" "+x;}
+  if(a>=1e9)return f(a/1e9,u[2]);if(a>=1e6)return f(a/1e6,u[1]);if(a>=1e3)return f(a/1e3,u[0]);return s+(Math.round(a*100)/100).toString().replace(".",I18.dec);}
 
 /* ---------- Login ---------- */
 async function loginStart(){
@@ -169,6 +170,8 @@ function renderMore(){
   $("ver").textContent=VERSION;
 var sc=$("sp-opt");if(!sc){var lab=el("label","sub");lab.style.cssText="display:flex;gap:8px;align-items:center;margin:10px 0";sc=document.createElement("input");sc.type="checkbox";sc.id="sp-opt";sc.onchange=function(){lsSet("eve-omni-m-splash",sc.checked?"1":"0");};lab.appendChild(sc);lab.appendChild(document.createTextNode("Startbild beim Öffnen zeigen"));$("menu").parentNode.insertBefore(lab,$("status"));}
 sc.checked=lsGet("eve-omni-m-splash")!=="0";
+var lg=$("lang-opt");if(lg)lg.remove();lg=el("div","card");lg.id="lang-opt";lg.setAttribute("data-keep","1");lg.appendChild(el("div","nm","Sprache / Language"));var lr=el("div","row");lr.style.cssText="gap:8px;margin-top:8px";
+[["en","English"],["de","Deutsch"]].forEach(function(o){var b=el("button",I18.lang===o[0]?"":"ghost",o[1]);b.setAttribute("data-lang",o[0]);b.style.cssText="flex:1;min-height:40px";b.onclick=function(){if(I18.set)I18.set(o[0]);};lr.appendChild(b);});lg.appendChild(lr);$("menu").parentNode.insertBefore(lg,$("status"));
 var np=$("nav-opt");if(np)np.remove();np=el("div","card");np.id="nav-opt";np.appendChild(el("div","nm","Navigationsleiste"));np.appendChild(el("div","sub","Wähle bis zu 4 Punkte für die untere Leiste (Mehr bleibt immer dabei)."));
 var chosen=navList(),chips=el("div","row");chips.style.cssText="flex-wrap:wrap;gap:6px;margin-top:8px";
 Object.keys(NAVCAT).forEach(function(k){var on=chosen.indexOf(k)>=0,b=el("button",on?"":"ghost",NAVCAT[k][0]+" "+NAVCAT[k][1]);b.style.cssText="min-height:36px;padding:4px 10px;font-size:13px";b.setAttribute("data-nav",k);
@@ -263,7 +266,7 @@ async function renderChars(){
   rows.forEach(function(d){
     var card=el("div","card row"),img=el("img","pt");img.src="https://images.evetech.net/characters/"+d.c.character_id+"/portrait?size=64";img.alt="";img.loading="lazy";
     var g=el("div","grow"),n=el("div","nm",d.c.character_name),s1=el("div","sub");
-    if(d.on){s1.appendChild(el("span","dot"+(d.on.online?" on":"")));s1.appendChild(document.createTextNode(d.on.online?"online":"offline"+(d.on.last_logout?" seit "+new Date(d.on.last_logout).toLocaleString("de-DE",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}):"")));}
+    if(d.on){s1.appendChild(el("span","dot"+(d.on.online?" on":"")));s1.appendChild(document.createTextNode(d.on.online?"online":"offline"+(d.on.last_logout?" seit "+new Date(d.on.last_logout).toLocaleString(I18.loc,{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"}):"")));}
     var s2=el("div","sub",d.loc?(d.loc.station_id?nm(d.loc.station_id):"im Weltraum · "+nm(d.loc.solar_system_id)):"Standort: Berechtigung fehlt");
     var s3=el("div","sub",d.ship?(d.ship.ship_name?d.ship.ship_name+" · ":"")+nm(d.ship.ship_type_id):"");
     g.appendChild(n);g.appendChild(s1);g.appendChild(s2);if(d.ship)g.appendChild(s3);card.appendChild(img);card.appendChild(g);list.appendChild(card);
@@ -279,7 +282,15 @@ $("sp-ver").textContent=VERSION;s.hidden=false;
 var t=setTimeout(close,4000);function close(){clearTimeout(t);s.classList.add("off");setTimeout(function(){s.hidden=true;},400);}
 s.onclick=function(e){if(e.target.closest("a")){clearTimeout(t);return;}close();};
 }
+function chooser(){
+var o=document.createElement("div");o.id="lang-pick";o.style.cssText="position:fixed;inset:0;z-index:300;background:var(--bg,#0d141c);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;text-align:center";
+var t=el("div","nm","Choose your language · Sprache wählen");t.style.fontSize="18px";o.appendChild(t);
+[["en","English"],["de","Deutsch"]].forEach(function(x){var b=el("button","",x[1]);b.setAttribute("data-lang",x[0]);b.style.cssText="width:240px;min-height:52px;font-size:18px";b.onclick=function(){I18.set(x[0]);};o.appendChild(b);});
+var n=el("div","sub","You can change this later under More · Das kannst du später unter Mehr ändern.");n.setAttribute("data-keep","1");o.appendChild(n);
+document.body.appendChild(o);
+}
 async function main(){
+if(I18.stored&&!I18.stored()&&location.search.indexOf("state=")<0&&location.search.indexOf("error=")<0){chooser();return;}
 splash();
   $("b-login").onclick=loginStart;$("b-add").onclick=loginStart;
   $("b-out").onclick=function(){saveChars([]);show();};
@@ -293,6 +304,6 @@ splash();
   show("wallet");
   if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("/m/sw.js",{scope:"/m/"}).catch(function(){});
 }
-window.OmniM={VIEWS:VIEWS,leave:LEAVE,loadChars:loadChars,show:show,esi:esi,esiRaw:esiRaw,pub:pub,names:names,nm:nm,el:el,copy:copy,now:now,hasScope:hasScope,activeChar:activeChar,lsGet:lsGet,lsSet:lsSet,$:$,fmtDur:fmtDur,tick:tick,snap:snap,newPrice:newPrice,priceTxt:priceTxt,fmtDur:fmtDur,VERSION:VERSION,SCOPES:SCOPES,b64url:b64url,jwt:jwt,short:short,exact:exact,tokFromData:tokFromData,challenge:challenge,loadChars:loadChars,saveChars:saveChars,accessToken:accessToken,loginFinish:loginFinish,errText:errText};
+window.OmniM={VIEWS:VIEWS,bestAt:bestAt,leave:LEAVE,loadChars:loadChars,show:show,esi:esi,esiRaw:esiRaw,pub:pub,names:names,nm:nm,el:el,copy:copy,I18:I18,now:now,hasScope:hasScope,activeChar:activeChar,lsGet:lsGet,lsSet:lsSet,$:$,fmtDur:fmtDur,tick:tick,snap:snap,newPrice:newPrice,priceTxt:priceTxt,fmtDur:fmtDur,VERSION:VERSION,SCOPES:SCOPES,b64url:b64url,jwt:jwt,short:short,exact:exact,tokFromData:tokFromData,challenge:challenge,loadChars:loadChars,saveChars:saveChars,accessToken:accessToken,loginFinish:loginFinish,errText:errText};
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",main);else main();
 })();

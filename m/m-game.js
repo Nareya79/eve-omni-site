@@ -24,7 +24,7 @@ function leave(){if(onResize){window.removeEventListener("resize",onResize);onRe
 M.leave.game=leave;
 M.VIEWS.game=function(sec){
   leave();M.head(sec,"OmniBreaker","more");
-  var host=document.createElement("div");host.className="ob-field";host.lang="de";sec.appendChild(host);
+  var host=document.createElement("div");host.className="ob-field";host.lang=M.I18.lang;sec.appendChild(host);
   inst=window.OmniBreaker.mount(host,{online:online(),storageKey:"eve-omni-m-ob-highscores",nameKey:"eve-omni-m-ob-name",progressKey:"eve-omni-m-ob-progress",defaultName:"Pilot"});
   fieldOnly(host,inst);
   var stage=host.querySelector(".ob-stage");

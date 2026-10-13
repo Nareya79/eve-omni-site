@@ -10,10 +10,10 @@ function head(sec,title,back){
 }
 M.head=head;
 function msgEl(sec){var m=el("p","msg","");sec.appendChild(m);return m;}
-function when(s){return new Date(s).toLocaleString("de-DE",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});}
+function when(s){return new Date(s).toLocaleString(M.I18.loc,{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});}
 function sgn(n){return (n>0?"+":"")+exact(n);}
-function pct(x){return (Math.round(x*100000)/1000).toString().replace(".",",")+" %";}
-function sgn2(n){var v=(Math.round(n*100)/100).toFixed(2).replace(".",",");return (n>0?"+":"")+v;}
+function pct(x){return (Math.round(x*100000)/1000).toString().replace(".",M.I18.dec)+" %";}
+function sgn2(n){var v=(Math.round(n*100)/100).toFixed(2).replace(".",M.I18.dec);return (n>0?"+":"")+v;}
 function tabs(sec,list,cur,on){var r=el("div","row");r.style.margin="10px 0";list.forEach(function(t){var b=el("button",t[0]===cur?"":"ghost",t[1]);b.style.cssText="flex:1;padding:8px 4px;min-height:40px";b.onclick=function(){on(t[0]);};r.appendChild(b);});sec.appendChild(r);}
 function chip(sec,cur,on){var all=M.loadChars();if(all.length<2)return;var r=el("div","row");r.style.cssText="margin:8px 0;flex-wrap:wrap";all.forEach(function(c){var b=el("button",c.character_id===cur?"":"ghost",c.character_name);b.style.cssText="padding:6px 12px;min-height:36px;font-weight:600";b.onclick=function(){on(c.character_id);};r.appendChild(b);});sec.appendChild(r);}
 async function allPages(c,path,maxPages){var r=await esiRaw(c,path),out=await r.json(),p=Math.min(r.pages,maxPages||5);
@@ -21,6 +21,7 @@ async function allPages(c,path,maxPages){var r=await esiRaw(c,path),out=await r.
 var REF={market_transaction:"Markt",transaction_tax:"Verkaufssteuer",brokers_fee:"Maklergebühr",market_escrow:"Marktauftrag (Treuhand)",player_trading:"Handel Spieler",player_donation:"Spende",bounty_prizes:"Kopfgeld",bounty_prize:"Kopfgeld",contract_price:"Vertrag",contract_reward:"Vertragsbelohnung",contract_collateral:"Vertragspfand",contract_brokers_fee:"Vertragsgebühr",industry_job_tax:"Industriesteuer",manufacturing:"Herstellung",insurance:"Versicherung",corporation_account_withdrawal:"Corp-Entnahme",office_rental_fee:"Bürogebühr",agent_mission_reward:"Missionsbelohnung",agent_mission_time_bonus_reward:"Missionsbonus",planetary_export_tax:"PI-Exportsteuer",planetary_import_tax:"PI-Importsteuer",jump_clone_activation_fee:"Klonsprung",reprocessing_tax:"Wiederaufbereitung",daily_goal_payouts:"Tagesziel",ess_escrow_transfer:"ESS"};
 function refTxt(t){return REF[t]||String(t).replace(/_/g," ");}
 
+M.fees=function(c){return fees(c);};
 /* ================= Wallet-Details ================= */
 var wd={tab:"journal"};
 M.VIEWS.wdet=async function(sec,p){
@@ -179,7 +180,7 @@ M.VIEWS.route=async function(sec){
       var ap=el("button","ghost","Ziel im Spiel setzen");ap.style.cssText="margin:8px 0 0 8px";ap.onclick=async function(){var c=M.activeChar();try{if(!hasScope(c,"esi-ui.write_waypoint.v1"))throw new Error("Berechtigung fehlt – neu einloggen.");await esiRaw(c,"/ui/autopilot/waypoint/?add_to_beginning=false&clear_other_waypoints=true&destination_id="+b.id,false,null);ap.textContent="Ziel gesetzt ✓";}catch(e){ap.textContent=e.message;}};head2.appendChild(ap);
       out.appendChild(head2);
       route.forEach(function(id,i){var row=el("div","card row");row.style.padding="8px 14px";row.appendChild(el("div","sub",String(i)));var n=el("div","grow nm",nm(id));row.appendChild(n);
-        var s2=el("div","isk",SEC[id]!=null?(Math.round(SEC[id]*10)/10).toFixed(1).replace(".",","):"?");s2.style.color=SEC[id]!=null?secColor(SEC[id]):"var(--mu)";if(kills[id])s2.appendChild(el("small","",kills[id]+" Kills/Std"));row.appendChild(s2);out.appendChild(row);});
+        var s2=el("div","isk",SEC[id]!=null?(Math.round(SEC[id]*10)/10).toFixed(1).replace(".",M.I18.dec):"?");s2.style.color=SEC[id]!=null?secColor(SEC[id]):"var(--mu)";if(kills[id])s2.appendChild(el("small","",kills[id]+" Kills/Std"));row.appendChild(s2);out.appendChild(row);});
       msg.textContent="Kills der letzten Stunde laut ESI · Abgerufen "+M.now();
     }catch(e){msg.textContent=e.message;msg.className="msg bad";}
   };
@@ -247,7 +248,7 @@ M.VIEWS.pi=async function(sec){
 };
 
 /* ================= Industrie, Verträge, Mining ================= */
-var ACT={1:"Herstellung",3:"Zeiteffizienz",4:"Materialeffizienz",5:"Kopieren",8:"Invention",9:"Reaktion"};
+var ACT={1:"Herstellung",3:"Zeiteffizienz",4:"Materialeffizienz",5:"Kopie",8:"Invention",9:"Reaktion"};
 M.VIEWS.ind=async function(sec){
   head(sec,"Industrie & Verträge","more");var out=el("div");sec.appendChild(out);var msg=msgEl(sec);msg.textContent="Lade …";var chars=M.loadChars(),errs=[];
   var jobs=[],cons=[],mine=[];
