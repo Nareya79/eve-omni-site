@@ -28,14 +28,18 @@ function fullBtn(host,fit){
   function set(on){host.classList.toggle("ob-full",on);b.setAttribute("aria-pressed",on?"true":"false");fit();}
   b.addEventListener("click",function(){
     if(host.classList.contains("ob-full")){if(fsEl())(document.exitFullscreen||document.webkitExitFullscreen).call(document).catch(function(){});set(false);return;}
-    set(true);var rq=host.requestFullscreen||host.webkitRequestFullscreen;if(rq)try{var p=rq.call(host,{navigationUI:"hide"});if(p&&p.catch)p.catch(function(){});}catch(e){}
+    set(true);var rq=host.requestFullscreen||host.webkitRequestFullscreen;if(rq)try{var p=rq.call(host,{navigationUI:"hide"});if(p&&p.then)p.then(lock,function(){});}catch(e){}
   });
-  function chg(){if(!fsEl()&&host.classList.contains("ob-full")&&host.dataset.fs)set(false);host.dataset.fs=fsEl()?"1":"";}   /* Zurück-Geste beendet Vollbild */
+  /* 1.0.2: im Vollbild Hochformat halten (Android; sonst still nichts) */
+  function lock(){try{var o=screen.orientation;if(o&&o.lock)o.lock("portrait").catch(function(){});}catch(e){}}
+  function unlock(){try{var o=screen.orientation;if(o&&o.unlock)o.unlock();}catch(e){}}
+  function chg(){if(!fsEl()&&host.classList.contains("ob-full")&&host.dataset.fs)set(false);host.dataset.fs=fsEl()?"1":"";if(!fsEl())unlock();fitSoon(fit);}   /* Zurück-Geste beendet Vollbild; 1.0.2: Größe nach dem Wechsel neu (Android meldet sie verspätet) */
   document.addEventListener("fullscreenchange",chg);document.addEventListener("webkitfullscreenchange",chg);
-  offFs=function(){host.classList.remove("ob-full");document.removeEventListener("fullscreenchange",chg);document.removeEventListener("webkitfullscreenchange",chg);if(fsEl())(document.exitFullscreen||document.webkitExitFullscreen).call(document).catch(function(){});};
+  offFs=function(){host.classList.remove("ob-full");unlock();document.removeEventListener("fullscreenchange",chg);document.removeEventListener("webkitfullscreenchange",chg);if(fsEl())(document.exitFullscreen||document.webkitExitFullscreen).call(document).catch(function(){});};
   host.querySelector(".ob-stage").appendChild(b);
 }
-function leave(){if(offFs){offFs();offFs=null;}if(onResize){window.removeEventListener("resize",onResize);onResize=null;}if(inst){try{inst.destroy();}catch(e){}inst=null;}}
+function fitSoon(fit){fit();[60,250,600].forEach(function(t){setTimeout(fit,t);});}
+function leave(){if(offFs){offFs();offFs=null;}if(onResize){window.removeEventListener("resize",onResize);if(window.visualViewport)visualViewport.removeEventListener("resize",onResize);onResize=null;}if(inst){try{inst.destroy();}catch(e){}inst=null;}}
 M.leave.game=leave;
 M.VIEWS.game=function(sec){
   leave();M.head(sec,"OmniBreaker","more");
@@ -43,9 +47,18 @@ M.VIEWS.game=function(sec){
   inst=window.OmniBreaker.mount(host,{online:online(),storageKey:"eve-omni-m-ob-highscores",nameKey:"eve-omni-m-ob-name",progressKey:"eve-omni-m-ob-progress",defaultName:"Pilot"});
   fieldOnly(host,inst);
   var stage=host.querySelector(".ob-stage");
-  function fit(){var full=host.classList.contains("ob-full"),top=host.getBoundingClientRect().top,avail=full?window.innerHeight:window.innerHeight-Math.max(top,0)-72-(parseInt(getComputedStyle(document.documentElement).getPropertyValue("--sab"))||0);
-    var w=Math.max(200,Math.floor(Math.min(full?window.innerWidth:sec.clientWidth,avail*0.5625)));   /* 4.0: Feld 9:16 */stage.style.width=w+"px";stage.classList.toggle("ob-sm",w<380);}
-  fullBtn(host,fit);onResize=fit;window.addEventListener("resize",fit);fit();setTimeout(fit,50);
+  /* 1.0.2: Feld 9:16 so groß wie möglich – ganze Bildschirmbreite (ohne Seitenrand), Höhe bis zur echten Leiste unten; Rest = Weltraum-Hintergrund der Hülle.
+     Im Vollbild rechnet CSS selbst (100dvw/100dvh), damit veraltete Maße beim Betreten (Android) nichts ausmachen. */
+  function fit(){
+    if(!host.isConnected)return;
+    if(host.classList.contains("ob-full")){host.style.height="";stage.style.width="min(100dvw, calc((100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * .5625))";}
+    else{
+      var top=Math.max(0,host.getBoundingClientRect().top),nav=document.querySelector("nav"),nb=nav&&nav.getBoundingClientRect().height?nav.getBoundingClientRect().top:window.innerHeight,avail=Math.max(200,Math.floor(nb-top));
+      host.style.height=avail+"px";stage.style.width=Math.max(200,Math.floor(Math.min(document.documentElement.clientWidth,avail*0.5625)))+"px";
+    }
+    stage.classList.toggle("ob-sm",stage.getBoundingClientRect().width<380);
+  }
+  fullBtn(host,fit);onResize=function(){fitSoon(fit);};window.addEventListener("resize",onResize);if(window.visualViewport)visualViewport.addEventListener("resize",onResize);fitSoon(fit);
   if(inst&&inst.intro)setTimeout(inst.intro,300);
 };
 })();
