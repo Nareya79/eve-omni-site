@@ -2,7 +2,7 @@
    Nur lesen. Eigener Speicher (Praefix eve-omni-m-), getrennt vom Desktop. */
 (function(){
 "use strict";
-var VERSION="1.0.2";
+var VERSION="1.0.3";
 var I18=window.OmniI18n||{en:false,th:".",dec:",",loc:"de-DE",units:["Tsd.","Mio.","Mrd."],int:function(n){return String(Math.round(n));},fix:function(n,d){return n.toFixed(d);}};
 var CLIENT_ID="26b3d504aaa6443daed268d2cea52bc7", OLD_ID="aa3a93ff84e84013967e34b5e35b5267";
 var REDIRECT="https://omni.nareya79.com/callback.html";
@@ -137,12 +137,14 @@ var view="wallet";
 var VIEWS={},LEAVE={},TABOF={wdet:"wallet",sdet:"skills"},param=null;
 var CORE=["login","wallet","orders","skills","chars","more"];
 /* Navigationsleiste: frei waehlbar (bis zu 4 + "Mehr") */
-var NAVCAT={wallet:["◈","Wallet"],orders:["⇄","Orders"],skills:["✦","Skills"],chars:["☺","Chars"],sync:["★","Watchlist"],assets:["▤","Assets"],pnl:["Σ","Gewinne"],pi:["◍","PI"],ind:["⚙","Industrie"],game:["▶","Spiel"]};
+/* 1.0.3: OmniBreaker-Symbol (Ring, E, Ball) statt Text-Zeichen */
+var OB_ICON='<svg class="ob-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.1A8.9 8.9 0 1 0 20.8 14.1"/><path d="M7.7 7v10M10 7h4.4M10 12h5.6M10 17h7"/><circle cx="18.2" cy="5.8" r="1.9"/></svg>';
+var NAVCAT={wallet:["◈","Wallet"],orders:["⇄","Orders"],skills:["✦","Skills"],chars:["☺","Chars"],sync:["★","Watchlist"],assets:["▤","Assets"],pnl:["Σ","Gewinne"],pi:["◍","PI"],ind:["⚙","Industrie"],game:["","Spiel"]};
 var NAVDEF=["wallet","orders","skills","chars"];
 function navList(){var a=null;try{a=JSON.parse(lsGet("eve-omni-m-nav"));}catch(e){}
 if(!Array.isArray(a))return NAVDEF.slice();return a.filter(function(k,i){return NAVCAT[k]&&a.indexOf(k)===i;}).slice(0,4);}
 function renderNav(){var n=$("nav");n.textContent="";
-navList().concat(["more"]).forEach(function(k){var b=document.createElement("button");b.setAttribute("data-v",k);var s=document.createElement("span");s.textContent=k==="more"?"☰":NAVCAT[k][0];b.appendChild(s);b.appendChild(document.createTextNode(k==="more"?"Mehr":NAVCAT[k][1]));b.onclick=function(){show(k);};n.appendChild(b);});
+navList().concat(["more"]).forEach(function(k){var b=document.createElement("button");b.setAttribute("data-v",k);var s=document.createElement("span");if(k==="game")s.innerHTML=OB_ICON;else s.textContent=k==="more"?"☰":NAVCAT[k][0];b.appendChild(s);b.appendChild(document.createTextNode(k==="more"?"Mehr":NAVCAT[k][1]));b.onclick=function(){show(k);};n.appendChild(b);});
 var cur=document.querySelector("main > section:not([hidden])");if(cur)markNav();}
 function markNav(){var tab=TABOF[view]||view,l=navList();if(l.indexOf(tab)<0)tab="more";
 document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("on",b.getAttribute("data-v")===tab);});}
@@ -193,7 +195,7 @@ async function statusLine(){
 function renderMore(){
   var mm=$("menu");mm.textContent="";
   var sb=el("button","ghost");sb.id="b-settings";sb.style.cssText="width:100%;text-align:left;margin:0 0 8px;display:block;border-color:var(--cy)";sb.appendChild(el("div","nm","⚙ Einstellungen"));sb.appendChild(el("div","sub","Darstellung, Sprache, Leiste, Charaktere, Abgleich mit dem PC"));sb.onclick=function(){show("settings");};mm.appendChild(sb);
-  MENU.forEach(function(m){if(!VIEWS[m[0]])return;var b=el("button","ghost");b.style.cssText="width:100%;text-align:left;margin:0 0 8px;display:block";b.appendChild(el("div","nm",m[1]));b.appendChild(el("div","sub",m[2]));b.onclick=function(){show(m[0]);};mm.appendChild(b);});
+  MENU.forEach(function(m){if(!VIEWS[m[0]])return;var b=el("button","ghost");b.style.cssText="width:100%;text-align:left;margin:0 0 8px;display:block";b.appendChild(el("div","nm",m[1]));if(m[0]==="game")b.firstChild.insertAdjacentHTML("afterbegin",OB_ICON+" ");b.appendChild(el("div","sub",m[2]));b.onclick=function(){show(m[0]);};mm.appendChild(b);});
   statusLine();
   $("ver").textContent=VERSION+" (Beta 5)";
 }
@@ -207,7 +209,7 @@ var lg=$("lang-opt");if(lg)lg.remove();lg=el("div","card");lg.id="lang-opt";lg.s
 [["en","English"],["de","Deutsch"]].forEach(function(o){var b=el("button",I18.lang===o[0]?"":"ghost",o[1]);b.setAttribute("data-lang",o[0]);b.style.cssText="flex:1;min-height:40px";b.onclick=function(){if(I18.set)I18.set(o[0]);};lr.appendChild(b);});lg.appendChild(lr);sec.appendChild(lg);
 var np=$("nav-opt");if(np)np.remove();np=el("div","card");np.id="nav-opt";np.appendChild(el("div","nm","Navigationsleiste"));np.appendChild(el("div","sub","Wähle bis zu 4 Punkte für die untere Leiste (Mehr bleibt immer dabei)."));
 var chosen=navList(),chips=el("div","row");chips.style.cssText="flex-wrap:wrap;gap:6px;margin-top:8px";
-Object.keys(NAVCAT).forEach(function(k){var on=chosen.indexOf(k)>=0,b=el("button",on?"":"ghost",NAVCAT[k][0]+" "+NAVCAT[k][1]);b.style.cssText="min-height:36px;padding:4px 10px;font-size:13px";b.setAttribute("data-nav",k);
+Object.keys(NAVCAT).forEach(function(k){var on=chosen.indexOf(k)>=0,b=el("button",on?"":"ghost",NAVCAT[k][0]+" "+NAVCAT[k][1]);if(k==="game")b.innerHTML=OB_ICON+" "+NAVCAT[k][1];b.style.cssText="min-height:36px;padding:4px 10px;font-size:13px";b.setAttribute("data-nav",k);
 b.onclick=function(){var l=navList(),i=l.indexOf(k);if(i>=0)l.splice(i,1);else if(l.length<4)l.push(k);else{np.querySelector(".msg").textContent="Höchstens 4 – erst einen abwählen.";return;}lsSet("eve-omni-m-nav",JSON.stringify(l));renderNav();show("settings");};chips.appendChild(b);});
 np.appendChild(chips);np.appendChild(el("p","msg",""));sec.appendChild(np);
 var sc=null;{var lab=el("label","sub");lab.style.cssText="display:flex;gap:8px;align-items:center;margin:10px 0";sc=document.createElement("input");sc.type="checkbox";sc.id="sp-opt";sc.onchange=function(){lsSet("eve-omni-m-splash",sc.checked?"1":"0");};lab.appendChild(sc);lab.appendChild(document.createTextNode("Startbild beim Öffnen zeigen"));sec.appendChild(lab);}

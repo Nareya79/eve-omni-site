@@ -2946,18 +2946,15 @@ function el(tag, cls, text) {
   return n;
 }
 
-/* Eigenes Logo: E im Ring (Omni) mit Laserstrahl und Gesteinsbrocken */
-function makeLogo() {
-  var NS = 'http://www.w3.org/2000/svg';
-  function n(tag, attrs) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
-  var svg = n('svg', { viewBox: '0 0 44 44', width: '34', height: '34', 'aria-hidden': 'true' });
-  svg.style.alignSelf = 'center'; svg.style.flex = '0 0 34px';
-  svg.appendChild(n('circle', { cx: '22', cy: '23', r: '16.5', fill: 'none', stroke: '#ff9a1f', 'stroke-width': '3', 'stroke-dasharray': '82 22', 'stroke-dashoffset': '-14', 'stroke-linecap': 'round' }));
-  svg.appendChild(n('path', { d: 'M16 14.5 H29 M16 23 H27 M16 31.5 H29 M16 14.5 V31.5', stroke: '#d7dde6', 'stroke-width': '3.4', 'stroke-linecap': 'square', fill: 'none' }));
-  svg.appendChild(n('path', { d: 'M2 2 L15 13', stroke: '#ffd08a', 'stroke-width': '2', 'stroke-linecap': 'round' }));
-  svg.appendChild(n('circle', { cx: '15.5', cy: '13.5', r: '2.2', fill: '#fff' }));
-  svg.appendChild(n('polygon', { points: '36,3 41,5 40,10 35,9', fill: '#7d8ea5' }));
-  svg.appendChild(n('polygon', { points: '39,13 42,14 41,17 38,16', fill: '#566478' }));
+/* Logo (14.10.2026, Entwurf 3, kleine Fassung aus OmniBreaker/logo/omnibreaker-logo-klein.svg): Omni-Ring gebrochen, E aus Steinen, Ball schlägt ein Stück ab */
+var OB_LOGO = '<path d="M256 62 A194 194 0 1 0 446 300" fill="none" stroke="#ff8a2a" stroke-width="46" stroke-linecap="round"/><polygon points="334,44 400,60 378,122 322,100" fill="#ff8a2a"/>' +
+  '<rect x="132" y="116" width="54" height="280" rx="10" fill="#4fd8ff"/><rect x="200" y="116" width="114" height="52" rx="10" fill="#4fd8ff"/><rect x="200" y="230" width="144" height="52" rx="10" fill="#f0a030"/><rect x="200" y="344" width="180" height="52" rx="10" fill="#4fd8ff"/>' +
+  '<path d="M210 296 L370 138" stroke="#ffb347" stroke-width="30" stroke-linecap="round" opacity=".55"/><circle cx="390" cy="118" r="54" fill="#fff4cf" stroke="#ffb347" stroke-width="14"/>';
+function makeLogo(size) {
+  var z = String(size || 34), svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 512 512'); svg.setAttribute('width', z); svg.setAttribute('height', z); svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('class', 'ob-logo'); svg.style.alignSelf = 'center'; svg.style.flex = '0 0 ' + z + 'px';
+  svg.innerHTML = OB_LOGO;
   return svg;
 }
 
@@ -4468,6 +4465,7 @@ function mount(container, opts) {
 }
 
 root.OmniBreaker = {
+  makeLogo: makeLogo,   // 14.10.: Logo für Hüllen (Handy-Kopf, Startknopf)
   version: '4.0',
   CFG: CFG, LEVELS: LEVELS, POWER_NAMES: POWER_NAMES, t: obT, en: OB_EN, lvName: obLvName, lvDesc: obLvDesc, Game: Game, Highscores: Highscores, Progress: Progress, createSound: createSound,
   makeLayout: makeLayout, buildLevel: buildLevel, sceneOf: obSceneOf, K: OBK, HAND: OB2_LEVELS, buildStoneRail: buildStoneRail, obStonePieces: obStonePieces, obRailSweep: obRailSweep, mvAt: mvAt, segNear: segNear, fmtScore: fmtScore, mount: mount

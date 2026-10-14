@@ -52,4 +52,12 @@ body{zoom:var(--zoom,1)}
 /* 1.0.2: Hülle ohne Seitenrand, Feld mittig; freie Fläche um das 9:16-Feld = Weltraum (Nebel + Sterne) statt Schwarz/leer */
 #v-game .ob-field{--ob-space:radial-gradient(1px 1px at 12% 18%,#fff9,transparent),radial-gradient(1px 1px at 67% 9%,#fff8,transparent),radial-gradient(1.5px 1.5px at 84% 41%,#cfe8ff,transparent),radial-gradient(1px 1px at 33% 63%,#fff7,transparent),radial-gradient(1px 1px at 52% 87%,#fff8,transparent),radial-gradient(1.5px 1.5px at 7% 79%,#ffe7c9,transparent),radial-gradient(1px 1px at 92% 93%,#fff6,transparent),radial-gradient(ellipse 70% 45% at 20% 12%,rgba(96,52,170,.32),transparent 70%),radial-gradient(ellipse 65% 40% at 85% 92%,rgba(24,104,160,.30),transparent 70%),#03050a;
   margin:0 -16px;width:calc(100% + 32px);display:flex;align-items:center;justify-content:center;background:var(--ob-space);overflow:hidden}
+#v-game .ob-field{position:relative}
+.ob-ic{width:1.15em;height:1.15em;vertical-align:-.2em}nav .ob-ic{width:20px;height:20px}
+/* 1.0.3: Kopf über dem Feld (Logo + Schriftzug) und Startknopf „Spielen“ */
+.ob-mhead{position:absolute;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:10px;pointer-events:none;z-index:1}
+.ob-mhead b,.ob-start b{font-weight:800;letter-spacing:.14em;background:linear-gradient(180deg,#ffd27a,#ff9a1f 55%,#ff6a2a);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 6px rgba(255,154,31,.55)) drop-shadow(0 0 16px rgba(255,106,42,.3))}
+.ob-start{position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border:0;padding:0;background:radial-gradient(ellipse at 50% 45%,rgba(30,18,70,.9),rgba(3,5,10,.95) 70%);color:#fff;cursor:pointer;font:inherit}
+.ob-start b{font-size:clamp(22px,8cqw,40px)}
+.ob-start span{margin-top:6px;padding:12px 40px;border:1px solid #ff9a1f;border-radius:6px;background:rgba(255,154,31,.16);color:#ffd9a6;font-size:20px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;box-shadow:0 0 18px rgba(255,154,31,.35)}
 .ob-field.ob-full{position:fixed;inset:0;z-index:20;margin:0;width:auto!important;background:var(--ob-space, #000);display:flex;align-items:center;justify-content:center;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);height:100dvh}

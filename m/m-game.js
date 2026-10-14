@@ -26,9 +26,10 @@ function fsEl(){return document.fullscreenElement||document.webkitFullscreenElem
 function fullBtn(host,fit){
   var b=document.createElement("button");b.type="button";b.className="ob-full-btn";b.textContent="⛶";b.setAttribute("aria-label","Vollbild");b.setAttribute("aria-pressed","false");
   function set(on){host.classList.toggle("ob-full",on);b.setAttribute("aria-pressed",on?"true":"false");fit();}
+  function enter(){set(true);var rq=host.requestFullscreen||host.webkitRequestFullscreen;if(rq)try{var p=rq.call(host,{navigationUI:"hide"});if(p&&p.then)p.then(lock,function(){});}catch(e){}}   /* verweigert = Feld deckt trotzdem Kopfzeile + Leiste ab */
   b.addEventListener("click",function(){
     if(host.classList.contains("ob-full")){if(fsEl())(document.exitFullscreen||document.webkitExitFullscreen).call(document).catch(function(){});set(false);return;}
-    set(true);var rq=host.requestFullscreen||host.webkitRequestFullscreen;if(rq)try{var p=rq.call(host,{navigationUI:"hide"});if(p&&p.then)p.then(lock,function(){});}catch(e){}
+    enter();
   });
   /* 1.0.2: im Vollbild Hochformat halten (Android; sonst still nichts) */
   function lock(){try{var o=screen.orientation;if(o&&o.lock)o.lock("portrait").catch(function(){});}catch(e){}}
@@ -37,6 +38,26 @@ function fullBtn(host,fit){
   document.addEventListener("fullscreenchange",chg);document.addEventListener("webkitfullscreenchange",chg);
   offFs=function(){host.classList.remove("ob-full");unlock();document.removeEventListener("fullscreenchange",chg);document.removeEventListener("webkitfullscreenchange",chg);if(fsEl())(document.exitFullscreen||document.webkitExitFullscreen).call(document).catch(function(){});};
   host.querySelector(".ob-stage").appendChild(b);
+  return enter;
+}
+/* 1.0.3: Kopf über dem Feld – Logo + Schriftzug auf dem Weltraum außerhalb des Feldes, nur wenn oben genug Platz ist (das Feld wird dafür nie kleiner) */
+function obHead(host){
+  var h=document.createElement("div");h.className="ob-mhead";h.hidden=true;h.setAttribute("aria-hidden","true");
+  var lg=window.OmniBreaker.makeLogo(48);h.appendChild(lg);var t=document.createElement("b");t.textContent="OMNIBREAKER";h.appendChild(t);
+  host.appendChild(h);
+  return function(stage){
+    var hr=host.getBoundingClientRect(),sr=stage.getBoundingClientRect(),pt=parseFloat(getComputedStyle(host).paddingTop)||0,free=sr.top-hr.top-pt;
+    h.hidden=free<64;if(h.hidden)return;
+    var z=Math.max(40,Math.min(56,Math.round(free-16)));h.style.top=pt+"px";h.style.height=Math.min(free,88)+"px";
+    lg.setAttribute("width",z);lg.setAttribute("height",z);lg.style.flex="0 0 "+z+"px";t.style.fontSize=Math.round(z*0.5)+"px";
+  };
+}
+/* 1.0.3: „Spielen“ – Vollbild geht nur nach einer Berührung, deshalb einmal je Spielbesuch ein Startknopf über dem Feld */
+function startBtn(host,enter,go){
+  var o=document.createElement("button");o.type="button";o.className="ob-start";o.setAttribute("aria-label","Spielen (Vollbild)");
+  o.appendChild(window.OmniBreaker.makeLogo(96));var t=document.createElement("b");t.textContent="OMNIBREAKER";o.appendChild(t);var s=document.createElement("span");s.textContent="Spielen";o.appendChild(s);
+  o.addEventListener("click",function(){o.remove();enter();go();});
+  host.querySelector(".ob-stage").appendChild(o);
 }
 function fitSoon(fit){fit();[60,250,600].forEach(function(t){setTimeout(fit,t);});}
 function leave(){if(offFs){offFs();offFs=null;}if(onResize){window.removeEventListener("resize",onResize);if(window.visualViewport)visualViewport.removeEventListener("resize",onResize);onResize=null;}if(inst){try{inst.destroy();}catch(e){}inst=null;}}
@@ -57,8 +78,10 @@ M.VIEWS.game=function(sec){
       host.style.height=avail+"px";stage.style.width=Math.max(200,Math.floor(Math.min(document.documentElement.clientWidth,avail*0.5625)))+"px";
     }
     stage.classList.toggle("ob-sm",stage.getBoundingClientRect().width<380);
+    head(stage);
   }
-  fullBtn(host,fit);onResize=function(){fitSoon(fit);};window.addEventListener("resize",onResize);if(window.visualViewport)visualViewport.addEventListener("resize",onResize);fitSoon(fit);
-  if(inst&&inst.intro)setTimeout(inst.intro,300);
+  var head=obHead(host),enter=fullBtn(host,fit);onResize=function(){fitSoon(fit);};window.addEventListener("resize",onResize);if(window.visualViewport)visualViewport.addEventListener("resize",onResize);fitSoon(fit);
+  var go=function(){if(inst&&inst.intro)setTimeout(inst.intro,300);};
+  if(fsEl())go();else startBtn(host,enter,go);
 };
 })();
