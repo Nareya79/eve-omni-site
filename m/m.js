@@ -2,7 +2,7 @@
    Nur lesen. Eigener Speicher (Praefix eve-omni-m-), getrennt vom Desktop. */
 (function(){
 "use strict";
-var VERSION="1.0.3";
+var VERSION="1.0.4";
 var I18=window.OmniI18n||{en:false,th:".",dec:",",loc:"de-DE",units:["Tsd.","Mio.","Mrd."],int:function(n){return String(Math.round(n));},fix:function(n,d){return n.toFixed(d);}};
 var CLIENT_ID="26b3d504aaa6443daed268d2cea52bc7", OLD_ID="aa3a93ff84e84013967e34b5e35b5267";
 var REDIRECT="https://omni.nareya79.com/callback.html";
@@ -349,6 +349,6 @@ splash();
     document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")reg.update().catch(function(){});});
   }).catch(function(){});
 }
-window.OmniM={VIEWS:VIEWS,bestAt:bestAt,leave:LEAVE,loadChars:loadChars,show:show,esi:esi,esiRaw:esiRaw,pub:pub,names:names,nm:nm,el:el,copy:copy,I18:I18,now:now,hasScope:hasScope,activeChar:activeChar,lsGet:lsGet,lsSet:lsSet,$:$,fmtDur:fmtDur,tick:tick,snap:snap,newPrice:newPrice,priceTxt:priceTxt,fmtDur:fmtDur,VERSION:VERSION,SCOPES:SCOPES,b64url:b64url,jwt:jwt,short:short,exact:exact,tokFromData:tokFromData,challenge:challenge,loadChars:loadChars,saveChars:saveChars,accessToken:accessToken,loginFinish:loginFinish,errText:errText};
+window.OmniM={TABOF:TABOF,VIEWS:VIEWS,bestAt:bestAt,leave:LEAVE,loadChars:loadChars,show:show,esi:esi,esiRaw:esiRaw,pub:pub,names:names,nm:nm,el:el,copy:copy,I18:I18,now:now,hasScope:hasScope,activeChar:activeChar,lsGet:lsGet,lsSet:lsSet,$:$,fmtDur:fmtDur,tick:tick,snap:snap,newPrice:newPrice,priceTxt:priceTxt,fmtDur:fmtDur,VERSION:VERSION,SCOPES:SCOPES,b64url:b64url,jwt:jwt,short:short,exact:exact,tokFromData:tokFromData,challenge:challenge,loadChars:loadChars,saveChars:saveChars,accessToken:accessToken,loginFinish:loginFinish,errText:errText};
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",main);else main();
 })();
