@@ -1704,14 +1704,16 @@ var OB2_LEVELS = {
     } }
 };
 var OB_LEVELS = 150;
-/* Drohnen je Level (Phase 7, nach Bot-Bericht): 12, Finale 13; Welten, die aus der Kurve fallen, ±1; späte Finale (130–150) +1 */
+/* Drohnen je Level (Phase 7, nach Bot-Bericht): Grundwert, Finale +1; Welten, die aus der Kurve fallen, ±1; späte Finale (130–150) +1.
+   QQ4 (14.10.2026): Grundwert 12 → 10 – Spieler schafften 9 von 10 Leveln im ersten Versuch mit 2–5 Drohnen übrig (der Bot ist schwächer als ein Mensch). */
+var OB_BALLS_BASE = 10;
 var OB_BALLS_WORLD = { 7: -1, 8: 1, 10: -1, 14: 1 };
-function obBalls(L) { var w = Math.ceil(L / 10), fin = L % 10 === 0; return 12 + (fin ? 1 : 0) + (OB_BALLS_WORLD[w] || 0) + (fin && w >= 13 ? 1 : 0); }
+function obBalls(L) { var w = Math.ceil(L / 10), fin = L % 10 === 0; return OB_BALLS_BASE + (fin ? 1 : 0) + (OB_BALLS_WORLD[w] || 0) + (fin && w >= 13 ? 1 : 0); }
 function obHandDef(L, d) {
   var fresh = Object.keys(POWER_UNLOCK).filter(function (k) { return POWER_UNLOCK[k] === L; }), items = L === OB_LEVELS ? OB_POWERS.concat(obNewAt(L)) : fresh.concat(d.items || obPowersFor(L, mulberry32(L * 7907), 2));   // Finale 150: alle Items   // neues Item zuerst (erster grüner Brocken)
   var desc = d.desc + (fresh.length ? ' · neu: ' + fresh.map(function (k) { return POWER_NAMES[k]; }).join(', ') : '');
   if (d.en) OB_WORD_EN[d.name] = d.en; if (d.descEn) OB_WORD_EN[d.desc] = d.descEn;
-  return { name: d.name, desc: desc, seed: 5000 + L, hand: true, peak: L % 10 === 0, balls: d.balls || obBalls(L), powers: items, scene: d.scene, build: d.build };   // 12 Drohnen, Finale 13 (Bot-Bericht; Schwierigkeit kommt aus den Leveln)
+  return { name: d.name, desc: desc, seed: 5000 + L, hand: true, peak: L % 10 === 0, balls: d.balls || obBalls(L), powers: items, scene: d.scene, build: d.build };   // Drohnen aus obBalls (Grundwert OB_BALLS_BASE, Finale +1)
 }
 var LEVELS = [];
 for (var obL = 1; obL <= OB_LEVELS; obL++) LEVELS.push(obHandDef(obL, OB2_LEVELS[obL]));   // alle 150 Level sind handgebaut (OB2_LEVELS)
