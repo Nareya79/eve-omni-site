@@ -45,3 +45,8 @@ body{zoom:var(--zoom,1)}
 :root.dense .card img.pt{width:38px;height:38px}
 .look-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.look-row button{flex:1;min-height:38px;padding:4px 10px;font-size:13px}
 .look-sch{display:flex;align-items:center;gap:8px;justify-content:flex-start;flex:1 1 45%!important}.look-sch i{display:inline-flex;flex:none}.look-sch i b{width:14px;height:14px;border-radius:50%;border:1px solid rgba(255,255,255,.25);margin-right:-4px}
+/* 1.0.1: OmniBreaker Vollbild – Knopf ⛶ links neben ☰; Feld deckt Kopfzeile + Leiste ab (iPhone ohne echtes Vollbild) */
+.ob-field .ob-full-btn{position:absolute;right:46px;z-index:5;top:calc(var(--ob-hud-h) + 6px);width:34px;height:34px;border:1px solid #26303c;border-radius:4px;background:rgba(15,20,27,.85);color:#d7dde6;font-size:17px;line-height:1;cursor:pointer;padding:0}
+.ob-field .ob-full-btn::before{content:"";position:absolute;inset:-12px -6px}
+.ob-field .ob-full-btn[aria-pressed="true"]{border-color:#ff9a1f;color:#ff9a1f}
+.ob-field.ob-full{position:fixed;inset:0;z-index:20;background:#000;display:flex;align-items:center;justify-content:center;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}

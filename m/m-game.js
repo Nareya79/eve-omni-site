@@ -3,7 +3,7 @@
 (function(){
 "use strict";
 var M=window.OmniM;if(!M||!window.OmniBreaker)return;
-var URL_ONLINE="https://fluxserver01.taileafff1.ts.net:8443/omni",inst=null,onResize=null;
+var URL_ONLINE="https://fluxserver01.taileafff1.ts.net:8443/omni",inst=null,onResize=null,offFs=null;
 function online(){
   return {
     me:function(){try{var a=M.loadChars(),c=M.activeChar();return c&&c.character_name?{cid:String(c.character_id),n:String(c.character_name)}:null;}catch(e){return null;}},
@@ -21,7 +21,21 @@ function fieldOnly(host,ctrl){
   mb.addEventListener("click",function(){show(!menu.classList.contains("open"));});
   menu.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest(".ob-bar button");if(b&&!/Ton|Sound/.test(b.textContent))show(false,true);});
 }
-function leave(){if(onResize){window.removeEventListener("resize",onResize);onResize=null;}if(inst){try{inst.destroy();}catch(e){}inst=null;}}
+/* 1.0.1: Vollbild – echtes Vollbild (Android), sonst (iPhone) deckt das Feld nur Kopfzeile + Leiste ab */
+function fsEl(){return document.fullscreenElement||document.webkitFullscreenElement;}
+function fullBtn(host,fit){
+  var b=document.createElement("button");b.type="button";b.className="ob-full-btn";b.textContent="⛶";b.setAttribute("aria-label","Vollbild");b.setAttribute("aria-pressed","false");
+  function set(on){host.classList.toggle("ob-full",on);b.setAttribute("aria-pressed",on?"true":"false");fit();}
+  b.addEventListener("click",function(){
+    if(host.classList.contains("ob-full")){if(fsEl())(document.exitFullscreen||document.webkitExitFullscreen).call(document).catch(function(){});set(false);return;}
+    set(true);var rq=host.requestFullscreen||host.webkitRequestFullscreen;if(rq)try{var p=rq.call(host,{navigationUI:"hide"});if(p&&p.catch)p.catch(function(){});}catch(e){}
+  });
+  function chg(){if(!fsEl()&&host.classList.contains("ob-full")&&host.dataset.fs)set(false);host.dataset.fs=fsEl()?"1":"";}   /* Zurück-Geste beendet Vollbild */
+  document.addEventListener("fullscreenchange",chg);document.addEventListener("webkitfullscreenchange",chg);
+  offFs=function(){host.classList.remove("ob-full");document.removeEventListener("fullscreenchange",chg);document.removeEventListener("webkitfullscreenchange",chg);if(fsEl())(document.exitFullscreen||document.webkitExitFullscreen).call(document).catch(function(){});};
+  host.querySelector(".ob-stage").appendChild(b);
+}
+function leave(){if(offFs){offFs();offFs=null;}if(onResize){window.removeEventListener("resize",onResize);onResize=null;}if(inst){try{inst.destroy();}catch(e){}inst=null;}}
 M.leave.game=leave;
 M.VIEWS.game=function(sec){
   leave();M.head(sec,"OmniBreaker","more");
@@ -29,9 +43,9 @@ M.VIEWS.game=function(sec){
   inst=window.OmniBreaker.mount(host,{online:online(),storageKey:"eve-omni-m-ob-highscores",nameKey:"eve-omni-m-ob-name",progressKey:"eve-omni-m-ob-progress",defaultName:"Pilot"});
   fieldOnly(host,inst);
   var stage=host.querySelector(".ob-stage");
-  function fit(){var top=host.getBoundingClientRect().top,avail=window.innerHeight-Math.max(top,0)-72-(parseInt(getComputedStyle(document.documentElement).getPropertyValue("--sab"))||0);
-    var w=Math.max(200,Math.floor(Math.min(sec.clientWidth,avail*0.5625)));   /* 4.0: Feld 9:16 */stage.style.width=w+"px";stage.classList.toggle("ob-sm",w<380);}
-  onResize=fit;window.addEventListener("resize",fit);fit();setTimeout(fit,50);
+  function fit(){var full=host.classList.contains("ob-full"),top=host.getBoundingClientRect().top,avail=full?window.innerHeight:window.innerHeight-Math.max(top,0)-72-(parseInt(getComputedStyle(document.documentElement).getPropertyValue("--sab"))||0);
+    var w=Math.max(200,Math.floor(Math.min(full?window.innerWidth:sec.clientWidth,avail*0.5625)));   /* 4.0: Feld 9:16 */stage.style.width=w+"px";stage.classList.toggle("ob-sm",w<380);}
+  fullBtn(host,fit);onResize=fit;window.addEventListener("resize",fit);fit();setTimeout(fit,50);
   if(inst&&inst.intro)setTimeout(inst.intro,300);
 };
 })();

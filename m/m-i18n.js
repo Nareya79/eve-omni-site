@@ -20,7 +20,7 @@ try{localStorage.setItem("eve-zentrale-lang-v1",en?"en":"de");}catch(e){}   /* O
 document.documentElement.lang=en?"en":"de";
 if(!en)return;
 var P=[
-["Aktualisieren","Refresh"],["Zurück","Back"],["Menü","Menu"],
+["Aktualisieren","Refresh"],["Zurück","Back"],["Menü","Menu"],["Vollbild","Full screen"],
 ["Melde dich mit deinem EVE-Charakter an.","Log in with your EVE character."],
 ["Dein Login bleibt nur in diesem Browser auf deinem Handy.","Your login stays only in this browser on your phone."],
 ["Mit EVE-Charakter einloggen","Log in with EVE character"],["Weiteren Charakter einloggen","Add another character"],
