@@ -12,9 +12,12 @@ function online(){
     top:function(l){return fetch(URL_ONLINE+"/top?l="+Number(l)).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();});}
   };
 }
+/* 1.0.6: Symbole als SVG statt Zeichen ☰/⛶ – Android setzte die Schriftzeichen schief */
+var IC_MENU='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h14"/></svg>',
+    IC_FULL='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>';
 function fieldOnly(host,ctrl){
   var stage=host.querySelector(".ob-stage"),menu=document.createElement("div"),mb=document.createElement("button");
-  menu.className="ob-menu";mb.type="button";mb.className="ob-menu-btn";mb.textContent="☰";mb.setAttribute("aria-label","Menü");
+  menu.className="ob-menu";mb.type="button";mb.className="ob-menu-btn";mb.innerHTML=IC_MENU;mb.setAttribute("aria-label","Menü");
   menu.appendChild(host.querySelector(".ob-bar"));menu.appendChild(host.querySelector(".ob-side"));
   stage.appendChild(host.querySelector(".ob-hud"));stage.appendChild(menu);stage.appendChild(mb);
   function show(on,keep){menu.classList.toggle("open",on);mb.setAttribute("aria-expanded",on?"true":"false");if(on)ctrl.pause();else if(!keep)ctrl.resume();}
@@ -24,7 +27,7 @@ function fieldOnly(host,ctrl){
 /* 1.0.1: Vollbild – echtes Vollbild (Android), sonst (iPhone) deckt das Feld nur Kopfzeile + Leiste ab */
 function fsEl(){return document.fullscreenElement||document.webkitFullscreenElement;}
 function fullBtn(host,fit){
-  var b=document.createElement("button");b.type="button";b.className="ob-full-btn";b.textContent="⛶";b.setAttribute("aria-label","Vollbild");b.setAttribute("aria-pressed","false");
+  var b=document.createElement("button");b.type="button";b.className="ob-full-btn";b.innerHTML=IC_FULL;b.setAttribute("aria-label","Vollbild");b.setAttribute("aria-pressed","false");
   function set(on){host.classList.toggle("ob-full",on);b.setAttribute("aria-pressed",on?"true":"false");fit();}
   function enter(){set(true);var rq=host.requestFullscreen||host.webkitRequestFullscreen;if(rq)try{var p=rq.call(host,{navigationUI:"hide"});if(p&&p.then)p.then(lock,function(){});}catch(e){}}   /* verweigert = Feld deckt trotzdem Kopfzeile + Leiste ab */
   b.addEventListener("click",function(){

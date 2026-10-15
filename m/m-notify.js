@@ -109,6 +109,17 @@ async function syncEvents(c){
   try{await S.pushEvents(sc.url,sc.code,ev);M.lsSet("eve-omni-m-push-hash",h);N.events=ev;}catch(e){}
 }
 N.syncEvents=function(){return syncEvents(cfg());};
+/* QQ3: Anmeldung beim Server halbstündlich auffrischen – streicht der Server das Gerät (404/410) oder hat er einen neuen Schlüssel, merkt das Handy es sonst nie */
+var lastKeep=0;
+async function keepPush(c){
+  if(Date.now()-lastKeep<18e5)return;lastKeep=Date.now();
+  var sc=syncCfg();if(!sc||!S)return;
+  try{
+    var reg=await navigator.serviceWorker.getRegistration("/m/"),sub=reg&&await reg.pushManager.getSubscription(),key=await S.pushKey(sc.url),ak=sub&&sub.options&&sub.options.applicationServerKey;
+    if(!sub||!ak||new Uint8Array(ak).join()!==u8(key).join()){if(typeof Notification!=="undefined"&&Notification.permission==="granted")await N.enablePush(c);return;}
+    await S.pushSubscribe(sc.url,sc.code,sub.toJSON());
+  }catch(e){}
+}
 var lastPi=0;
 N.check=async function(force){
   var c=cfg();if(N.busy||!M.loadChars().length)return;if(!c.on&&!force)return;
@@ -117,7 +128,7 @@ N.check=async function(force){
     if(c.out)await checkOut(c,s);if(c.skill)await checkSkill(c,s);
     if(c.pi&&(Date.now()-lastPi>18e5||force)){lastPi=Date.now();await checkPi(c,s);}
     if(c.goal)await checkGoal(c,s);
-    if(c.push)await syncEvents(c);
+    if(c.push){await keepPush(c);await syncEvents(c);}
   }finally{N.busy=false;var st=document.getElementById("notify-last");if(st)st.textContent="Zuletzt geprüft "+M.now();}
 };
 var timer=null;
