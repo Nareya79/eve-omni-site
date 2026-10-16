@@ -1,5 +1,5 @@
 // EVEOmni Mobile – Service Worker: nur die App-Huelle zwischenspeichern, EVE-/ESI-Daten nie
-const V='m-29';const SHELL=['/m/','/m/index.html','/m/m.css','/m/m-i18n.js','/m/m.js','/m/m-views.js','/m/m-wa.js','/m/sync-core.js','/m/m-sync.js','/m/m-notify.js','/m/ob-game.js','/m/ob-game.css','/m/ob-field.css','/m/m-game.js','/m/manifest.webmanifest'];
+const V='m-30';const SHELL=['/m/','/m/index.html','/m/m.css','/m/m-i18n.js','/m/m.js','/m/m-views.js','/m/m-wa.js','/m/sync-core.js','/m/m-sync.js','/m/m-notify.js','/m/ob-game.js','/m/ob-game.css','/m/ob-field.css','/m/m-game.js','/m/manifest.webmanifest'];
 importScripts('/m/sync-core.js');
 // ---- Push (Stufe 2): der Server stupst nur an; Text holen + entschlüsseln wir selbst (Schlüssel liegt in IndexedDB) ----
 const idb=()=>new Promise((res,rej)=>{const r=indexedDB.open('eve-omni-m-push',1);r.onupgradeneeded=()=>r.result.createObjectStore('kv');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});

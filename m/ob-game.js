@@ -3498,9 +3498,9 @@ function mount(container, opts) {
   /* Zwischenbilder je Steinart und Zustand (kein teures Leuchten je Bild); auf dem Handy ohne pulsierendes Erz-Leuchten */
   var stoneCache = {}, lite = !!(opts.lite || (win.matchMedia && win.matchMedia('(pointer: coarse)').matches));
   function stoneSprite(p, part) {
-    var key = part + p.t + (p.power || '') + (p.used ? 'u' : p.lit ? 'l' : 'i') + Math.round(p.dl || 20), sp = stoneCache[key];
+    var key = part + p.t + (p.power || '') + (p.used ? 'u' : p.lit ? 'l' : 'i') + Math.round(p.dl || 20) + '|' + Math.round(p.r), sp = stoneCache[key];
     if (sp) return sp;
-    var pad = 30, w = (p.dl || 20) + 2 * p.r + 2 * pad, h = 4.4 * p.r + 2 * pad, cv = document.createElement('canvas');
+    var pad = p.r + 30 / scale, w = (p.dl || 20) + 2 * p.r + 2 * pad, h = 4.4 * p.r + 2 * pad, cv = document.createElement('canvas');
     cv.width = Math.ceil(w * scale); cv.height = Math.ceil(h * scale);
     var g = cv.getContext('2d'); g.scale(scale, scale);
     drawStoneOn(g, { t: p.t, power: p.power, lit: p.lit, used: p.used, r: p.r, dl: p.dl, x: w / 2, y: h / 2, a: 0, id: 0 }, 0, part);
@@ -3510,7 +3510,7 @@ function mount(container, opts) {
   var pegCache = {}, auraCache = {};
   function drawPegFast(p, t) {
     if (p.t === 'g' || p.t === 'w' || p.st) { drawPegOn(ctx, p, t); return; }   // Items (drehende Ringe) und Wracks (Blinklicht) weiter live
-    var key = p.id + p.t + (p.lit ? 'l' : '') + (p.hp || 0), sp = pegCache[key], R = p.r * 1.3 + 30;   // Platz fürs Leuchten (shadowBlur bis 26) – sonst schneidet der Bildrand es eckig ab
+    var key = p.id + p.t + (p.lit ? 'l' : '') + (p.hp || 0), sp = pegCache[key], R = p.r * 1.3 + 30 / scale;   // Platz fürs Leuchten: shadowBlur (bis 26) zählt in Bild-Pixeln, wird also nicht mitverkleinert – sonst schneidet der Bildrand es eckig ab
     if (!sp) {
       var cv = document.createElement('canvas'); cv.width = cv.height = Math.ceil(2 * R * scale);
       var g = cv.getContext('2d'); g.scale(scale, scale);
