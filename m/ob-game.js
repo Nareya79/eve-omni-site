@@ -20,7 +20,7 @@ var CFG = {
   catchPts: 250, restBonus: 1000, multEvery: 6, multMax: 8,
   aimMax: 1.35, launcherX: 360, launcherY: 52, muzzle: 34,
   bucketW: 108, bucketY: 1252, bucketSpeed: 150,                   // Frachter bei H − 28
-  stuckCheck: 1.0, stuckDist: 14, shotMax: 30,
+  stuckCheck: 1.0, stuckDist: 14, shotMax: 30, dissolveT: 3,   // TT5: getroffene Brocken/Steine lösen sich nach 3 s auf
   wreckR: 18, restWreck: 1.05, gateR: 20, gateTrigger: 14, gateCd: 0.6,
   swarmMax: 6, plasmaHits: 6, tractorK: 6, tractorMax: 900, tractorMinY: 640,
   volleySpread: 0.13,
@@ -65,7 +65,7 @@ var OB_DICT = {
   'Zufallsfeld': 'Random field', 'Zufällige Anordnung': 'Random layout', 'Zufälliges Feld': 'Random field',
   'Kampagne abgeschlossen!': 'Campaign complete!', 'Kampagne beendet': 'Campaign over', 'Game over': 'Game over', 'Übung geschafft': 'Practice cleared', 'Übung vorbei': 'Practice over',
   'Übungsmodus: kein Highscore-Eintrag.': 'Practice mode: no high score entry.', 'Nochmal': 'Again', 'Nächstes Level (Übung)': 'Next level (practice)',
-  'Punkte jetzt eintragen': 'Submit score now', 'Top-10-Platz! Trag deinen Namen ein:': 'Top 10! Enter your name:', 'Eintragen': 'Submit', 'Diesmal kein Top-10-Platz.': 'No top 10 this time.',
+  'Punkte jetzt eintragen': 'Submit score now', 'Deine Punkte gehen in die weltweite Bestenliste.': 'Your score goes to the worldwide leaderboard.', 'Hochladen ist aus (Haken „Punkte hochladen“).': 'Upload is off (tick “Upload scores”).', 'Top-10-Platz! Trag deinen Namen ein:': 'Top 10! Enter your name:', 'Eintragen': 'Submit', 'Diesmal kein Top-10-Platz.': 'No top 10 this time.',
   'Level neu versuchen': 'Retry level', 'Gespeichert.': 'Saved.', 'Klicken, Leertaste oder P zum Weiterspielen.': 'Click, Space or P to resume.', 'Hintergrund': 'Background', 'Lautstärke': 'Volume', 'Weltweite Bestenliste': 'Worldwide leaderboard', 'Punkte hochladen': 'Upload scores', 'Kampagne': 'Campaign', 'Anzeigen': 'Show', 'Lade …': 'Loading …', 'Noch keine Einträge.': 'No entries yet.', 'Bestenliste gerade nicht erreichbar.': 'Leaderboard not reachable right now.', 'Kein EVE-Charakter eingeloggt – Hochladen geht erst nach dem Login.': 'No EVE character logged in – uploading works after login.', 'Ton: an': 'Sound: on', 'Ton: aus': 'Sound: off',
   'Name für den Highscore': 'Name for the high score', 'OmniBreaker – Minispiel': 'OmniBreaker – minigame', 'Den OmniBreaker-Highscore wirklich leeren?': 'Really clear the OmniBreaker high score?',
   'SALVE BEREIT': 'VOLLEY READY', 'SALVE!': 'VOLLEY!', 'ÜBUNG': 'PRACTICE', 'Gerettet!': 'Saved!', 'Panzer geknackt!': 'Armor cracked!', 'Frachter! +1 Drohne': 'Freighter! +1 drone',
@@ -1708,12 +1708,16 @@ var OB_LEVELS = 150;
    QQ4 (14.10.2026): Grundwert 12 → 10 – Spieler schafften 9 von 10 Leveln im ersten Versuch mit 2–5 Drohnen übrig (der Bot ist schwächer als ein Mensch). */
 var OB_BALLS_BASE = 10;
 var OB_BALLS_WORLD = { 7: -1, 8: 1, 10: -1, 14: 1 };
-function obBalls(L) { var w = Math.ceil(L / 10), fin = L % 10 === 0; return OB_BALLS_BASE + (fin ? 1 : 0) + (OB_BALLS_WORLD[w] || 0) + (fin && w >= 13 ? 1 : 0); }
+var OB_FIN_EXTRA = 0;   // TT8: Finale ohne Extra-Drohne (vorher +1, ab Welt 13 +2)
+function obBalls(L) { var w = Math.ceil(L / 10), fin = L % 10 === 0; return OB_BALLS_BASE + (fin ? OB_FIN_EXTRA : 0) + (OB_BALLS_WORLD[w] || 0) + (fin && w >= 13 ? OB_FIN_EXTRA : 0); }
+/* TT8 (16.10.2026): mehr orange Erzadern – ein Anteil der normalen grauen Brocken wird zu Erzadern (fest je Level, gleiche Wahl bei jedem Spiel).
+   OB_Z_PLUS = Anteil der grauen Brocken, normal / Finale. Gemessen mit tools/ob2-bot.js --liste … (Ziel: normal etwa 6/10 beim ersten Versuch, Finale 3–4/10). */
+var OB_Z_PLUS = [0.08, 0.2];   // Nutzer 16.10.: normal etwas weniger als der mittlere Schritt, Finale knackig
 function obHandDef(L, d) {
   var fresh = Object.keys(POWER_UNLOCK).filter(function (k) { return POWER_UNLOCK[k] === L; }), items = L === OB_LEVELS ? OB_POWERS.concat(obNewAt(L)) : fresh.concat(d.items || obPowersFor(L, mulberry32(L * 7907), 2));   // Finale 150: alle Items   // neues Item zuerst (erster grüner Brocken)
   var desc = d.desc + (fresh.length ? ' · neu: ' + fresh.map(function (k) { return POWER_NAMES[k]; }).join(', ') : '');
   if (d.en) OB_WORD_EN[d.name] = d.en; if (d.descEn) OB_WORD_EN[d.desc] = d.descEn;
-  return { name: d.name, desc: desc, seed: 5000 + L, hand: true, peak: L % 10 === 0, balls: d.balls || obBalls(L), powers: items, scene: d.scene, build: d.build };   // Drohnen aus obBalls (Grundwert OB_BALLS_BASE, Finale +1)
+  return { name: d.name, desc: desc, seed: 5000 + L, hand: true, peak: L % 10 === 0, zPlus: OB_Z_PLUS[L % 10 === 0 ? 1 : 0], balls: d.balls || obBalls(L), powers: items, scene: d.scene, build: d.build };   // Drohnen aus obBalls (Grundwert OB_BALLS_BASE, Finale +1)
 }
 var LEVELS = [];
 for (var obL = 1; obL <= OB_LEVELS; obL++) LEVELS.push(obHandDef(obL, OB2_LEVELS[obL]));   // alle 150 Level sind handgebaut (OB2_LEVELS)
@@ -1996,6 +2000,10 @@ function buildLevel(def) {
     delete rg.stones;                                              // Steine stecken in pegs (rg-Index), die Gruppe hält nur Lage und Bewegung
   });
   var wells = (b.wells || []).map(function (w) { return { x: w.x, y: w.y, r: w.r, k: w.k, mv: w.mv }; });
+  if (def.zPlus > 0){   // TT8: graue Brocken (ohne Panzer, ohne Blinken) teilweise zu Erzadern
+    var zr = mulberry32((def.seed ^ 0x51ED270B) >>> 0), cand = pegs.filter(function (q) { return q.t === 'n' && !q.st && !(q.hp > 1) && !q.fade; });
+    shuffle(cand, zr).slice(0, Math.round(cand.length * def.zPlus)).forEach(function (q) { q.t = 'z'; });
+  }
   return { pegs: pegs, gates: gates, wells: wells, ramps: b.ramps || [], tracks: (b.tracks || []).map(railPath), stoneRails: rails };
 }
 
@@ -2162,13 +2170,14 @@ Game.prototype.update = function (dt) {
   if (this.frozen > 0) this.frozen = Math.max(0, this.frozen - dt); else this.mt = (this.mt || 0) + dt;
   this._placePegs();
   if (this.status !== 'flying') { this._moveBucket(dt); return; }
+  this._dissolve();
   this.acc += dt;
   while (this.acc >= CFG.sub && this.status === 'flying') { this._sub(CFG.sub); this.acc -= CFG.sub; }
 };
 Game.prototype._lightPeg = function (p, withBoom, ball) {
   if (p.lit || p.gone || p.t === 'w') return;
   var mult = this.multiplier();
-  p.lit = true; this.shotHits++; this.hitsTotal++;
+  p.lit = true; p.litT = this.time; this.shotHits++; this.hitsTotal++;
   if (this.shotHits >= CFG.comboMin && this.shotHits % CFG.comboStep === 0) this.events.push({ type: 'combo', n: this.shotHits, x: p.x, y: p.y });
   var pts = CFG.pts[p.t] * mult * (this.dbl ? 2 : 1);
   this.score += pts; this.shotScore += pts;
@@ -2494,6 +2503,16 @@ Game.prototype._removeBall = function (idx, reason) {
     this.events.push({ type: 'catch', x: this.bucket.x, y: this.bucket.y, pts: CFG.catchPts, free: free });
   }
   if (!this.balls.length) this._endShot(this.shotCaught ? 'catch' : reason);
+};
+/* TT5 (16.10.2026): ein getroffener Brocken verschwindet nach CFG.dissolveT s, ein getroffener Bahnstein wird durchlässig (wie am Schussende) –
+   so bleibt die Drohne nicht ewig in einer U-Bahn oder Mulde liegen */
+Game.prototype._dissolve = function () {
+  for (var i = 0; i < this.pegs.length; i++) {
+    var p = this.pegs[i];
+    if (!p.lit || p.gone || p.used || !(this.time - p.litT >= CFG.dissolveT)) continue;
+    if (p.st) p.used = true; else p.gone = true;
+    this.events.push({ type: 'gone', x: p.x, y: p.y, t: p.t });
+  }
 };
 Game.prototype._unstick = function (b) {
   b = b || this.balls[0];
@@ -3325,15 +3344,14 @@ function mount(container, opts) {
   bar.appendChild(btnContinue); bar.appendChild(btnNew); bar.appendChild(btnRestart); bar.appendChild(lvBox); bar.appendChild(btnPause); bar.appendChild(btnSound); bar.appendChild(volBox); bar.appendChild(vibeBox); bar.appendChild(bgBox); bar.appendChild(hint);
   main.appendChild(title); main.appendChild(hud); main.appendChild(stage); main.appendChild(bar);
 
-  side.appendChild(el('h3', null, 'Highscore · Top 10'));
-  var scoreList = el('ol', 'ob-scores'); side.appendChild(scoreList);
-  var btnClear = el('button', 'ob-btn', 'Highscore leeren'); btnClear.type = 'button';
-  side.appendChild(btnClear);
-  // PQ7: weltweite Bestenliste – lädt erst auf Klick, hochgeladen wird nur mit Haken (Haken standardmäßig gesetzt)
+  // PQ7: weltweite Bestenliste, hochgeladen wird nur mit Haken (Haken standardmäßig gesetzt). TT4: lädt gleich beim Öffnen;
+  // mit Server gibt es nur noch sie – die lokale Top 10 nur ohne Server (Browser-Datei)
   var online = opts.online || null, wwOn = false, wwSel = null, wwList = null, wwSt = null;
+  var scoreList = el('ol', 'ob-scores'), btnClear = el('button', 'ob-btn', 'Highscore leeren'); btnClear.type = 'button';
+  if (!online) { side.appendChild(el('h3', null, 'Highscore · Top 10')); side.appendChild(scoreList); side.appendChild(btnClear); }
   if (online) {
     try { wwOn = store.getItem(ONLINE_KEY) !== '0'; } catch (e) { }   // 13.10.: Standard an
-    side.appendChild(el('h3', null, 'Weltweite Bestenliste')).style.marginTop = '14px';
+    side.appendChild(el('h3', null, 'Weltweite Bestenliste'));
     var wwLbl = el('label', 'ob-ww-on'), wwChk = el('input'); wwChk.type = 'checkbox'; wwChk.checked = wwOn;
     wwLbl.appendChild(wwChk); wwLbl.appendChild(el('span', null, 'Punkte hochladen')); side.appendChild(wwLbl);
     var wwWho = el('p', 'ob-ww-who'); side.appendChild(wwWho);
@@ -3358,6 +3376,7 @@ function mount(container, opts) {
     wwFill(); wwWhoTxt();
     wwChk.addEventListener('change', function () { wwOn = wwChk.checked; try { store.setItem(ONLINE_KEY, wwOn ? '1' : '0'); } catch (e) { } wwWhoTxt(); });
     wwBtn.addEventListener('click', function () { wwShow(Number(wwSel.value)); });
+    wwShow(0);
   }
   function wwMe() {                                                // gewählter Charakter, sonst der aktive
     if (!online) return null;
@@ -3396,7 +3415,7 @@ function mount(container, opts) {
   var ctx = canvas.getContext('2d');
   var scale = 1, dpr = 1, bg = null, bgLevel = -1, paused = false, destroyed = false, raf = 0, last = 0;
   var texts = [], parts = [], rings = [], bolts = [], hbeams = [], newRank = 0, entered = false, flash = 0, laserT = 0, catchT = 0, beamPts = null, bannerT = 0, bumpT = {};
-  var fxSlow = 0, fxZx = 0, fxZy = 0, banner2 = null;                 // OB2 1b: Zeitlupe + Zoom beim letzten Ziel, großes Banner (Gleiter, Geschick)
+  var fxSlow = 0, fxHold = false, fxZx = 0, fxZy = 0, banner2 = null;                 // OB2 1b: Zeitlupe + Zoom beim letzten Ziel, großes Banner (Gleiter, Geschick)
   var shake = 0, shakeA = 0, flashC = '255,200,120', calm = !!(win.matchMedia && win.matchMedia('(prefers-reduced-motion: reduce)').matches);   // PR5: Wackeln (nicht bei „weniger Bewegung“)
   var sound = createSound({ AudioContext: opts.AudioContext || win.AudioContext || win.webkitAudioContext, store: store, key: opts.soundKey || SOUND_KEY });
   var stars = [], srnd = mulberry32(7);
@@ -3881,7 +3900,6 @@ function mount(container, opts) {
     c.strokeStyle = 'rgba(120,160,200,.2)'; c.lineWidth = 1; c.beginPath(); for (i = 1; i < 12; i++) { c.moveTo(-hw + i * bk.w / 12, 0); c.lineTo(-hw + i * bk.w / 12, BD - 1); } c.stroke();
     c.fillStyle = fl > 0 ? '#9bffc4' : '#ffb14a';
     for (i = 0; i < 7; i++) { var on = (Math.floor(t * 7) % 7) === i; c.globalAlpha = fl > 0 ? 1 : (on ? 1 : 0.4); c.beginPath(); c.arc(-hw + 10 + i * (bk.w - 20) / 6, BD - 4, 2.1, 0, 6.2832); c.fill(); } c.globalAlpha = 1;
-    if (fl > 0) { var f2 = c.createRadialGradient(0, 0, 4, 0, 0, hw + 20); f2.addColorStop(0, 'rgba(155,255,196,' + fl * 0.8 + ')'); f2.addColorStop(1, 'rgba(70,224,138,0)'); c.save(); c.globalCompositeOperation = 'lighter'; c.fillStyle = f2; c.fillRect(-hw - 20, -26, bk.w + 40, 50); c.restore(); }
     for (e = -1; e <= 1; e += 2) {                                          // Schachtpfeiler
       var rx = e < 0 ? -hw - 6 : hw;
       c.fillStyle = '#2b3646'; c.strokeStyle = '#7b90ad'; c.lineWidth = 1; c.fillRect(rx, -14, 6, 34); c.strokeRect(rx, -14, 6, 34);
@@ -3914,6 +3932,15 @@ function mount(container, opts) {
         if (push > 0.05) { var bl = c.createRadialGradient(x0 + e * 3, ny, 0, x0 + e * 3, ny, 11); bl.addColorStop(0, 'rgba(140,200,255,' + (0.38 * push) + ')'); bl.addColorStop(1, 'rgba(40,110,255,0)'); c.fillStyle = bl; c.beginPath(); c.arc(x0 + e * 3, ny, 11, 0, 6.2832); c.fill(); }
         c.restore();
       });
+    }
+    if (fl > 0) {                                                       // TT7: Fang-Leuchten entlang des Rumpf-Umrisses (vorher ein Kasten)
+      var L = [[-100, 29], [-114, 22], [-114, 10], [-112, 3], [-104, -6], [-hw - 8, -6], [-hw - 8, -16], [-hw + 16, -16], [-hw + 16, -6], [-hw, -1]];
+      c.save(); c.globalCompositeOperation = 'lighter'; c.lineJoin = 'round'; c.beginPath();
+      L.forEach(function (q, k) { if (k) c.lineTo(q[0], q[1]); else c.moveTo(q[0], q[1]); });
+      for (i = L.length - 1; i >= 0; i--) c.lineTo(-L[i][0], L[i][1]);
+      c.closePath();
+      [[9, 0.35], [3.5, 0.6], [1.6, 1]].forEach(function (w) { c.strokeStyle = 'rgba(155,255,196,' + (fl * w[1]) + ')'; c.lineWidth = w[0]; c.shadowColor = '#46e08a'; c.shadowBlur = 14 * fl; c.stroke(); });
+      c.restore();
     }
     c.restore();
   }
@@ -4144,7 +4171,7 @@ function mount(container, opts) {
         else texts.push({ x: W / 2, y: H * 0.5, vy: -30, life: 1.4, max: 1.4, s: sk2 + ' +' + e.pts, c: '#7fe8ff', size: 22, glow: 1 });
         rings.push({ x: e.x, y: e.y, r: 60, t: 0, c: '#7fe8ff', lw: 3 });
       } else if (e.type === 'lastHit') {                              // letzte Erzader: kurze Zeitlupe + Zoom
-        fxSlow = 1.1; fxZx = e.x; fxZy = e.y; flash = Math.max(flash, 0.35); flashC = '255,225,150';
+        fxSlow = 1.1; fxHold = true; fxZx = e.x; fxZy = e.y; flash = Math.max(flash, 0.35); flashC = '255,225,150';
         rings.push({ x: e.x, y: e.y, r: 120, t: 0, c: '#ffe14c', lw: 5 });
       } else if (e.type === 'rock') {
         shake = Math.max(shake, 0.35); shakeA = Math.max(shakeA, 6);
@@ -4257,7 +4284,7 @@ function mount(container, opts) {
 
   /* --- Meldungen (Level geschafft, Ende, Pause) --- */
   function hideMsg() { msg.classList.remove('ob-show'); msg.textContent = ''; }
-  function resetFx() { fxSlow = 0; banner2 = null; texts = []; parts = []; rings = []; bolts = []; hbeams = []; flash = 0; shake = 0; shakeA = 0; shown = {}; newRank = 0; beamPts = null; laserT = 0; catchT = 0; bumpT = {}; renderScores(0); bannerT = 3.2; updateHud(); }
+  function resetFx() { fxSlow = 0; fxHold = false; banner2 = null; texts = []; parts = []; rings = []; bolts = []; hbeams = []; flash = 0; shake = 0; shakeA = 0; shown = {}; newRank = 0; beamPts = null; laserT = 0; catchT = 0; bumpT = {}; renderScores(0); bannerT = 3.2; updateHud(); }
   /* --- Spielstand der Kampagne --- */
   /* Übernahme 4.0: einmalig alten Spielstand und Level-Bestwerte zurücksetzen (die Level sind neu), Highscore bleibt; Hinweis beim ersten Öffnen */
   var obReset = false;
@@ -4322,14 +4349,15 @@ function mount(container, opts) {
       card.appendChild(el('h2', null, done ? 'Kampagne abgeschlossen!' : (won ? 'Kampagne beendet' : 'Game over')));
       card.appendChild(el('div', 'ob-big', fmtScore(game.score)));
       card.appendChild(el('p', null, tt(game.levelsCleared + ' von ' + LEVELS.length + ' Leveln geräumt' + (won ? '' : ' · Level ' + game.level + ': noch ' + game.targetsLeft + ' Erzadern übrig'), game.levelsCleared + ' of ' + LEVELS.length + ' levels cleared' + (won ? '' : ' · level ' + game.level + ': ' + game.targetsLeft + ' ore veins left'))));
-      var can = Highscores.qualifies(scores, game.score);
+      var can = !online && Highscores.qualifies(scores, game.score);   // TT4: mit Server nur die weltweite Liste
       if (can) {
         status.textContent = obT('Top-10-Platz! Trag deinen Namen ein:'); status.className = 'ob-ok';
         input = el('input'); input.type = 'text'; input.maxLength = 24; input.setAttribute('aria-label', obT('Name für den Highscore'));
         var nm = ''; try { nm = store.getItem(nameKey) || ''; } catch (e) { }
         input.value = nm || defaultName;
         btnSave = el('button', 'ob-btn ob-primary', 'Eintragen'); btnSave.type = 'button';
-      } else status.textContent = game.score > 0 ? obT('Diesmal kein Top-10-Platz.') : '';
+      } else if (online) status.textContent = game.score > 0 ? obT(wwOn ? 'Deine Punkte gehen in die weltweite Bestenliste.' : 'Hochladen ist aus (Haken „Punkte hochladen“).') : '';
+      else status.textContent = game.score > 0 ? obT('Diesmal kein Top-10-Platz.') : '';
       card.appendChild(status);
       if (input) card.appendChild(input);
       if (btnSave) row.appendChild(btnSave);
@@ -4425,7 +4453,7 @@ function mount(container, opts) {
     if (destroyed) return;
     raf = win.requestAnimationFrame(loop);
     var dt = last ? (ts - last) / 1000 : 0; last = ts;
-    if (!paused) { game.update(fxSlow > 0 ? dt * 0.35 : dt); handleEvents(); tickEffects(dt); if (fxSlow > 0) fxSlow = Math.max(0, fxSlow - dt); }
+    if (!paused) { if (fxHold && game.status !== 'flying') fxHold = false; game.update(fxSlow > 0 || fxHold ? dt * 0.35 : dt); handleEvents(); tickEffects(dt); if (fxSlow > 0) fxSlow = Math.max(0, fxSlow - dt); }   // TT6: fxHold = Zeitlupe bis die letzte Drohne gefangen/unten ist
     updateHud();
     draw(ts / 1000);
   }
