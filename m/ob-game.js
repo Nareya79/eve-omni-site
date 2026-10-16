@@ -1706,13 +1706,13 @@ var OB2_LEVELS = {
 var OB_LEVELS = 150;
 /* Drohnen je Level (Phase 7, nach Bot-Bericht): Grundwert, Finale +1; Welten, die aus der Kurve fallen, ±1; späte Finale (130–150) +1.
    QQ4 (14.10.2026): Grundwert 12 → 10 – Spieler schafften 9 von 10 Leveln im ersten Versuch mit 2–5 Drohnen übrig (der Bot ist schwächer als ein Mensch). */
-var OB_BALLS_BASE = 10;
+var OB_BALLS_BASE = 8;   // TT8b (Nutzer 16.10.: „immer noch voll einfach“) – vorher 10
 var OB_BALLS_WORLD = { 7: -1, 8: 1, 10: -1, 14: 1 };
 var OB_FIN_EXTRA = 0;   // TT8: Finale ohne Extra-Drohne (vorher +1, ab Welt 13 +2)
 function obBalls(L) { var w = Math.ceil(L / 10), fin = L % 10 === 0; return OB_BALLS_BASE + (fin ? OB_FIN_EXTRA : 0) + (OB_BALLS_WORLD[w] || 0) + (fin && w >= 13 ? OB_FIN_EXTRA : 0); }
 /* TT8 (16.10.2026): mehr orange Erzadern – ein Anteil der normalen grauen Brocken wird zu Erzadern (fest je Level, gleiche Wahl bei jedem Spiel).
    OB_Z_PLUS = Anteil der grauen Brocken, normal / Finale. Gemessen mit tools/ob2-bot.js --liste … (Ziel: normal etwa 6/10 beim ersten Versuch, Finale 3–4/10). */
-var OB_Z_PLUS = [0.08, 0.2];   // Nutzer 16.10.: normal etwas weniger als der mittlere Schritt, Finale knackig
+var OB_Z_PLUS = [0.15, 0.3];   // Nutzer 16.10.: normal etwas weniger als der mittlere Schritt, Finale knackig
 function obHandDef(L, d) {
   var fresh = Object.keys(POWER_UNLOCK).filter(function (k) { return POWER_UNLOCK[k] === L; }), items = L === OB_LEVELS ? OB_POWERS.concat(obNewAt(L)) : fresh.concat(d.items || obPowersFor(L, mulberry32(L * 7907), 2));   // Finale 150: alle Items   // neues Item zuerst (erster grüner Brocken)
   var desc = d.desc + (fresh.length ? ' · neu: ' + fresh.map(function (k) { return POWER_NAMES[k]; }).join(', ') : '');
@@ -3408,7 +3408,7 @@ function mount(container, opts) {
   var hPow = el('h3', null, 'Power-Items'); side.appendChild(hPow);
   var legendP = el('ul', 'ob-legend'); side.appendChild(legendP);
   side.appendChild(el('h3', null, 'Regeln'));
-  side.appendChild(el('p', 'ob-rules', OB_EN ? 'Campaign: ' + LEVELS.length + ' levels, the points add up. You get 10 drones per level. Clear all ore veins (orange) = level done. Every 6 hits with one drone raise the factor by 1 (up to x8). The first drone that lands in the freighter gives you a drone and 250 points. After a win every drone left is worth 1,000 points. Power-ups act on the drone that hits them; new ones join in higher levels. Wrecks cannot be destroyed, warp gates send the drone to the partner gate. Armored rocks need several hits. Gravity fields pull the drone in, repulsors push it away. Combo: from 5 hits with one drone you get a combo bonus at the end of the shot (10 hits = 600, 20 = 3,200, 30 = 7,800 points). Your progress is saved after every level so you can continue later. Slides: roll over 6 or more stones of a rail in a row for a slide bonus (12 stones = 1,680, from 12 an extreme slide pays double). Skill shots give a small bonus: long shot, ore rush, bank shot, freighter kick.' : 'Kampagne: ' + LEVELS.length + ' Level, die Punkte zählen zusammen. Pro Level hast du 10 Drohnen. Alle Erzadern (orange) leeren = Level geschafft. Alle 6 Treffer mit einer Drohne steigt der Faktor um 1 (höchstens x8). Die erste Drohne, die im Frachter landet, gibt eine Drohne und 250 Punkte. Nach dem Sieg zählt jede übrige Drohne 1.000 Punkte. Power-Items wirken auf die Drohne, die sie trifft. Wracks sind nicht zerstörbar, Warp-Tore bringen die Drohne ans Partner-Tor. Panzer-Brocken brauchen mehrere Treffer. Gravitationsfelder ziehen die Drohne an, Abstoßer stoßen sie weg. Combo: ab 5 Treffern mit einer Drohne gibt es am Schussende einen Combo-Bonus (10 Treffer = 600, 20 = 3.200, 30 = 7.800 Punkte). Dein Stand wird nach jedem Level gespeichert, du kannst später weiterspielen. Gleiter: Rollt die Drohne über 6 oder mehr Steine einer Bahn hintereinander, gibt es einen Gleiter-Bonus (12 Steine = 1.680, ab 12 zählt der Extreme Gleiter doppelt). Geschicklichkeitsschüsse geben einen kleinen Bonus: Langer Schuss, Erz-Ansturm, Querbande, Frachter-Tritt.'));
+  side.appendChild(el('p', 'ob-rules', OB_EN ? 'Campaign: ' + LEVELS.length + ' levels, the points add up. You get 8 drones per level (7–9 in some worlds). Clear all ore veins (orange) = level done. Every 6 hits with one drone raise the factor by 1 (up to x8). The first drone that lands in the freighter gives you a drone and 250 points. After a win every drone left is worth 1,000 points. Power-ups act on the drone that hits them; new ones join in higher levels. Wrecks cannot be destroyed, warp gates send the drone to the partner gate. Armored rocks need several hits. Gravity fields pull the drone in, repulsors push it away. Combo: from 5 hits with one drone you get a combo bonus at the end of the shot (10 hits = 600, 20 = 3,200, 30 = 7,800 points). Your progress is saved after every level so you can continue later. Slides: roll over 6 or more stones of a rail in a row for a slide bonus (12 stones = 1,680, from 12 an extreme slide pays double). Skill shots give a small bonus: long shot, ore rush, bank shot, freighter kick.' : 'Kampagne: ' + LEVELS.length + ' Level, die Punkte zählen zusammen. Pro Level hast du 8 Drohnen (in manchen Welten 7–9). Alle Erzadern (orange) leeren = Level geschafft. Alle 6 Treffer mit einer Drohne steigt der Faktor um 1 (höchstens x8). Die erste Drohne, die im Frachter landet, gibt eine Drohne und 250 Punkte. Nach dem Sieg zählt jede übrige Drohne 1.000 Punkte. Power-Items wirken auf die Drohne, die sie trifft. Wracks sind nicht zerstörbar, Warp-Tore bringen die Drohne ans Partner-Tor. Panzer-Brocken brauchen mehrere Treffer. Gravitationsfelder ziehen die Drohne an, Abstoßer stoßen sie weg. Combo: ab 5 Treffern mit einer Drohne gibt es am Schussende einen Combo-Bonus (10 Treffer = 600, 20 = 3.200, 30 = 7.800 Punkte). Dein Stand wird nach jedem Level gespeichert, du kannst später weiterspielen. Gleiter: Rollt die Drohne über 6 oder mehr Steine einer Bahn hintereinander, gibt es einen Gleiter-Bonus (12 Steine = 1.680, ab 12 zählt der Extreme Gleiter doppelt). Geschicklichkeitsschüsse geben einen kleinen Bonus: Langer Schuss, Erz-Ansturm, Querbande, Frachter-Tritt.'));
   rootEl.appendChild(main); rootEl.appendChild(side);
   container.appendChild(rootEl);
 
@@ -3857,7 +3857,7 @@ function mount(container, opts) {
   }
   /* Neuer Frachter: Ansicht von hinten (dunkel, Sternzerstörer-Stil), 2 große Triebwerke.
      c = Zeichenfläche, bk = game.bucket {x,y,w}, t = Zeit in s, fl = Fang-Blitz 0..1, thr = weiche Fahrtrichtung -1..1 (positiv = nach rechts) */
-  function drawFreighterNew(c, bk, t, fl, thr, hazard, drawCargo) {
+  function drawFreighterNew(c, bk, t, fl, thr, hazard, drawCargo, fv) {
     var hw = bk.w / 2, i, e, pulse = 0.86 + 0.14 * Math.sin(t * 23) + 0.06 * Math.sin(t * 61), sp = Math.abs(thr);
     var blink = Math.floor(t * 1.6) % 2, boost = 1 + fl * 0.7;
     var cols = ['#7a4a2a', '#2f5a6a', '#6a2e2a', '#7a6428'];
@@ -3900,6 +3900,7 @@ function mount(container, opts) {
     c.strokeStyle = 'rgba(120,160,200,.2)'; c.lineWidth = 1; c.beginPath(); for (i = 1; i < 12; i++) { c.moveTo(-hw + i * bk.w / 12, 0); c.lineTo(-hw + i * bk.w / 12, BD - 1); } c.stroke();
     c.fillStyle = fl > 0 ? '#9bffc4' : '#ffb14a';
     for (i = 0; i < 7; i++) { var on = (Math.floor(t * 7) % 7) === i; c.globalAlpha = fl > 0 ? 1 : (on ? 1 : 0.4); c.beginPath(); c.arc(-hw + 10 + i * (bk.w - 20) / 6, BD - 4, 2.1, 0, 6.2832); c.fill(); } c.globalAlpha = 1;
+    if (fl > 0) { var f2 = c.createRadialGradient(0, 0, 4, 0, 0, hw + 20); f2.addColorStop(0, 'rgba(155,255,196,' + fl * 0.8 + ')'); f2.addColorStop(1, 'rgba(70,224,138,0)'); c.save(); c.globalCompositeOperation = 'lighter'; c.fillStyle = f2; c.fillRect(-hw - 20, -26, bk.w + 40, 50); c.restore(); }
     for (e = -1; e <= 1; e += 2) {                                          // Schachtpfeiler
       var rx = e < 0 ? -hw - 6 : hw;
       c.fillStyle = '#2b3646'; c.strokeStyle = '#7b90ad'; c.lineWidth = 1; c.fillRect(rx, -14, 6, 34); c.strokeRect(rx, -14, 6, 34);
@@ -3933,13 +3934,15 @@ function mount(container, opts) {
         c.restore();
       });
     }
-    if (fl > 0) {                                                       // TT7: Fang-Leuchten entlang des Rumpf-Umrisses (vorher ein Kasten)
+    if (fv > 0) {                                                       // TT7b: Bonus-Leuchten nach dem letzten Erz („Fieber“) am Rumpf-Umriss, Regenbogen wandert (vorher ein Kasten)
       var L = [[-100, 29], [-114, 22], [-114, 10], [-112, 3], [-104, -6], [-hw - 8, -6], [-hw - 8, -16], [-hw + 16, -16], [-hw + 16, -6], [-hw, -1]];
       c.save(); c.globalCompositeOperation = 'lighter'; c.lineJoin = 'round'; c.beginPath();
       L.forEach(function (q, k) { if (k) c.lineTo(q[0], q[1]); else c.moveTo(q[0], q[1]); });
       for (i = L.length - 1; i >= 0; i--) c.lineTo(-L[i][0], L[i][1]);
       c.closePath();
-      [[9, 0.35], [3.5, 0.6], [1.6, 1]].forEach(function (w) { c.strokeStyle = 'rgba(155,255,196,' + (fl * w[1]) + ')'; c.lineWidth = w[0]; c.shadowColor = '#46e08a'; c.shadowBlur = 14 * fl; c.stroke(); });
+      var rg = c.createLinearGradient(-hw - 20, 0, hw + 20, 0), h0 = t * 240;
+      for (var rs = 0; rs <= 6; rs++) rg.addColorStop(rs / 6, 'hsl(' + Math.floor((h0 + rs * 60) % 360) + ',100%,62%)');
+      [[11, 0.3], [4.5, 0.55], [2, 1]].forEach(function (w) { c.strokeStyle = rg; c.globalAlpha = (0.55 + 0.45 * fv) * w[1]; c.lineWidth = w[0]; c.shadowColor = 'hsl(' + Math.floor(h0 % 360) + ',100%,60%)'; c.shadowBlur = 18; c.stroke(); });
       c.restore();
     }
     c.restore();
@@ -3948,7 +3951,8 @@ function mount(container, opts) {
   function drawFreighter(t) {
     var bk = game.bucket, dt = Math.max(0, Math.min(0.05, t - thrT)); thrT = t;
     thrS += ((bk.dir || 1) * (paused ? 0 : 1) - thrS) * Math.min(1, dt * 5);
-    drawFreighterNew(ctx, bk, t, catchT > 0 ? catchT / 0.6 : 0, thrS, hazard, drawCargo);
+    var fev = game.status === 'flying' && game.targetsLeft === 0 && game.targetsTotal > 0 ? 0.5 + 0.5 * Math.sin(t * 8) : 0;   // TT7b: Fieber-Puls
+    drawFreighterNew(ctx, bk, t, catchT > 0 ? catchT / 0.6 : 0, thrS, hazard, drawCargo, fev);
   }
   function drawBall(b) {
     var tr = b.trail || [], i, sl = Math.min(1, (b.slideN || 0) / 12), gold = (b.slideN || 0) >= 6, hot = b.pierce > 0, col = gold ? '#ffd36a' : hot ? '#ffb347' : '#4cc3ff', col2 = gold ? '255,211,106' : hot ? '255,150,40' : '76,195,255';
@@ -4023,7 +4027,6 @@ function mount(container, opts) {
     }
     if (game.status === 'flying' && game.targetsLeft === 0 && game.targetsTotal > 0) {   // „Fieber“: alle Erzadern weg – Frachter hervorheben
       var fb = game.bucket, fp = 0.5 + 0.5 * Math.sin(t * 8);
-      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.35 + 0.25 * fp; ctx.fillStyle = rainbow(fb.x, 260, t); ctx.fillRect(fb.x - 130, fb.y - 40, 260, 70); ctx.restore();
       ctx.textAlign = 'center'; ctx.font = '800 18px "Segoe UI",sans-serif'; ctx.fillStyle = rainbow(fb.x, 200, t); ctx.fillText('CATCH BONUS +' + CFG.catchPts, fb.x, fb.y - 50);
     }
     if (game.status === 'aiming' && game.traceShots > 0) {             // Zielscanner: Leuchtspur nach dem ersten Abprall
