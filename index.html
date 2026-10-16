@@ -55,7 +55,11 @@ header{position:sticky;top:0;z-index:20;background:rgba(11,17,24,.88);backdrop-f
 .lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
 .lang button{background:none;border:0;color:var(--mut);font:600 13px/1 inherit;padding:7px 11px;cursor:pointer}
 .lang button[aria-pressed=true]{background:var(--gd);color:#0b1118}
-@media(max-width:860px){.links{display:none}.lang{margin-left:auto}}
+/* TT3: Handy – Menü-Knopf ☰ klappt die Navigation unter dem Kopf auf (vorher war sie im Hochformat einfach weg) */
+.menu-btn{display:none;background:none;border:1px solid var(--line);border-radius:10px;color:var(--fg);width:42px;height:38px;font-size:20px;line-height:1;cursor:pointer}
+@media(max-width:860px){.lang{margin-left:auto}.menu-btn{display:inline-flex;align-items:center;justify-content:center}
+  .links{display:none;position:absolute;top:62px;left:0;right:0;flex-direction:column;gap:0;margin:0;padding:6px 16px 12px;background:var(--bg);border-bottom:1px solid var(--line);max-height:calc(100vh - 62px);overflow:auto}
+  header.open .links{display:flex}.links a{padding:11px 4px;border-bottom:1px solid var(--line);font-size:16px}.links a:last-child{border-bottom:0}}
 /* hero */
 .hero{position:relative;overflow:hidden;background:radial-gradient(ellipse at 30% 40%,#1d3140 0%,#121c26 50%,var(--bg) 100%)}
 .stars{position:absolute;inset:0;opacity:.7;pointer-events:none}
@@ -259,6 +263,7 @@ footer a{color:var(--mut)}
       <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
       <button type="button" data-set-lang="de" aria-pressed="false">DE</button>
     </div>
+    <button type="button" class="menu-btn" aria-label="Menu" aria-expanded="false">&#9776;</button>
   </div>
 </header>
 
@@ -649,17 +654,17 @@ footer a{color:var(--mut)}
 <section id="all-functions">
   <div class="wrap">
     <h2><span data-en>All functions</span><span data-de>Alle Funktionen</span></h2>
-    <p class="intro"><span data-en>68 functions – and where to find them in the app. ◱ = also available as an overlay on top of EVE.</span><span data-de>68 Funktionen – und wo du sie im Programm findest. ◱ = auch als Overlay über EVE.</span></p>
+    <p class="intro"><span data-en>70 functions – and where to find them in the app. ◱ = also available as an overlay on top of EVE.</span><span data-de>70 Funktionen – und wo du sie im Programm findest. ◱ = auch als Overlay über EVE.</span></p>
     <div class="fx-grid">
       <div class="fx-col"><h3><span data-en>Trading</span><span data-de>Handel</span></h3><ul>
         <li><span data-en>Market scanner: profitable items for station trading per hub</span><span data-de>Markt-Scanner: lohnende Waren fürs Station-Trading je Hub</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading › Station trading</span><span data-de>Handel › Station-Trading</span></small></li>
         <li><span data-en>My trades with outbid alarm, price suggestion and profit</span><span data-de>Meine Trades mit Überboten-Alarm, Preisvorschlag und Gewinn</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading › Station trading › Trades</span><span data-de>Handel › Station-Trading › Trades</span></small></li>
         <li><span data-en>Price watchlist with charts and alarm</span><span data-de>Preis-Merkliste mit Kurven und Alarm</span><small><span data-en>Trading › Station trading › Price watchlist</span><span data-de>Handel › Station-Trading › Preis-Merkliste</span></small></li>
         <li><span data-en>Profit history from the wallet (day, week, month)</span><span data-de>Gewinn-Historie aus der Wallet (Tag, Woche, Monat)</span><small><span data-en>Trading › Station trading › Profit</span><span data-de>Handel › Station-Trading › Gewinn</span></small></li>
-        <li><span data-en>Hauling: best cargo in a radius or to a target, with ship recommendation</span><span data-de>Hauling: beste Ladung im Umkreis oder zu einem Ziel, mit Schiffsempfehlung</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading</span><span data-de>Handel</span></small></li>
-        <li><span data-en>Hub trading: best cargo between hubs by budget and cargo space</span><span data-de>Hub-Handel: beste Ladung zwischen Hubs nach Budget und Laderaum</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading › To a fixed hub</span><span data-de>Handel › Zu festem Hub</span></small></li>
-        <li><span data-en>Buying starts at the location of the active EVE client</span><span data-de>Einkauf startet am Standort des aktiven EVE-Clients</span><small><span data-en>Trading › Where to buy</span><span data-de>Handel › Wo kaufen</span></small></li>
-        <li><span data-en>Gank protection: cargo value matched to the ship (ISK/EHP light)</span><span data-de>Gank-Schutz: Ladungswert passend zum Schiff (ISK/EHP-Ampel)</span><small><span data-en>Trading › How much ISK</span><span data-de>Handel › Wie viel ISK</span></small></li>
+        <li><span data-en>Hauling: best cargo in a radius or to a target, with ship recommendation</span><span data-de>Hauling: beste Ladung im Umkreis oder zu einem Ziel, mit Schiffsempfehlung</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Hauling</span><span data-de>Hauling</span></small></li>
+        <li><span data-en>Hub trading: best cargo between hubs by budget and cargo space</span><span data-de>Hub-Handel: beste Ladung zwischen Hubs nach Budget und Laderaum</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Hauling › To a fixed hub</span><span data-de>Hauling › Zu festem Hub</span></small></li>
+        <li><span data-en>Buying starts at the location of the active EVE client</span><span data-de>Einkauf startet am Standort des aktiven EVE-Clients</span><small><span data-en>Hauling › Where to buy</span><span data-de>Hauling › Wo kaufen</span></small></li>
+        <li><span data-en>Gank protection: cargo value matched to the ship (ISK/EHP light)</span><span data-de>Gank-Schutz: Ladungswert passend zum Schiff (ISK/EHP-Ampel)</span><small><span data-en>Hauling › How much ISK</span><span data-de>Hauling › Wie viel ISK</span></small></li>
         <li><span data-en>Market browser: one item in the 5 hubs, order book, price history, margin</span><span data-de>Marktbrowser: eine Ware in den 5 Hubs, Orderbuch, Preisverlauf, Marge</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading › Market</span><span data-de>Handel › Markt</span></small></li>
         <li><span data-en>Watchlist: all trades and hauling runs with profit/loss</span><span data-de>Watchlist: alle Trades und Hauling-Läufe mit Gewinn/Verlust</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading › Watchlist</span><span data-de>Handel › Watchlist</span></small></li>
         <li><span data-en>Appraisal: paste a list, value in Jita and the hubs</span><span data-de>Wertschätzer: Liste einfügen, Wert in Jita und den Hubs</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Trading › Appraisal</span><span data-de>Handel › Wertschätzer</span></small></li>
@@ -672,6 +677,8 @@ footer a{color:var(--mut)}
         <li><span data-en>Own market orders with expiry warning and free slots</span><span data-de>Eigene Market-Orders mit Ablauf-Warnung und freien Slots</span><small><span data-en>Assets › Orders</span><span data-de>Besitz › Orders</span></small></li>
         <li><span data-en>Contracts of all characters</span><span data-de>Verträge aller Charaktere</span><small><span data-en>Assets › Contracts</span><span data-de>Besitz › Verträge</span></small></li>
         <li><span data-en>Industry jobs and blueprints</span><span data-de>Industrie-Jobs und Blaupausen</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Assets › Industry</span><span data-de>Besitz › Industrie</span></small></li>
+        <li><span data-en>Manufacturing planner: is building worth it, or sell the materials instead</span><span data-de>Produktions-Planer: lohnt sich die Herstellung oder Material direkt verkaufen</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Assets › Industry › Manufacturing</span><span data-de>Besitz › Industrie › Produktion</span></small></li>
+        <li><span data-en>Build or buy components: bill of materials across all levels, savings, shopping list of only what is bought</span><span data-de>Bauteile selbst bauen oder kaufen: Stückliste über alle Ebenen, Ersparnis, Einkaufsliste nur Gekauftes</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Assets › Industry › Manufacturing</span><span data-de>Besitz › Industrie › Produktion</span></small></li>
         <li><span data-en>Mining: ore calculator, best place to sell, mining log, moons</span><span data-de>Mining: Erz-Rechner, bester Verkaufsort, Mining-Tagebuch, Monde</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Assets › Mining</span><span data-de>Besitz › Mining</span></small></li>
         <li><span data-en>Fits from EVE Workbench: community fits per ship, copy EFT, calculate, save, shopping list with Jita price</span><span data-de>Fits von EVE Workbench: Community-Fits je Schiff, EFT kopieren, durchrechnen, speichern, Einkaufsliste mit Jita-Preis</span> <span class="fx-ov" title="Overlay">◱</span><small><span data-en>Assets › Assets › Workbench</span><span data-de>Besitz › Assets › Workbench</span></small></li>
         <li><span data-en>Workbench: index all community fits once, then find any ship instantly</span><span data-de>Workbench: alle Community-Fits einmal indexieren, danach jedes Schiff sofort finden</span><small><span data-en>Assets › Assets › Workbench</span><span data-de>Besitz › Assets › Workbench</span></small></li>
@@ -908,6 +915,11 @@ footer a{color:var(--mut)}
   var sec=document.getElementById('leaderboard');   // erst laden, wenn der Abschnitt in Sicht kommt
   if('IntersectionObserver' in window){var io=new IntersectionObserver(function(e){if(e[0].isIntersecting){io.disconnect();load();}},{rootMargin:'300px'});io.observe(sec);} else load();
 })();
+</script>
+<script>/* TT3: Handy-Menü auf/zu, schließt nach Klick auf einen Eintrag */
+(function(){var h=document.querySelector('header'),b=h&&h.querySelector('.menu-btn');if(!b)return;
+b.addEventListener('click',function(){var o=h.classList.toggle('open');b.setAttribute('aria-expanded',o?'true':'false');b.innerHTML=o?'&#10005;':'&#9776;';});
+h.querySelectorAll('.links a').forEach(function(a){a.addEventListener('click',function(){h.classList.remove('open');b.setAttribute('aria-expanded','false');b.innerHTML='&#9776;';});});})();
 </script>
 </body>
 </html>
