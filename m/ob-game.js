@@ -3465,9 +3465,8 @@ function mount(container, opts) {
     c.save(); c.translate(p.x, p.y); c.rotate(p.a || 0);
     function plate(e) { var x = -hl - r + e, y = -r + e, w = 2 * (hl + r - e), hh = 2 * (r - e), rr = r - e; c.beginPath(); c.moveTo(x + rr, y); c.lineTo(x + w - rr, y); c.arcTo(x + w, y, x + w, y + rr, rr); c.arcTo(x + w, y + hh, x + w - rr, y + hh, rr); c.lineTo(x + rr, y + hh); c.arcTo(x, y + hh, x, y + hh - rr, rr); c.arcTo(x, y, x + rr, y, rr); c.closePath(); }
     if (p.t !== 'n' && !p.lit && part !== 'body') {                  // Erz-Leuchten wie bei den Brocken (pulsiert)
-      var og = c.createLinearGradient(0, -2.2 * r, 0, 2.2 * r); og.addColorStop(0, 'rgba(0,0,0,0)'); og.addColorStop(0.5, col.glow); og.addColorStop(1, 'rgba(0,0,0,0)');
-      c.globalAlpha = part === 'aura' ? 1 : 0.16 + 0.12 * (0.5 + 0.5 * Math.sin((t || 0) * 3 + id)); c.fillStyle = og; c.shadowColor = col.glow; c.shadowBlur = 12;
-      c.fillRect(-hl - r, -2.2 * r, 2 * (hl + r), 4.4 * r); c.shadowBlur = 0; c.globalAlpha = 1;
+      c.globalAlpha = part === 'aura' ? 1 : 0.16 + 0.12 * (0.5 + 0.5 * Math.sin((t || 0) * 3 + id));   // weicher Schein um die Platte (vorher Rechteck mit harten Kanten)
+      c.fillStyle = col.glow; c.shadowColor = col.glow; c.shadowBlur = 22; plate(-r * 0.6); c.fill(); c.fill(); c.shadowBlur = 0; c.globalAlpha = 1;
     }
     if (part === 'aura') { c.restore(); return; }
     if (p.used) c.globalAlpha = 0.22;                                // abgebaut: nur noch als Schatten, durchlässig
@@ -3501,7 +3500,7 @@ function mount(container, opts) {
   function stoneSprite(p, part) {
     var key = part + p.t + (p.power || '') + (p.used ? 'u' : p.lit ? 'l' : 'i') + Math.round(p.dl || 20), sp = stoneCache[key];
     if (sp) return sp;
-    var pad = 18, w = (p.dl || 20) + 2 * p.r + 2 * pad, h = 4.4 * p.r + 2 * pad, cv = document.createElement('canvas');
+    var pad = 30, w = (p.dl || 20) + 2 * p.r + 2 * pad, h = 4.4 * p.r + 2 * pad, cv = document.createElement('canvas');
     cv.width = Math.ceil(w * scale); cv.height = Math.ceil(h * scale);
     var g = cv.getContext('2d'); g.scale(scale, scale);
     drawStoneOn(g, { t: p.t, power: p.power, lit: p.lit, used: p.used, r: p.r, dl: p.dl, x: w / 2, y: h / 2, a: 0, id: 0 }, 0, part);
@@ -3511,7 +3510,7 @@ function mount(container, opts) {
   var pegCache = {}, auraCache = {};
   function drawPegFast(p, t) {
     if (p.t === 'g' || p.t === 'w' || p.st) { drawPegOn(ctx, p, t); return; }   // Items (drehende Ringe) und Wracks (Blinklicht) weiter live
-    var key = p.id + p.t + (p.lit ? 'l' : '') + (p.hp || 0), sp = pegCache[key], R = p.r * 1.5 + 4;
+    var key = p.id + p.t + (p.lit ? 'l' : '') + (p.hp || 0), sp = pegCache[key], R = p.r * 1.3 + 30;   // Platz fürs Leuchten (shadowBlur bis 26) – sonst schneidet der Bildrand es eckig ab
     if (!sp) {
       var cv = document.createElement('canvas'); cv.width = cv.height = Math.ceil(2 * R * scale);
       var g = cv.getContext('2d'); g.scale(scale, scale);
