@@ -71,6 +71,7 @@ var OB_DICT = {
   'SALVE BEREIT': 'VOLLEY READY', 'SALVE!': 'VOLLEY!', 'ÜBUNG': 'PRACTICE', 'Gerettet!': 'Saved!', 'Panzer geknackt!': 'Armor cracked!', 'Frachter! +1 Drohne': 'Freighter! +1 drone',
   'Rampe: die Drohne prallt ab': 'Ramp: the drone bounces off', 'Beschleunigerbahn: die Drohne fährt mit und wird am Ende rausgeschossen': 'Accelerator rail: the drone rides along and is fired out at the end',
   ' · Übung (kein Highscore)': ' · practice (no high score)', 'Übungsmodus: Level wählen': 'Practice mode: pick a level',
+  'Kampagne löschen': 'Delete campaign', 'Wirklich löschen?': 'Really delete?',
   'Charakter für die Bestenliste': 'Character for the leaderboard', 'Vibration': 'Vibration', 'Vibration bei Combo und Gleiter (Handy)': 'Vibration on combo and slide (phone)',
   'Zielscanner': 'Target scanner', 'Phantom-Drohne': 'Phantom drone', 'Gleitschub': 'Slide booster', 'Felsbrecher': 'Rock breaker', 'Sprung-Drohne': 'Jump drone',
   'Wiederbelebung': 'Revival', 'Frostschlag': 'Frost strike', 'Überladung': 'Overload',
@@ -3310,6 +3311,7 @@ function mount(container, opts) {
   var bar = el('div', 'ob-bar');
   var btnNew = el('button', 'ob-btn ob-primary', 'Neue Kampagne'), btnRestart = el('button', 'ob-btn', 'Level neu starten'), btnPause = el('button', 'ob-btn', 'Pause');
   var btnSound = el('button', 'ob-btn', ''), btnContinue = el('button', 'ob-btn ob-primary', 'Weiterspielen');
+  var btnWipe = el('button', 'ob-btn ob-wipe', 'Kampagne löschen'); btnWipe.type = 'button';   // XX2: 2. Klick bestätigt (kein Windows-Dialog über EVE)
   // OB5: Übung als Level-Raster 1–100 (Höhepunkte orange, geschaffte grün, Bestwert im Tooltip)
   var lvBox = el('div', 'ob-lv'), lvGrid = el('div', 'ob-lvgrid'), lvCells = [];
   lvBox.appendChild(el('div', 'ob-lv-h', 'Übung: Level wählen (zählt nicht für den Highscore)')); lvBox.appendChild(lvGrid);
@@ -3341,7 +3343,8 @@ function mount(container, opts) {
   volIn.addEventListener('input', function () { volV.textContent = volIn.value + ' %'; sound.setVolume(volIn.value); });
   volIn.addEventListener('change', function () { sound.resume(); if (sound.enabled()) sound.hit({ t: 'z' }, 3); });
   bgIn.addEventListener('input', function () { bgA = Number(bgIn.value); bgV.textContent = bgA + ' %'; try { store.setItem(BGA_KEY, String(bgA)); } catch (e) {} bgApply(); });
-  bar.appendChild(btnContinue); bar.appendChild(btnNew); bar.appendChild(btnRestart); bar.appendChild(lvBox); bar.appendChild(btnPause); bar.appendChild(btnSound); bar.appendChild(volBox); bar.appendChild(vibeBox); bar.appendChild(bgBox); bar.appendChild(hint);
+  var wwBox = el('div', 'ob-ww');   // XX3: weltweite Bestenliste oben im Menü, darunter die Level-Auswahl
+  bar.appendChild(wwBox); bar.appendChild(btnContinue); bar.appendChild(btnNew); bar.appendChild(btnRestart); bar.appendChild(btnWipe); bar.appendChild(lvBox); bar.appendChild(btnPause); bar.appendChild(btnSound); bar.appendChild(volBox); bar.appendChild(vibeBox); bar.appendChild(bgBox); bar.appendChild(hint);
   main.appendChild(title); main.appendChild(hud); main.appendChild(stage); main.appendChild(bar);
 
   // PQ7: weltweite Bestenliste, hochgeladen wird nur mit Haken (Haken standardmäßig gesetzt). TT4: lädt gleich beim Öffnen;
@@ -3351,16 +3354,16 @@ function mount(container, opts) {
   if (!online) { side.appendChild(el('h3', null, 'Highscore · Top 10')); side.appendChild(scoreList); side.appendChild(btnClear); }
   if (online) {
     try { wwOn = store.getItem(ONLINE_KEY) !== '0'; } catch (e) { }   // 13.10.: Standard an
-    side.appendChild(el('h3', null, 'Weltweite Bestenliste'));
+    wwBox.appendChild(el('h3', null, 'Weltweite Bestenliste'));
     var wwLbl = el('label', 'ob-ww-on'), wwChk = el('input'); wwChk.type = 'checkbox'; wwChk.checked = wwOn;
-    wwLbl.appendChild(wwChk); wwLbl.appendChild(el('span', null, 'Punkte hochladen')); side.appendChild(wwLbl);
-    var wwWho = el('p', 'ob-ww-who'); side.appendChild(wwWho);
+    wwLbl.appendChild(wwChk); wwLbl.appendChild(el('span', null, 'Punkte hochladen')); wwBox.appendChild(wwLbl);
+    var wwWho = el('p', 'ob-ww-who'); wwBox.appendChild(wwWho);
     var wwRow = el('div', 'ob-ww-row'); wwSel = el('select'); wwSel.appendChild(el('option', null, 'Kampagne')).value = '0';
     for (var wl = 1; wl <= LEVELS.length; wl++) wwSel.appendChild(el('option', null, 'Level ' + wl)).value = String(wl);
     var wwBtn = el('button', 'ob-btn', 'Anzeigen'); wwBtn.type = 'button';
-    wwRow.appendChild(wwSel); wwRow.appendChild(wwBtn); side.appendChild(wwRow);
-    wwSt = el('p', 'ob-ww-st'); side.appendChild(wwSt);
-    wwList = el('ol', 'ob-scores'); side.appendChild(wwList);
+    wwRow.appendChild(wwSel); wwRow.appendChild(wwBtn); wwBox.appendChild(wwRow);
+    wwSt = el('p', 'ob-ww-st'); wwBox.appendChild(wwSt);
+    wwList = el('ol', 'ob-scores'); wwBox.appendChild(wwList);
     // Charakterwahl: online.chars() liefert [{cid, n}] aller eingeloggten Charaktere (optional); ohne Wahl gilt online.me() (aktiver Charakter)
     var wwPick = el('select', 'ob-ww-pick'); wwPick.setAttribute('aria-label', obT('Charakter für die Bestenliste'));
     var wwChars = function () { try { return (online.chars && online.chars()) || []; } catch (e) { return []; } };
@@ -3372,12 +3375,13 @@ function mount(container, opts) {
     };
     wwPick.addEventListener('change', function () { try { store.setItem(ONLINE_CHAR_KEY, wwPick.value); } catch (e) { } wwWhoTxt(); });
     var wwWhoTxt = function () { var me = wwMe(); wwWho.textContent = me ? tt('Name: ', 'Name: ') + me.n : obT('Kein EVE-Charakter eingeloggt – Hochladen geht erst nach dem Login.'); };
-    side.insertBefore(wwPick, wwWho.nextSibling);
+    wwBox.insertBefore(wwPick, wwWho.nextSibling);
     wwFill(); wwWhoTxt();
     wwChk.addEventListener('change', function () { wwOn = wwChk.checked; try { store.setItem(ONLINE_KEY, wwOn ? '1' : '0'); } catch (e) { } wwWhoTxt(); });
     wwBtn.addEventListener('click', function () { wwShow(Number(wwSel.value)); });
     wwShow(0);
-  }
+    wwBox.addEventListener('click', function (e) { e.stopPropagation(); });   // Menü ☰ bleibt offen (schließt sonst bei jedem Knopf in .ob-bar)
+  } else wwBox.style.display = 'none';
   function wwMe() {                                                // gewählter Charakter, sonst der aktive
     if (!online) return null;
     var sel = null; try { sel = store.getItem(ONLINE_CHAR_KEY); } catch (e) { }
@@ -4293,9 +4297,14 @@ function mount(container, opts) {
   try { if (store.getItem(progKey + '-v4') !== '1') { obReset = !!(store.getItem(progKey) || store.getItem(opts.bestKey || BEST_KEY)); store.removeItem(progKey); store.removeItem(opts.bestKey || BEST_KEY); store.setItem(progKey + '-v4', '1'); } } catch (e) { }
   var progress = Progress.load(store, progKey);
   var best = {}; try { best = JSON.parse(store.getItem(opts.bestKey || BEST_KEY) || '{}') || {}; } catch (e) { best = {}; }
+  // XX1: frei sind geschaffte Level (Bestwert) + das nächste, mindestens bis zum Kampagnen-Stand
+  function lvFree() { var m = progress ? progress.level : 1; for (var k in best) if (best[k] && +k + 1 > m) m = +k + 1; return Math.min(m, LEVELS.length); }
   function renderLv() {
+    var free = lvFree();
     lvCells.forEach(function (b) {
       var n = +b.dataset.lv, l = LEVELS[n - 1]; if (!l) { b.title = obT('Zufälliges Feld'); return; }
+      var lock = n > free; b.classList.toggle('ob-lv-lock', lock); b.setAttribute('aria-disabled', lock ? 'true' : 'false');
+      if (lock) { b.title = 'Level ' + n + ' · ' + tt('gesperrt – erst die Level davor schaffen', 'locked – clear the levels before it first'); b.classList.remove('ob-lv-done', 'ob-lv-cur'); return; }
       b.classList.toggle('ob-lv-done', !!best[n]); b.classList.toggle('ob-lv-cur', !!(progress && progress.level === n));
       b.title = 'Level ' + n + ' · ' + obLvName(l.name) + '\n' + obLvDesc(l.desc) + (best[n] ? tt('\nBestwert: ', '\nBest: ') + fmtScore(best[n]) : '');
     });
@@ -4309,6 +4318,10 @@ function mount(container, opts) {
   }
   function saveProgress(level, score) { if (Progress.save(store, progKey, level, score)) progress = { level: level, score: Math.floor(score) }; updateContinue(); }
   function clearProgress() { Progress.clear(store, progKey); progress = null; updateContinue(); }
+  // XX2: Spielstand + Level-Bestwerte weg (nur Level 1 frei); Highscores und weltweite Bestenliste bleiben
+  function wipeCampaign() { best = {}; try { store.removeItem(opts.bestKey || BEST_KEY); } catch (e) { } clearProgress(); }
+  var wipeT = 0;
+  function wipeArm(on) { clearTimeout(wipeT); btnWipe.classList.toggle('ob-wipe-arm', on); btnWipe.textContent = obMenu(obT)(on ? 'Wirklich löschen?' : 'Kampagne löschen'); if (on) wipeT = setTimeout(function () { wipeArm(false); }, 4000); }
   function continueCampaign() { if (!progress) return; hideMsg(); setPausedSilent(false); game.resumeCampaign(progress.level, progress.score); resetFx(); sound.intro(); }
   function startCampaign() { hideMsg(); setPausedSilent(false); game.reset(undefined, 1); resetFx(); sound.intro(); }
   function startPractice(n) { hideMsg(); setPausedSilent(false); game.reset(n ? undefined : undefined, n); game.practice = true; resetFx(); levelFx(); }
@@ -4438,7 +4451,11 @@ function mount(container, opts) {
   btnContinue.addEventListener('click', function () { continueCampaign(); });
   updateContinue();
   btnRestart.addEventListener('click', function () { restartLevel(); });
-  lvGrid.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('.ob-lv-c'); if (b) startPractice(parseInt(b.dataset.lv, 10)); });
+  lvGrid.addEventListener('click', function (e) { var b = e.target.closest && e.target.closest('.ob-lv-c'); if (!b) return; if (b.classList.contains('ob-lv-lock')) { e.stopPropagation(); return; } startPractice(parseInt(b.dataset.lv, 10)); });
+  btnWipe.addEventListener('click', function (e) {
+    if (!btnWipe.classList.contains('ob-wipe-arm')) { e.stopPropagation(); wipeArm(true); return; }   // 1. Klick: „Wirklich?“, Menü bleibt offen
+    wipeArm(false); wipeCampaign();
+  });
   btnPause.addEventListener('click', function () { setPaused(!paused); });
   btnClear.addEventListener('click', function () {
     if (!scores.length) return;
