@@ -4473,6 +4473,7 @@ function mount(container, opts) {
     raf = win.requestAnimationFrame(loop);
     var dt = last ? (ts - last) / 1000 : 0; last = ts;
     if (!paused) { if (fxHold && game.status !== 'flying') fxHold = false; game.update(fxSlow > 0 || fxHold ? dt * 0.35 : dt); handleEvents(); tickEffects(dt); if (fxSlow > 0) fxSlow = Math.max(0, fxSlow - dt); }   // TT6: fxHold = Zeitlupe bis die letzte Drohne gefangen/unten ist
+    if (!canvas.getClientRects().length) return;   // YY7: Feld unsichtbar (Spiel zu, andere Seite) → nicht zeichnen – sonst 60 Bilder/s im Hintergrund
     updateHud();
     draw(ts / 1000);
   }
