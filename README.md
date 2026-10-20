@@ -1,6 +1,6 @@
 # EVE Omni – Homepage
 
-Source of the website **[omni.nareya79.com](https://omni.nareya79.com)** for **EVE Omni**, the free all-in-one companion for EVE Online (multi-client preview, in-game overlay, market & trading tools).
+Source of the website **[omni.nareya79.com](https://omni.nareya79.com)** for **EVE Omni**, the free all-in-one tool for EVE Online (multi-client preview, in-game overlay, market & trading tools).
 
 - ▶ Trailer: https://youtu.be/LSafv7unbqA
 - 💬 Discord: https://discord.gg/Tyxt6J8yPR
